@@ -5,9 +5,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboEmojiSpecTest.class,
-        ComboEmojiJiraTest.class,
-        ComboEmojiCrashSpecTest.class,
+    ComboEmojiSpecTest.class,
+    ComboEmojiJiraTest.class,
+    ComboEmojiCrashSpecTest.class,
 })
 public class ExtEmojiTestSuite {
 }

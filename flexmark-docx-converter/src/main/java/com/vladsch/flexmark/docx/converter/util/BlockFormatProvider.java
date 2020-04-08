@@ -4,8 +4,8 @@ import org.docx4j.wml.PPr;
 import org.docx4j.wml.RPr;
 
 public interface BlockFormatProvider<T> extends FormatProvider<T> {
-    // list type style
-    String STYLE_TYPE_NUMBERING = "numbering";
+  // list type style
+  String STYLE_TYPE_NUMBERING = "numbering";
 
 /*
 
@@ -29,22 +29,22 @@ public interface BlockFormatProvider<T> extends FormatProvider<T> {
 
     */
 
-    // these are extracted and combined using format merge by each block formatter
-    // using the docx context for helping with the mash-up of formatting
-    // PPrBase.Ind getInd();
-    // PPrBase.Spacing getSpacing();
-    // PPrBase.NumPr getNumPr();
-    // PPrBase.PBdr getPBdr();
-    // PShading getPShading();
+  // these are extracted and combined using format merge by each block formatter
+  // using the docx context for helping with the mash-up of formatting
+  // PPrBase.Ind getInd();
+  // PPrBase.Spacing getSpacing();
+  // PPrBase.NumPr getNumPr();
+  // PPrBase.PBdr getPBdr();
+  // PShading getPShading();
 
-    // get the final PPr for the next P of this provider
-    void getPPr(PPr pPr);
+  BlockFormatProvider<T> getBlockParent();
 
-    // get the final ParaRPr for the next P of this provider
-    void getParaRPr(RPr rPr);
+  // get the final PPr for the next P of this provider
+  void getPPr(PPr pPr);
 
-    // to allow formatter to track first P formatting
-    void adjustPPrForFormatting(PPr pP);
+  // get the final ParaRPr for the next P of this provider
+  void getParaRPr(RPr rPr);
 
-    BlockFormatProvider<T> getBlockParent();
+  // to allow formatter to track first P formatting
+  void adjustPPrForFormatting(PPr pP);
 }

@@ -1,5 +1,5 @@
 package com.vladsch.flexmark.ext.admonition;
 
 public interface AdmonitionVisitor {
-    void visit(AdmonitionBlock node);
+  void visit(AdmonitionBlock node);
 }

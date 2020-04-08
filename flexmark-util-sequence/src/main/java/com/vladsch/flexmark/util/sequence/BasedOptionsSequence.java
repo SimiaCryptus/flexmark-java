@@ -14,84 +14,96 @@ import java.util.stream.IntStream;
  * a subSequence() returns a sub-sequence from the original base sequence with updated offset tracking
  */
 final public class BasedOptionsSequence implements CharSequence, BasedOptionsHolder {
-    final private @NotNull CharSequence chars;
-    final private int optionFlags;
-    final private @Nullable DataHolder options;
+  final private @NotNull CharSequence chars;
+  final private int optionFlags;
+  final private @Nullable DataHolder options;
 
-    private BasedOptionsSequence(@NotNull CharSequence chars, int optionFlags, @Nullable DataHolder options) {
-        this.chars = chars;
-        this.optionFlags = optionFlags & ~(options == null || SEGMENTED_STATS.get(options) == null ? F_COLLECT_SEGMENTED_STATS : 0);
-        this.options = options;
-    }
+  private BasedOptionsSequence(@NotNull CharSequence chars, int optionFlags, @Nullable DataHolder options) {
+    this.chars = chars;
+    this.optionFlags = optionFlags & ~(options == null || SEGMENTED_STATS.get(options) == null ? F_COLLECT_SEGMENTED_STATS : 0);
+    this.options = options;
+  }
 
-    @Override
-    public int getOptionFlags() {
-        return optionFlags;
-    }
+  @Override
+  public int getOptionFlags() {
+    return optionFlags;
+  }
 
-    @Override
-    public boolean allOptions(int options) {
-        return (optionFlags & options) == options;
-    }
+  @Nullable
+  @Override
+  public DataHolder getOptions() {
+    return options;
+  }
 
-    @Override
-    public boolean anyOptions(int options) {
-        return (optionFlags & options) != 0;
-    }
+  public static BasedOptionsSequence of(@NotNull CharSequence chars, BitFieldSet<Options> optionFlags) {
+    return new BasedOptionsSequence(chars, optionFlags.toInt(), null);
+  }
 
-    @Override
-    public <T> T getOption(DataKeyBase<T> dataKey) {
-        return dataKey.get(options);
-    }
+  public static BasedOptionsSequence of(@NotNull CharSequence chars, int optionFlags) {
+    return new BasedOptionsSequence(chars, optionFlags, null);
+  }
 
-    @Nullable
-    @Override
-    public DataHolder getOptions() {
-        return options;
-    }
+  public static BasedOptionsSequence of(@NotNull CharSequence chars, BitFieldSet<Options> optionFlags, @Nullable DataHolder options) {
+    return new BasedOptionsSequence(chars, optionFlags.toInt(), options);
+  }
 
-    @Override
-    public int length() {return chars.length();}
+  public static BasedOptionsSequence of(@NotNull CharSequence chars, int optionFlags, @Nullable DataHolder options) {
+    return new BasedOptionsSequence(chars, optionFlags, options);
+  }
 
-    @Override
-    public char charAt(int index) {return chars.charAt(index);}
+  @Override
+  public boolean allOptions(int options) {
+    return (optionFlags & options) == options;
+  }
 
-    @Override
-    public CharSequence subSequence(int start, int end) {return chars.subSequence(start, end);}
+  @Override
+  public boolean anyOptions(int options) {
+    return (optionFlags & options) != 0;
+  }
 
-    @Override
-    public String toString() {return chars.toString();}
+  @Override
+  public <T> T getOption(DataKeyBase<T> dataKey) {
+    return dataKey.get(options);
+  }
 
-    @Override
-    public IntStream chars() {return chars.chars();}
+  @Override
+  public int length() {
+    return chars.length();
+  }
 
-    @Override
-    public IntStream codePoints() {return chars.codePoints();}
+  @Override
+  public char charAt(int index) {
+    return chars.charAt(index);
+  }
 
-    @Override
-    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
-    public boolean equals(Object o) {
-        return chars.equals(o);
-    }
+  @Override
+  public CharSequence subSequence(int start, int end) {
+    return chars.subSequence(start, end);
+  }
 
-    @Override
-    public int hashCode() {
-        return chars.hashCode();
-    }
+  @Override
+  public String toString() {
+    return chars.toString();
+  }
 
-    public static BasedOptionsSequence of(@NotNull CharSequence chars, BitFieldSet<Options> optionFlags) {
-        return new BasedOptionsSequence(chars, optionFlags.toInt(), null);
-    }
+  @Override
+  public IntStream chars() {
+    return chars.chars();
+  }
 
-    public static BasedOptionsSequence of(@NotNull CharSequence chars, int optionFlags) {
-        return new BasedOptionsSequence(chars, optionFlags, null);
-    }
+  @Override
+  public IntStream codePoints() {
+    return chars.codePoints();
+  }
 
-    public static BasedOptionsSequence of(@NotNull CharSequence chars, BitFieldSet<Options> optionFlags, @Nullable DataHolder options) {
-        return new BasedOptionsSequence(chars, optionFlags.toInt(), options);
-    }
+  @Override
+  @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
+  public boolean equals(Object o) {
+    return chars.equals(o);
+  }
 
-    public static BasedOptionsSequence of(@NotNull CharSequence chars, int optionFlags, @Nullable DataHolder options) {
-        return new BasedOptionsSequence(chars, optionFlags, options);
-    }
+  @Override
+  public int hashCode() {
+    return chars.hashCode();
+  }
 }

@@ -15,30 +15,32 @@ import java.util.List;
 import java.util.Map;
 
 public class ComboJekyllTagSpecTest extends RendererSpecTest {
-    final private static String SPEC_RESOURCE = "/jekyll_tag_ast_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singleton(JekyllTagExtension.create()))
-            .toImmutable();
+  final private static String SPEC_RESOURCE = "/jekyll_tag_ast_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Collections.singleton(JekyllTagExtension.create()))
+      .toImmutable();
 
-    final private static Map<String, DataHolder> optionsMap = new HashMap<>();
-    static {
-        optionsMap.put("dummy-identifier", new MutableDataSet().set(Parser.INTELLIJ_DUMMY_IDENTIFIER, true));
-        optionsMap.put("no-inlines", new MutableDataSet().set(JekyllTagExtension.ENABLE_INLINE_TAGS, false));
-        optionsMap.put("no-blocks", new MutableDataSet().set(JekyllTagExtension.ENABLE_BLOCK_TAGS, false));
-        Map<String, String> content = new HashMap<>();
-        content.put("test.html", "<h1>Heading 1</h1>\n" +
-                "<p>test text</p>\n" +
-                "");
-        content.put("links.html", "");
-        optionsMap.put("includes", new MutableDataSet().set(JekyllTagExtension.INCLUDED_HTML, content));
-    }
-    public ComboJekyllTagSpecTest(@NotNull SpecExample example) {
-        super(example, optionsMap, OPTIONS);
-    }
+  final private static Map<String, DataHolder> optionsMap = new HashMap<>();
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  static {
+    optionsMap.put("dummy-identifier", new MutableDataSet().set(Parser.INTELLIJ_DUMMY_IDENTIFIER, true));
+    optionsMap.put("no-inlines", new MutableDataSet().set(JekyllTagExtension.ENABLE_INLINE_TAGS, false));
+    optionsMap.put("no-blocks", new MutableDataSet().set(JekyllTagExtension.ENABLE_BLOCK_TAGS, false));
+    Map<String, String> content = new HashMap<>();
+    content.put("test.html", "<h1>Heading 1</h1>\n" +
+        "<p>test text</p>\n" +
+        "");
+    content.put("links.html", "");
+    optionsMap.put("includes", new MutableDataSet().set(JekyllTagExtension.INCLUDED_HTML, content));
+  }
+
+  public ComboJekyllTagSpecTest(@NotNull SpecExample example) {
+    super(example, optionsMap, OPTIONS);
+  }
+
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

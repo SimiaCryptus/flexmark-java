@@ -21,37 +21,37 @@ import java.util.Iterator;
 import java.util.function.Function;
 
 public class MappingIterable<T, R> implements Iterable<R> {
-    final private @NotNull Iterable<T> myIterable;
-    final private @NotNull Function<T, R> myFunction;
+  final private @NotNull Iterable<T> myIterable;
+  final private @NotNull Function<T, R> myFunction;
 
-    public MappingIterable(@NotNull Iterable<T> iterable, @NotNull Function<T, R> function) {
-        myIterable = iterable;
-        myFunction = function;
+  public MappingIterable(@NotNull Iterable<T> iterable, @NotNull Function<T, R> function) {
+    myIterable = iterable;
+    myFunction = function;
+  }
+
+  @NotNull
+  @Override
+  public Iterator<R> iterator() {
+    return new MyIterator<>(myIterable.iterator(), myFunction);
+  }
+
+  private static class MyIterator<E, V> implements Iterator<V> {
+    final private @NotNull Iterator<E> myIterator;
+    final private @NotNull Function<E, V> myFunction;
+
+    public MyIterator(@NotNull Iterator<E> iterator, @NotNull Function<E, V> function) {
+      myIterator = iterator;
+      myFunction = function;
     }
 
-    @NotNull
     @Override
-    public Iterator<R> iterator() {
-        return new MyIterator<>(myIterable.iterator(), myFunction);
+    public boolean hasNext() {
+      return myIterator.hasNext();
     }
 
-    private static class MyIterator<E, V> implements Iterator<V> {
-        final private @NotNull Iterator<E> myIterator;
-        final private @NotNull Function<E, V> myFunction;
-
-        public MyIterator(@NotNull Iterator<E> iterator, @NotNull Function<E, V> function) {
-            myIterator = iterator;
-            myFunction = function;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return myIterator.hasNext();
-        }
-
-        @Override
-        public V next() {
-            return myFunction.apply(myIterator.next());
-        }
+    @Override
+    public V next() {
+      return myFunction.apply(myIterator.next());
     }
+  }
 }

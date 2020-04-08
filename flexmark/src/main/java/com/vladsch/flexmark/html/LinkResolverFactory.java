@@ -9,15 +9,15 @@ import java.util.Set;
 import java.util.function.Function;
 
 public interface LinkResolverFactory extends Function<LinkResolverContext, LinkResolver>, Dependent {
-    @Override
-    @Nullable Set<Class<?>> getAfterDependents();
+  @Override
+  @Nullable Set<Class<?>> getAfterDependents();
 
-    @Override
-    @Nullable Set<Class<?>> getBeforeDependents();
+  @Override
+  @Nullable Set<Class<?>> getBeforeDependents();
 
-    @Override
-    boolean affectsGlobalScope();
+  @Override
+  boolean affectsGlobalScope();
 
-    @Override
-    @NotNull LinkResolver apply(@NotNull LinkResolverContext context);
+  @Override
+  @NotNull LinkResolver apply(@NotNull LinkResolverContext context);
 }

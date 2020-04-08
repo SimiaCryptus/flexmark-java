@@ -16,41 +16,41 @@ import org.jetbrains.annotations.NotNull;
  * The parsed anchorlink text is turned into {@link AnchorLink} nodes.
  */
 public class AnchorLinkExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension {
-    final public static DataKey<Boolean> ANCHORLINKS_WRAP_TEXT = new DataKey<>("ANCHORLINKS_WRAP_TEXT", true);
-    final public static DataKey<String> ANCHORLINKS_TEXT_PREFIX = new DataKey<>("ANCHORLINKS_TEXT_PREFIX", "");
-    final public static DataKey<String> ANCHORLINKS_TEXT_SUFFIX = new DataKey<>("ANCHORLINKS_TEXT_SUFFIX", "");
-    final public static DataKey<String> ANCHORLINKS_ANCHOR_CLASS = new DataKey<>("ANCHORLINKS_ANCHOR_CLASS", "");
-    final public static DataKey<Boolean> ANCHORLINKS_SET_NAME = new DataKey<>("ANCHORLINKS_SET_NAME", false);
-    final public static DataKey<Boolean> ANCHORLINKS_SET_ID = new DataKey<>("ANCHORLINKS_SET_ID", true);
-    final public static DataKey<Boolean> ANCHORLINKS_NO_BLOCK_QUOTE = new DataKey<>("ANCHORLINKS_NO_BLOCK_QUOTE", false);
+  final public static DataKey<Boolean> ANCHORLINKS_WRAP_TEXT = new DataKey<>("ANCHORLINKS_WRAP_TEXT", true);
+  final public static DataKey<String> ANCHORLINKS_TEXT_PREFIX = new DataKey<>("ANCHORLINKS_TEXT_PREFIX", "");
+  final public static DataKey<String> ANCHORLINKS_TEXT_SUFFIX = new DataKey<>("ANCHORLINKS_TEXT_SUFFIX", "");
+  final public static DataKey<String> ANCHORLINKS_ANCHOR_CLASS = new DataKey<>("ANCHORLINKS_ANCHOR_CLASS", "");
+  final public static DataKey<Boolean> ANCHORLINKS_SET_NAME = new DataKey<>("ANCHORLINKS_SET_NAME", false);
+  final public static DataKey<Boolean> ANCHORLINKS_SET_ID = new DataKey<>("ANCHORLINKS_SET_ID", true);
+  final public static DataKey<Boolean> ANCHORLINKS_NO_BLOCK_QUOTE = new DataKey<>("ANCHORLINKS_NO_BLOCK_QUOTE", false);
 
-    private AnchorLinkExtension() {
+  private AnchorLinkExtension() {
+  }
+
+  public static AnchorLinkExtension create() {
+    return new AnchorLinkExtension();
+  }
+
+  @Override
+  public void extend(Parser.Builder parserBuilder) {
+    parserBuilder.postProcessorFactory(new AnchorLinkNodePostProcessor.Factory(parserBuilder));
+  }
+
+  @Override
+  public void rendererOptions(@NotNull MutableDataHolder options) {
+
+  }
+
+  @Override
+  public void parserOptions(MutableDataHolder options) {
+
+  }
+
+  @Override
+  public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
+    if (htmlRendererBuilder.isRendererType("HTML")) {
+      htmlRendererBuilder.nodeRendererFactory(new AnchorLinkNodeRenderer.Factory());
+    } else if (htmlRendererBuilder.isRendererType("JIRA")) {
     }
-
-    public static AnchorLinkExtension create() {
-        return new AnchorLinkExtension();
-    }
-
-    @Override
-    public void extend(Parser.Builder parserBuilder) {
-        parserBuilder.postProcessorFactory(new AnchorLinkNodePostProcessor.Factory(parserBuilder));
-    }
-
-    @Override
-    public void rendererOptions(@NotNull MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void parserOptions(MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
-        if (htmlRendererBuilder.isRendererType("HTML")) {
-            htmlRendererBuilder.nodeRendererFactory(new AnchorLinkNodeRenderer.Factory());
-        } else if (htmlRendererBuilder.isRendererType("JIRA")) {
-        }
-    }
+  }
 }

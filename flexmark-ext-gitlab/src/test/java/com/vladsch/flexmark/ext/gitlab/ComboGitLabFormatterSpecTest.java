@@ -13,19 +13,19 @@ import java.util.Collections;
 import java.util.List;
 
 public class ComboGitLabFormatterSpecTest extends FormatterSpecTest {
-    final private static String SPEC_RESOURCE = "/ext_gitlab_formatter_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singleton(GitLabExtension.create()))
-            .set(Parser.LISTS_AUTO_LOOSE, false)
-            .toImmutable();
+  final private static String SPEC_RESOURCE = "/ext_gitlab_formatter_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Collections.singleton(GitLabExtension.create()))
+      .set(Parser.LISTS_AUTO_LOOSE, false)
+      .toImmutable();
 
-    public ComboGitLabFormatterSpecTest(@NotNull SpecExample example) {
-        super(example, null, OPTIONS);
-    }
+  public ComboGitLabFormatterSpecTest(@NotNull SpecExample example) {
+    super(example, null, OPTIONS);
+  }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

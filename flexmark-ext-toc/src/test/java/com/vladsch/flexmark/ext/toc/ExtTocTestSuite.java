@@ -5,9 +5,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TocOptionsParserTest.class,
-        ComboTocSpecTest.class,
-        ComboSimTocSpecTest.class,
+    TocOptionsParserTest.class,
+    ComboTocSpecTest.class,
+    ComboSimTocSpecTest.class,
 })
 public class ExtTocTestSuite {
 }

@@ -7,68 +7,68 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class SpecExampleRendererBase implements SpecExampleRenderer {
-    protected final @NotNull SpecExample myExample;
-    protected final @NotNull DataHolder myOptions;
-    protected final boolean myIncludeExampleInfo;
-    private boolean myIsFinalized;
-    private @Nullable String myRenderedHtml;
-    private @Nullable String myRenderedAst;
+  protected final @NotNull SpecExample myExample;
+  protected final @NotNull DataHolder myOptions;
+  protected final boolean myIncludeExampleInfo;
+  private boolean myIsFinalized;
+  private @Nullable String myRenderedHtml;
+  private @Nullable String myRenderedAst;
 
-    public SpecExampleRendererBase(@NotNull SpecExample example, @Nullable DataHolder options) {
-        this(example, options, true);
+  public SpecExampleRendererBase(@NotNull SpecExample example, @Nullable DataHolder options) {
+    this(example, options, true);
+  }
+
+  public SpecExampleRendererBase(@NotNull SpecExample example, @Nullable DataHolder options, boolean includeExampleInfo) {
+    myExample = example;
+    myOptions = options == null ? new DataSet() : options.toImmutable();
+    myIncludeExampleInfo = includeExampleInfo;
+  }
+
+  @Override
+  final public @NotNull String getAst() {
+    if (myRenderedAst == null || !isFinalized()) {
+      myRenderedAst = renderAst();
     }
+    return myRenderedAst;
+  }
 
-    public SpecExampleRendererBase(@NotNull SpecExample example, @Nullable DataHolder options, boolean includeExampleInfo) {
-        myExample = example;
-        myOptions = options == null ? new DataSet() : options.toImmutable();
-        myIncludeExampleInfo = includeExampleInfo;
+  @NotNull
+  public SpecExample getExample() {
+    return myExample;
+  }
+
+  @Override
+  final public @NotNull String getHtml() {
+    if (myRenderedHtml == null || !isFinalized()) {
+      myRenderedHtml = renderHtml();
     }
+    return myRenderedHtml;
+  }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean isFinalized() {
-        return myIsFinalized;
-    }
+  @NotNull
+  @Override
+  public DataHolder getOptions() {
+    return myOptions.toImmutable();
+  }
 
-    @Override
-    final public @NotNull String getHtml() {
-        if (myRenderedHtml == null || !isFinalized()) {
-            myRenderedHtml = renderHtml();
-        }
-        return myRenderedHtml;
-    }
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+  public boolean isFinalized() {
+    return myIsFinalized;
+  }
 
-    @Override
-    final public @NotNull String getAst() {
-        if (myRenderedAst == null || !isFinalized()) {
-            myRenderedAst = renderAst();
-        }
-        return myRenderedAst;
-    }
+  @Override
+  public void finalizeRender() {
+    myIsFinalized = true;
+  }
 
-    @NotNull
-    protected abstract String renderHtml();
+  @Override
+  public boolean includeExampleInfo() {
+    return myIncludeExampleInfo;
+  }
 
-    @NotNull
-    protected abstract String renderAst();
+  @NotNull
+  protected abstract String renderHtml();
 
-    @Override
-    public void finalizeRender() {
-        myIsFinalized = true;
-    }
-
-    @Override
-    public boolean includeExampleInfo() {
-        return myIncludeExampleInfo;
-    }
-
-    @NotNull
-    public SpecExample getExample() {
-        return myExample;
-    }
-
-    @NotNull
-    @Override
-    public DataHolder getOptions() {
-        return myOptions.toImmutable();
-    }
+  @NotNull
+  protected abstract String renderAst();
 }

@@ -8,91 +8,91 @@ import org.jetbrains.annotations.NotNull;
  * A EnumeratedReference node
  */
 public class EnumeratedReferenceBase extends Node implements DelimitedNode, DoNotDecorate, ReferencingNode<EnumeratedReferenceRepository, EnumeratedReferenceBlock> {
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence text = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
-    protected EnumeratedReferenceBlock enumeratedReferenceBlock;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence text = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected EnumeratedReferenceBlock enumeratedReferenceBlock;
 
-    @NotNull
-    @Override
-    public BasedSequence getReference() {
-        return text;
-    }
+  public EnumeratedReferenceBase() {
+  }
 
-    @Override
-    public EnumeratedReferenceBlock getReferenceNode(Document document) {
-        return enumeratedReferenceBlock;
-    }
+  public EnumeratedReferenceBase(BasedSequence chars) {
+    super(chars);
+  }
 
-    @Override
-    public EnumeratedReferenceBlock getReferenceNode(EnumeratedReferenceRepository repository) {
-        if (enumeratedReferenceBlock != null || text.isEmpty()) return enumeratedReferenceBlock;
-        enumeratedReferenceBlock = getEnumeratedReferenceBlock(repository);
-        return enumeratedReferenceBlock;
-    }
+  public EnumeratedReferenceBase(BasedSequence openingMarker, BasedSequence text, BasedSequence closingMarker) {
+    super(openingMarker.baseSubSequence(openingMarker.getStartOffset(), closingMarker.getEndOffset()));
+    this.openingMarker = openingMarker;
+    this.text = text;
+    this.closingMarker = closingMarker;
+  }
 
-    public boolean isDefined() {
-        return enumeratedReferenceBlock != null;
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    public EnumeratedReferenceBlock getEnumeratedReferenceBlock(EnumeratedReferenceRepository enumeratedReferenceRepository) {
-        return text.isEmpty() ? null : enumeratedReferenceRepository.get(EnumeratedReferenceRepository.getType(text.toString()));
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public EnumeratedReferenceBlock getEnumeratedReferenceBlock() {
-        return enumeratedReferenceBlock;
-    }
+  public EnumeratedReferenceBlock getEnumeratedReferenceBlock() {
+    return enumeratedReferenceBlock;
+  }
 
-    public void setEnumeratedReferenceBlock(EnumeratedReferenceBlock enumeratedReferenceBlock) {
-        this.enumeratedReferenceBlock = enumeratedReferenceBlock;
-    }
+  public void setEnumeratedReferenceBlock(EnumeratedReferenceBlock enumeratedReferenceBlock) {
+    this.enumeratedReferenceBlock = enumeratedReferenceBlock;
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] { openingMarker, text, closingMarker };
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        delimitedSegmentSpanChars(out, openingMarker, text, closingMarker, "text");
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public EnumeratedReferenceBase() {
-    }
+  @NotNull
+  @Override
+  public BasedSequence getReference() {
+    return text;
+  }
 
-    public EnumeratedReferenceBase(BasedSequence chars) {
-        super(chars);
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{openingMarker, text, closingMarker};
+  }
 
-    public EnumeratedReferenceBase(BasedSequence openingMarker, BasedSequence text, BasedSequence closingMarker) {
-        super(openingMarker.baseSubSequence(openingMarker.getStartOffset(), closingMarker.getEndOffset()));
-        this.openingMarker = openingMarker;
-        this.text = text;
-        this.closingMarker = closingMarker;
-    }
+  public BasedSequence getText() {
+    return text;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public void setText(BasedSequence text) {
+    this.text = text;
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public boolean isDefined() {
+    return enumeratedReferenceBlock != null;
+  }
 
-    public BasedSequence getText() {
-        return text;
-    }
+  @Override
+  public EnumeratedReferenceBlock getReferenceNode(Document document) {
+    return enumeratedReferenceBlock;
+  }
 
-    public void setText(BasedSequence text) {
-        this.text = text;
-    }
+  @Override
+  public EnumeratedReferenceBlock getReferenceNode(EnumeratedReferenceRepository repository) {
+    if (enumeratedReferenceBlock != null || text.isEmpty()) return enumeratedReferenceBlock;
+    enumeratedReferenceBlock = getEnumeratedReferenceBlock(repository);
+    return enumeratedReferenceBlock;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  public EnumeratedReferenceBlock getEnumeratedReferenceBlock(EnumeratedReferenceRepository enumeratedReferenceRepository) {
+    return text.isEmpty() ? null : enumeratedReferenceRepository.get(EnumeratedReferenceRepository.getType(text.toString()));
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    delimitedSegmentSpanChars(out, openingMarker, text, closingMarker, "text");
+  }
 }

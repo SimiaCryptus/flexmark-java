@@ -9,104 +9,103 @@ import org.jetbrains.annotations.NotNull;
  * A Footnote referencing node
  */
 public class Footnote extends Node implements DelimitedNode, DoNotDecorate, ReferencingNode<FootnoteRepository, FootnoteBlock> {
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence text = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
-    protected FootnoteBlock footnoteBlock;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence text = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected FootnoteBlock footnoteBlock;
+  protected int referenceOrdinal;
 
-    public int getReferenceOrdinal() {
-        return referenceOrdinal;
-    }
+  public Footnote() {
+  }
 
-    public void setReferenceOrdinal(int referenceOrdinal) {
-        this.referenceOrdinal = referenceOrdinal;
-    }
+  public Footnote(BasedSequence chars) {
+    super(chars);
+  }
 
-    protected int referenceOrdinal;
+  public Footnote(BasedSequence openingMarker, BasedSequence text, BasedSequence closingMarker) {
+    super(openingMarker.baseSubSequence(openingMarker.getStartOffset(), closingMarker.getEndOffset()));
+    this.openingMarker = openingMarker;
+    this.text = text;
+    this.closingMarker = closingMarker;
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence getReference() {
-        return text;
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    @Override
-    public FootnoteBlock getReferenceNode(Document document) {
-        if (footnoteBlock != null || text.isEmpty()) return footnoteBlock;
-        footnoteBlock = getFootnoteBlock(FootnoteExtension.FOOTNOTES.get(document));
-        return footnoteBlock;
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    @Override
-    public FootnoteBlock getReferenceNode(FootnoteRepository repository) {
-        if (footnoteBlock != null || text.isEmpty()) return footnoteBlock;
-        footnoteBlock = getFootnoteBlock(repository);
-        return footnoteBlock;
-    }
+  public FootnoteBlock getFootnoteBlock() {
+    return footnoteBlock;
+  }
 
-    public boolean isDefined() {
-        return footnoteBlock != null;
-    }
+  public void setFootnoteBlock(FootnoteBlock footnoteBlock) {
+    this.footnoteBlock = footnoteBlock;
+  }
 
-    public FootnoteBlock getFootnoteBlock(FootnoteRepository footnoteRepository) {
-        return text.isEmpty() ? null : footnoteRepository.get(text.toString());
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public FootnoteBlock getFootnoteBlock() {
-        return footnoteBlock;
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public void setFootnoteBlock(FootnoteBlock footnoteBlock) {
-        this.footnoteBlock = footnoteBlock;
-    }
+  @NotNull
+  @Override
+  public BasedSequence getReference() {
+    return text;
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] { openingMarker, text, closingMarker };
-    }
+  public int getReferenceOrdinal() {
+    return referenceOrdinal;
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        out.append(" ordinal: ").append(footnoteBlock != null ? footnoteBlock.getFootnoteOrdinal() : 0).append(" ");
-        delimitedSegmentSpanChars(out, openingMarker, text, closingMarker, "text");
-    }
+  public void setReferenceOrdinal(int referenceOrdinal) {
+    this.referenceOrdinal = referenceOrdinal;
+  }
 
-    public Footnote() {
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{openingMarker, text, closingMarker};
+  }
 
-    public Footnote(BasedSequence chars) {
-        super(chars);
-    }
+  public BasedSequence getText() {
+    return text;
+  }
 
-    public Footnote(BasedSequence openingMarker, BasedSequence text, BasedSequence closingMarker) {
-        super(openingMarker.baseSubSequence(openingMarker.getStartOffset(), closingMarker.getEndOffset()));
-        this.openingMarker = openingMarker;
-        this.text = text;
-        this.closingMarker = closingMarker;
-    }
+  public void setText(BasedSequence text) {
+    this.text = text;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public boolean isDefined() {
+    return footnoteBlock != null;
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  @Override
+  public FootnoteBlock getReferenceNode(Document document) {
+    if (footnoteBlock != null || text.isEmpty()) return footnoteBlock;
+    footnoteBlock = getFootnoteBlock(FootnoteExtension.FOOTNOTES.get(document));
+    return footnoteBlock;
+  }
 
-    public BasedSequence getText() {
-        return text;
-    }
+  @Override
+  public FootnoteBlock getReferenceNode(FootnoteRepository repository) {
+    if (footnoteBlock != null || text.isEmpty()) return footnoteBlock;
+    footnoteBlock = getFootnoteBlock(repository);
+    return footnoteBlock;
+  }
 
-    public void setText(BasedSequence text) {
-        this.text = text;
-    }
+  public FootnoteBlock getFootnoteBlock(FootnoteRepository footnoteRepository) {
+    return text.isEmpty() ? null : footnoteRepository.get(text.toString());
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
-
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    out.append(" ordinal: ").append(footnoteBlock != null ? footnoteBlock.getFootnoteOrdinal() : 0).append(" ");
+    delimitedSegmentSpanChars(out, openingMarker, text, closingMarker, "text");
+  }
 }

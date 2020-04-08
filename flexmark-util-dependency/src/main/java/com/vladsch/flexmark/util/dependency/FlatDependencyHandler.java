@@ -10,32 +10,32 @@ import java.util.function.Function;
  */
 @Deprecated
 public class FlatDependencyHandler<T extends Dependent> extends DependencyHandler<T, FlatDependencyStage<T>, FlatDependencies<T>> {
-    public List<T> resolvedDependencies(List<T> dependentsList) {
-        FlatDependencies<T> dependencies = resolveDependencies(dependentsList);
-        return dependencies.dependencies;
-    }
+  public static <T extends Dependent> List<T> computeDependencies(List<T> dependentsList) {
+    FlatDependencyHandler<T> resolver = new FlatDependencyHandler<>();
+    return resolver.resolvedDependencies(dependentsList);
+  }
 
-    @NotNull
-    @Override
-    protected FlatDependencyStage<T> createStage(List<T> dependents) {
-        return new FlatDependencyStage<>(dependents);
-    }
+  public List<T> resolvedDependencies(List<T> dependentsList) {
+    FlatDependencies<T> dependencies = resolveDependencies(dependentsList);
+    return dependencies.dependencies;
+  }
 
-    @NotNull
-    @Override
-    protected Class<? extends T> getDependentClass(T dependent) {
-        //noinspection unchecked
-        return (Class<? extends T>) dependent.getClass();
-    }
+  @NotNull
+  @Override
+  protected FlatDependencyStage<T> createStage(List<T> dependents) {
+    return new FlatDependencyStage<>(dependents);
+  }
 
-    @NotNull
-    @Override
-    protected FlatDependencies<T> createResolvedDependencies(List<FlatDependencyStage<T>> stages) {
-        return new FlatDependencies<>(stages);
-    }
+  @NotNull
+  @Override
+  protected Class<? extends T> getDependentClass(T dependent) {
+    //noinspection unchecked
+    return (Class<? extends T>) dependent.getClass();
+  }
 
-    public static <T extends Dependent> List<T> computeDependencies(List<T> dependentsList) {
-        FlatDependencyHandler<T> resolver = new FlatDependencyHandler<>();
-        return resolver.resolvedDependencies(dependentsList);
-    }
+  @NotNull
+  @Override
+  protected FlatDependencies<T> createResolvedDependencies(List<FlatDependencyStage<T>> stages) {
+    return new FlatDependencies<>(stages);
+  }
 }

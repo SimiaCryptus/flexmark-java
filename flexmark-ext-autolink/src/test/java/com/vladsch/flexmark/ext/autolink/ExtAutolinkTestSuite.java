@@ -5,9 +5,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        AutolinkTest.class,
-        ComboAutolinkSpecTest.class,
-        MergeAutoLinkTest.class,
+    AutolinkTest.class,
+    ComboAutolinkSpecTest.class,
+    MergeAutoLinkTest.class,
 })
 public class ExtAutolinkTestSuite {
 }

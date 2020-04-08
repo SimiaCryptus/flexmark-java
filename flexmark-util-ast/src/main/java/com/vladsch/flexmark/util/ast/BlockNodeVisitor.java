@@ -13,25 +13,25 @@ import java.util.function.BiConsumer;
  */
 @SuppressWarnings("rawtypes")
 public class BlockNodeVisitor extends NodeVisitor {
-    public BlockNodeVisitor() {
-    }
+  public BlockNodeVisitor() {
+  }
 
-    public BlockNodeVisitor(@NotNull VisitHandler... handlers) {
-        super(handlers);
-    }
+  public BlockNodeVisitor(@NotNull VisitHandler... handlers) {
+    super(handlers);
+  }
 
-    public BlockNodeVisitor(@NotNull VisitHandler[]... handlers) {
-        super(handlers);
-    }
+  public BlockNodeVisitor(@NotNull VisitHandler[]... handlers) {
+    super(handlers);
+  }
 
-    public BlockNodeVisitor(@NotNull Collection<VisitHandler> handlers) {
-        super(handlers);
-    }
+  public BlockNodeVisitor(@NotNull Collection<VisitHandler> handlers) {
+    super(handlers);
+  }
 
-    @Override
-    public void processNode(@NotNull Node node, boolean withChildren, @NotNull BiConsumer<Node, Visitor<Node>> processor) {
-        if (node instanceof Block) {
-            super.processNode(node, withChildren, processor);
-        }
+  @Override
+  public void processNode(@NotNull Node node, boolean withChildren, @NotNull BiConsumer<Node, Visitor<Node>> processor) {
+    if (node instanceof Block) {
+      super.processNode(node, withChildren, processor);
     }
+  }
 }

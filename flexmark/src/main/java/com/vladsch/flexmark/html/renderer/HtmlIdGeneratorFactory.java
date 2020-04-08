@@ -7,10 +7,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface HtmlIdGeneratorFactory {
 
-    /**
-     * Create an id generator
-     *
-     * @return an html id generator
-     */
-    @NotNull HtmlIdGenerator create();
+  /**
+   * Create an id generator
+   *
+   * @return an html id generator
+   */
+  @NotNull HtmlIdGenerator create();
 }

@@ -10,20 +10,19 @@ import org.junit.runners.Parameterized;
 import java.util.List;
 
 public class ComboDocxConverterAltStylesSpecTest extends ComboDocxConverterSpecTestBase {
-    final private static String SPEC_RESOURCE = "/docx_converter_ast_alt_styles_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final public static String TEMPLATE_XML = "/empty-numbered-headings.xml";
+  final public static String TEMPLATE_XML = "/empty-numbered-headings.xml";
+  final private static String SPEC_RESOURCE = "/docx_converter_ast_alt_styles_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(DocxRenderer.DEFAULT_TEMPLATE_RESOURCE, TEMPLATE_XML)
+      .toImmutable();
 
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(DocxRenderer.DEFAULT_TEMPLATE_RESOURCE, TEMPLATE_XML)
-            .toImmutable();
+  public ComboDocxConverterAltStylesSpecTest(@NotNull SpecExample example) {
+    super(example, null, OPTIONS);
+  }
 
-    public ComboDocxConverterAltStylesSpecTest(@NotNull SpecExample example) {
-        super(example, null, OPTIONS);
-    }
-
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

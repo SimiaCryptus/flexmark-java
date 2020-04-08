@@ -8,21 +8,21 @@ import org.jetbrains.annotations.NotNull;
  * A SpecExample block node
  */
 public class SpecExampleOption extends Node {
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        astExtraChars(out);
-    }
+  public SpecExampleOption() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return EMPTY_SEGMENTS;
-    }
+  public SpecExampleOption(BasedSequence chars) {
+    super(chars);
+  }
 
-    public SpecExampleOption() {
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return EMPTY_SEGMENTS;
+  }
 
-    public SpecExampleOption(BasedSequence chars) {
-        super(chars);
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    astExtraChars(out);
+  }
 }

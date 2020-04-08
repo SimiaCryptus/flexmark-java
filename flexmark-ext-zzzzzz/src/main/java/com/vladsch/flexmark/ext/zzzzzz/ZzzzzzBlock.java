@@ -9,94 +9,94 @@ import org.jetbrains.annotations.NotNull;
  * A Zzzzzz block node
  */
 public class ZzzzzzBlock extends Block {
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence text = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
-    protected BasedSequence zzzzzz = BasedSequence.NULL;
-    private int zzzzzzOrdinal = 0;
-    private int firstReferenceOffset = Integer.MAX_VALUE;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence text = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected BasedSequence zzzzzz = BasedSequence.NULL;
+  private int zzzzzzOrdinal = 0;
+  private int firstReferenceOffset = Integer.MAX_VALUE;
 
-    public int getFirstReferenceOffset() {
-        return firstReferenceOffset;
-    }
+  public ZzzzzzBlock() {
+  }
 
-    public void setFirstReferenceOffset(int firstReferenceOffset) {
-        this.firstReferenceOffset = firstReferenceOffset;
-    }
+  public ZzzzzzBlock(BasedSequence chars) {
+    super(chars);
+  }
 
-    public void addFirstReferenceOffset(int firstReferenceOffset) {
-        if (this.firstReferenceOffset < firstReferenceOffset) this.firstReferenceOffset = firstReferenceOffset;
-    }
+  public ZzzzzzBlock(Node node) {
+    super();
+    appendChild(node);
+    this.setCharsFromContent();
+  }
 
-    public boolean isReferenced() {
-        return this.firstReferenceOffset < Integer.MAX_VALUE;
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    public int getZzzzzzOrdinal() {
-        return zzzzzzOrdinal;
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public void setZzzzzzOrdinal(int zzzzzzOrdinal) {
-        this.zzzzzzOrdinal = zzzzzzOrdinal;
-    }
+  public int getFirstReferenceOffset() {
+    return firstReferenceOffset;
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        out.append(" ordinal: ").append(zzzzzzOrdinal).append(" ");
-        segmentSpan(out, openingMarker, "open");
-        segmentSpan(out, text, "text");
-        segmentSpan(out, closingMarker, "close");
-        segmentSpan(out, zzzzzz, "zzzzzz");
-    }
+  public void setFirstReferenceOffset(int firstReferenceOffset) {
+    this.firstReferenceOffset = firstReferenceOffset;
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] { openingMarker, text, closingMarker, zzzzzz };
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public ZzzzzzBlock() {
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public ZzzzzzBlock(BasedSequence chars) {
-        super(chars);
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{openingMarker, text, closingMarker, zzzzzz};
+  }
 
-    public ZzzzzzBlock(Node node) {
-        super();
-        appendChild(node);
-        this.setCharsFromContent();
-    }
+  public BasedSequence getText() {
+    return text;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public void setText(BasedSequence text) {
+    this.text = text;
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public BasedSequence getZzzzzz() {
+    return zzzzzz;
+  }
 
-    public BasedSequence getText() {
-        return text;
-    }
+  public void setZzzzzz(BasedSequence zzzzzz) {
+    this.zzzzzz = zzzzzz;
+  }
 
-    public void setText(BasedSequence text) {
-        this.text = text;
-    }
+  public int getZzzzzzOrdinal() {
+    return zzzzzzOrdinal;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  public void setZzzzzzOrdinal(int zzzzzzOrdinal) {
+    this.zzzzzzOrdinal = zzzzzzOrdinal;
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  public boolean isReferenced() {
+    return this.firstReferenceOffset < Integer.MAX_VALUE;
+  }
 
-    public BasedSequence getZzzzzz() {
-        return zzzzzz;
-    }
+  public void addFirstReferenceOffset(int firstReferenceOffset) {
+    if (this.firstReferenceOffset < firstReferenceOffset) this.firstReferenceOffset = firstReferenceOffset;
+  }
 
-    public void setZzzzzz(BasedSequence zzzzzz) {
-        this.zzzzzz = zzzzzz;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    out.append(" ordinal: ").append(zzzzzzOrdinal).append(" ");
+    segmentSpan(out, openingMarker, "open");
+    segmentSpan(out, text, "text");
+    segmentSpan(out, closingMarker, "close");
+    segmentSpan(out, zzzzzz, "zzzzzz");
+  }
 }

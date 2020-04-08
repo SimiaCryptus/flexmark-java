@@ -11,31 +11,31 @@ import java.util.function.Function;
 import static com.vladsch.flexmark.test.util.spec.ResourceUrlResolver.hasProtocol;
 
 public class ResourceResolverManager {
-    final private static ArrayList<Function<String, String>> urlResolvers = new ArrayList<>();
+  final private static ArrayList<Function<String, String>> urlResolvers = new ArrayList<>();
 
-    public static void registerUrlResolver(@NotNull Function<String, String> resolver) {
-        ResourceResolverManager.urlResolvers.add(resolver);
-    }
+  public static void registerUrlResolver(@NotNull Function<String, String> resolver) {
+    ResourceResolverManager.urlResolvers.add(resolver);
+  }
 
-    @NotNull
-    public static String adjustedFileUrl(@NotNull URL url) {
-        String externalForm = url.toExternalForm();
-        String bestProtocolMatch = null;
+  @NotNull
+  public static String adjustedFileUrl(@NotNull URL url) {
+    String externalForm = url.toExternalForm();
+    String bestProtocolMatch = null;
 
-        for (Function<String, String> resolver : urlResolvers) {
-            String filePath = resolver.apply(externalForm);
-            if (filePath == null) continue;
+    for (Function<String, String> resolver : urlResolvers) {
+      String filePath = resolver.apply(externalForm);
+      if (filePath == null) continue;
 
-            if (hasProtocol(filePath) && bestProtocolMatch == null) {
-                bestProtocolMatch = filePath;
-            } else {
-                File file = new File(filePath);
-                if (file.exists()) {
-                    return TestUtils.FILE_PROTOCOL + filePath;
-                }
-            }
+      if (hasProtocol(filePath) && bestProtocolMatch == null) {
+        bestProtocolMatch = filePath;
+      } else {
+        File file = new File(filePath);
+        if (file.exists()) {
+          return TestUtils.FILE_PROTOCOL + filePath;
         }
-
-        return bestProtocolMatch != null ? bestProtocolMatch : externalForm;
+      }
     }
+
+    return bestProtocolMatch != null ? bestProtocolMatch : externalForm;
+  }
 }

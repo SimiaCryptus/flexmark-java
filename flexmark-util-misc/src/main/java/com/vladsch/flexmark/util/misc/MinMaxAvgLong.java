@@ -1,42 +1,42 @@
 package com.vladsch.flexmark.util.misc;
 
 public class MinMaxAvgLong {
-    private long min = Long.MAX_VALUE;
-    private long max = Long.MIN_VALUE;
-    private long total = 0;
+  private long min = Long.MAX_VALUE;
+  private long max = Long.MIN_VALUE;
+  private long total = 0;
 
-    public MinMaxAvgLong() {
-    }
+  public MinMaxAvgLong() {
+  }
 
-    public void add(long value) {
-        total += value;
-        min = Math.min(min, value);
-        max = Math.max(max, value);
-    }
+  public long getMax() {
+    return max;
+  }
 
-    public void add(MinMaxAvgLong other) {
-        total += other.total;
-        min = Math.min(min, other.min);
-        max = Math.max(max, other.max);
-    }
+  public long getMin() {
+    return min;
+  }
 
-    public void diff(long start, long end) {
-        add(end - start);
-    }
+  public long getTotal() {
+    return total;
+  }
 
-    public long getMin() {
-        return min;
-    }
+  public void add(long value) {
+    total += value;
+    min = Math.min(min, value);
+    max = Math.max(max, value);
+  }
 
-    public long getMax() {
-        return max;
-    }
+  public void add(MinMaxAvgLong other) {
+    total += other.total;
+    min = Math.min(min, other.min);
+    max = Math.max(max, other.max);
+  }
 
-    public long getTotal() {
-        return total;
-    }
+  public void diff(long start, long end) {
+    add(end - start);
+  }
 
-    public long getAvg(long count) {
-        return count == 0 ? 0 : total / count;
-    }
+  public long getAvg(long count) {
+    return count == 0 ? 0 : total / count;
+  }
 }

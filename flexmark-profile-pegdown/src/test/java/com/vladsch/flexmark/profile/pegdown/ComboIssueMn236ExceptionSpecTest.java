@@ -15,24 +15,26 @@ import java.util.Map;
 import static com.vladsch.flexmark.profile.pegdown.Extensions.*;
 
 public class ComboIssueMn236ExceptionSpecTest extends RendererSpecTest {
-    final private static String SPEC_RESOURCE = "/issue_mn_236_exception_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = PegdownOptionsAdapter.flexmarkOptions((ALL & ~HARDWRAPS) | (ALL_OPTIONALS & ~(EXTANCHORLINKS | EXTANCHORLINKS_WRAP))).toMutable()
-            .set(HtmlRenderer.FENCED_CODE_LANGUAGE_CLASS_PREFIX, "")
-            .set(HtmlRenderer.OBFUSCATE_EMAIL_RANDOM, false)
-            .toImmutable();
+  final private static String SPEC_RESOURCE = "/issue_mn_236_exception_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = PegdownOptionsAdapter.flexmarkOptions((ALL & ~HARDWRAPS) | (ALL_OPTIONALS & ~(EXTANCHORLINKS | EXTANCHORLINKS_WRAP))).toMutable()
+      .set(HtmlRenderer.FENCED_CODE_LANGUAGE_CLASS_PREFIX, "")
+      .set(HtmlRenderer.OBFUSCATE_EMAIL_RANDOM, false)
+      .toImmutable();
 
-    final private static Map<String, DataHolder> optionsMap = new HashMap<>();
-    static {
-        optionsMap.put("hard-breaks", PegdownOptionsAdapter.flexmarkOptions((ALL & ~HARDWRAPS) | (ALL_OPTIONALS & ~(EXTANCHORLINKS | EXTANCHORLINKS_WRAP)) | HARDWRAPS)/*.toMutable().remove(Parser.EXTENSIONS)*/);
-        optionsMap.put("anchor-links", PegdownOptionsAdapter.flexmarkOptions((ALL & ~HARDWRAPS) | (ALL_OPTIONALS & ~(EXTANCHORLINKS | EXTANCHORLINKS_WRAP)) | ANCHORLINKS)/*.toMutable().remove(Parser.EXTENSIONS)*/);
-    }
-    public ComboIssueMn236ExceptionSpecTest(@NotNull SpecExample example) {
-        super(example, optionsMap, OPTIONS);
-    }
+  final private static Map<String, DataHolder> optionsMap = new HashMap<>();
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  static {
+    optionsMap.put("hard-breaks", PegdownOptionsAdapter.flexmarkOptions((ALL & ~HARDWRAPS) | (ALL_OPTIONALS & ~(EXTANCHORLINKS | EXTANCHORLINKS_WRAP)) | HARDWRAPS)/*.toMutable().remove(Parser.EXTENSIONS)*/);
+    optionsMap.put("anchor-links", PegdownOptionsAdapter.flexmarkOptions((ALL & ~HARDWRAPS) | (ALL_OPTIONALS & ~(EXTANCHORLINKS | EXTANCHORLINKS_WRAP)) | ANCHORLINKS)/*.toMutable().remove(Parser.EXTENSIONS)*/);
+  }
+
+  public ComboIssueMn236ExceptionSpecTest(@NotNull SpecExample example) {
+    super(example, optionsMap, OPTIONS);
+  }
+
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

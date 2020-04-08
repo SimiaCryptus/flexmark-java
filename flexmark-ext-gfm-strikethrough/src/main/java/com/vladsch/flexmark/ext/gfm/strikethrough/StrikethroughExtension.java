@@ -18,39 +18,39 @@ import org.jetbrains.annotations.NotNull;
  * The parsed strikethrough text regions are turned into {@link Strikethrough} nodes.
  */
 public class StrikethroughExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension {
-    final public static NullableDataKey<String> STRIKETHROUGH_STYLE_HTML_OPEN = StrikethroughSubscriptExtension.STRIKETHROUGH_STYLE_HTML_OPEN;
-    final public static NullableDataKey<String> STRIKETHROUGH_STYLE_HTML_CLOSE = StrikethroughSubscriptExtension.STRIKETHROUGH_STYLE_HTML_CLOSE;
+  final public static NullableDataKey<String> STRIKETHROUGH_STYLE_HTML_OPEN = StrikethroughSubscriptExtension.STRIKETHROUGH_STYLE_HTML_OPEN;
+  final public static NullableDataKey<String> STRIKETHROUGH_STYLE_HTML_CLOSE = StrikethroughSubscriptExtension.STRIKETHROUGH_STYLE_HTML_CLOSE;
 
-    private StrikethroughExtension() {
+  private StrikethroughExtension() {
+  }
+
+  public static StrikethroughExtension create() {
+    return new StrikethroughExtension();
+  }
+
+  @Override
+  public void rendererOptions(@NotNull MutableDataHolder options) {
+
+  }
+
+  @Override
+  public void parserOptions(MutableDataHolder options) {
+
+  }
+
+  @Override
+  public void extend(Parser.Builder parserBuilder) {
+    parserBuilder.customDelimiterProcessor(new StrikethroughDelimiterProcessor());
+  }
+
+  @Override
+  public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
+    if (htmlRendererBuilder.isRendererType("HTML")) {
+      htmlRendererBuilder.nodeRendererFactory(new StrikethroughNodeRenderer.Factory());
+    } else if (htmlRendererBuilder.isRendererType("YOUTRACK")) {
+      htmlRendererBuilder.nodeRendererFactory(new StrikethroughYouTrackRenderer.Factory());
+    } else if (htmlRendererBuilder.isRendererType("JIRA")) {
+      htmlRendererBuilder.nodeRendererFactory(new StrikethroughJiraRenderer.Factory());
     }
-
-    public static StrikethroughExtension create() {
-        return new StrikethroughExtension();
-    }
-
-    @Override
-    public void rendererOptions(@NotNull MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void parserOptions(MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void extend(Parser.Builder parserBuilder) {
-        parserBuilder.customDelimiterProcessor(new StrikethroughDelimiterProcessor());
-    }
-
-    @Override
-    public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
-        if (htmlRendererBuilder.isRendererType("HTML")) {
-            htmlRendererBuilder.nodeRendererFactory(new StrikethroughNodeRenderer.Factory());
-        } else if (htmlRendererBuilder.isRendererType("YOUTRACK")) {
-            htmlRendererBuilder.nodeRendererFactory(new StrikethroughYouTrackRenderer.Factory());
-        } else if (htmlRendererBuilder.isRendererType("JIRA")) {
-            htmlRendererBuilder.nodeRendererFactory(new StrikethroughJiraRenderer.Factory());
-        }
-    }
+  }
 }

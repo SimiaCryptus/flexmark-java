@@ -18,54 +18,54 @@ import com.vladsch.flexmark.util.sequence.BasedSequence;
 import org.jetbrains.annotations.NotNull;
 
 public class EnumeratedReferenceNodePostProcessor extends NodePostProcessor {
-    final private EnumeratedReferences enumeratedReferences;
-    final private HtmlIdGenerator headerIdGenerator;
+  final private EnumeratedReferences enumeratedReferences;
+  final private HtmlIdGenerator headerIdGenerator;
 
-    public EnumeratedReferenceNodePostProcessor(Document document) {
-        enumeratedReferences = EnumeratedReferenceExtension.ENUMERATED_REFERENCE_ORDINALS.get(document);
-        headerIdGenerator = new HeaderIdGenerator.Factory().create();
-        headerIdGenerator.generateIds(document);
+  public EnumeratedReferenceNodePostProcessor(Document document) {
+    enumeratedReferences = EnumeratedReferenceExtension.ENUMERATED_REFERENCE_ORDINALS.get(document);
+    headerIdGenerator = new HeaderIdGenerator.Factory().create();
+    headerIdGenerator.generateIds(document);
+  }
+
+  @Override
+  public void process(@NotNull NodeTracker state, @NotNull Node node) {
+    if (node instanceof AttributesNode) {
+      AttributesNode attributesNode = (AttributesNode) node;
+
+      for (Node attributeNode : attributesNode.getChildren()) {
+        if (attributeNode instanceof AttributeNode) {
+          if (((AttributeNode) attributeNode).isId()) {
+            final String text = ((AttributeNode) attributeNode).getValue().toString();
+            enumeratedReferences.add(text);
+            break;
+          }
+        }
+      }
+    } else if (node instanceof Heading) {
+      // see if it has bare enum reference text
+      for (Node child : node.getChildren()) {
+        if (child instanceof EnumeratedReferenceText) {
+          BasedSequence text = ((EnumeratedReferenceText) child).getText();
+          String type = EnumeratedReferenceRepository.getType(text.toString());
+          if (type.isEmpty() || text.equals(type + ":")) {
+            String id = (type.isEmpty() ? text : type) + ":" + headerIdGenerator.getId(node);
+            enumeratedReferences.add(id);
+          }
+        }
+      }
+    }
+  }
+
+  public static class Factory extends NodePostProcessorFactory {
+    public Factory() {
+      super(false);
+      addNodes(AttributesNode.class, Heading.class);
     }
 
+    @NotNull
     @Override
-    public void process(@NotNull NodeTracker state, @NotNull Node node) {
-        if (node instanceof AttributesNode) {
-            AttributesNode attributesNode = (AttributesNode) node;
-
-            for (Node attributeNode : attributesNode.getChildren()) {
-                if (attributeNode instanceof AttributeNode) {
-                    if (((AttributeNode) attributeNode).isId()) {
-                        final String text = ((AttributeNode) attributeNode).getValue().toString();
-                        enumeratedReferences.add(text);
-                        break;
-                    }
-                }
-            }
-        } else if (node instanceof Heading) {
-            // see if it has bare enum reference text
-            for (Node child : node.getChildren()) {
-                if (child instanceof EnumeratedReferenceText) {
-                    BasedSequence text = ((EnumeratedReferenceText) child).getText();
-                    String type = EnumeratedReferenceRepository.getType(text.toString());
-                    if (type.isEmpty() || text.equals(type + ":")) {
-                        String id = (type.isEmpty() ? text : type) + ":" + headerIdGenerator.getId(node);
-                        enumeratedReferences.add(id);
-                    }
-                }
-            }
-        }
+    public NodePostProcessor apply(@NotNull Document document) {
+      return new EnumeratedReferenceNodePostProcessor(document);
     }
-
-    public static class Factory extends NodePostProcessorFactory {
-        public Factory() {
-            super(false);
-            addNodes(AttributesNode.class, Heading.class);
-        }
-
-        @NotNull
-        @Override
-        public NodePostProcessor apply(@NotNull Document document) {
-            return new EnumeratedReferenceNodePostProcessor(document);
-        }
-    }
+  }
 }

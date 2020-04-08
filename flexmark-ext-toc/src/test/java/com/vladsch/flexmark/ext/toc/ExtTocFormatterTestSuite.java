@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboSimTocMdFormatterSpecTest.class,
-        ComboSimTocHtmlFormatterSpecTest.class,
+    ComboSimTocMdFormatterSpecTest.class,
+    ComboSimTocHtmlFormatterSpecTest.class,
 })
 public class ExtTocFormatterTestSuite {
 }

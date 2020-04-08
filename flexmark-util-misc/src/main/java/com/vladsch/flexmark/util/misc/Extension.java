@@ -15,5 +15,5 @@ import java.util.Collections;
  * also have a static create() method that returns an instance of the extension.
  */
 public interface Extension {
-    Collection<Extension> EMPTY_LIST = Collections.emptyList();
+  Collection<Extension> EMPTY_LIST = Collections.emptyList();
 }

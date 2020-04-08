@@ -12,37 +12,37 @@ import java.util.Set;
 
 public class GitLabNodeFormatter implements NodeFormatter {
 
-    public GitLabNodeFormatter(DataHolder options) {
+  public GitLabNodeFormatter(DataHolder options) {
 
-    }
+  }
 
-    @Nullable
+  @Nullable
+  @Override
+  public Set<Class<?>> getNodeClasses() {
+    return new HashSet<>(Collections.singletonList(
+        GitLabBlockQuote.class
+    ));
+  }
+
+  @Nullable
+  @Override
+  public Set<NodeFormattingHandler<?>> getNodeFormattingHandlers() {
+    return new HashSet<>(Collections.singletonList(
+        new NodeFormattingHandler<>(GitLabBlockQuote.class, GitLabNodeFormatter.this::render)
+    ));
+  }
+
+  private void render(GitLabBlockQuote node, NodeFormatterContext context, MarkdownWriter markdown) {
+    markdown.append(">>>").line();
+    context.renderChildren(node);
+    markdown.append(">>>").line();
+  }
+
+  public static class Factory implements NodeFormatterFactory {
+    @NotNull
     @Override
-    public Set<NodeFormattingHandler<?>> getNodeFormattingHandlers() {
-        return new HashSet<>(Collections.singletonList(
-                new NodeFormattingHandler<>(GitLabBlockQuote.class, GitLabNodeFormatter.this::render)
-        ));
+    public NodeFormatter create(@NotNull DataHolder options) {
+      return new GitLabNodeFormatter(options);
     }
-
-    @Nullable
-    @Override
-    public Set<Class<?>> getNodeClasses() {
-        return new HashSet<>(Collections.singletonList(
-                GitLabBlockQuote.class
-        ));
-    }
-
-    private void render(GitLabBlockQuote node, NodeFormatterContext context, MarkdownWriter markdown) {
-        markdown.append(">>>").line();
-        context.renderChildren(node);
-        markdown.append(">>>").line();
-    }
-
-    public static class Factory implements NodeFormatterFactory {
-        @NotNull
-        @Override
-        public NodeFormatter create(@NotNull DataHolder options) {
-            return new GitLabNodeFormatter(options);
-        }
-    }
+  }
 }

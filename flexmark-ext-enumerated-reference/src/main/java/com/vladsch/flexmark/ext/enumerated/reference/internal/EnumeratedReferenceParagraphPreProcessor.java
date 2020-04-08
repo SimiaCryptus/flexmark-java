@@ -24,77 +24,78 @@ import java.util.regex.Pattern;
 // to get around this need to add ReferenceParagraphPreProcessor set of leading characters
 // which make it not a reference id
 public class EnumeratedReferenceParagraphPreProcessor implements ParagraphPreProcessor {
-    static String ENUM_REF_ID = "(?:[^0-9].*)?";
-    static Pattern ENUM_REF_DEF_PARAGRAPH_PATTERN = Pattern.compile("\\s{0,3}(\\[[\\@]\\s*(" + ENUM_REF_ID + ")\\s*\\]:)\\s+(.*\n)");
+  static String ENUM_REF_ID = "(?:[^0-9].*)?";
+  static Pattern ENUM_REF_DEF_PARAGRAPH_PATTERN = Pattern.compile("\\s{0,3}(\\[[\\@]\\s*(" + ENUM_REF_ID + ")\\s*\\]:)\\s+(.*\n)");
 
-    @SuppressWarnings("FieldCanBeLocal") final private EnumeratedReferenceOptions options;
-    final private EnumeratedReferenceRepository enumeratedReferences;
+  @SuppressWarnings("FieldCanBeLocal")
+  final private EnumeratedReferenceOptions options;
+  final private EnumeratedReferenceRepository enumeratedReferences;
 
-    EnumeratedReferenceParagraphPreProcessor(DataHolder options) {
-        this.options = new EnumeratedReferenceOptions(options);
-        enumeratedReferences = EnumeratedReferenceExtension.ENUMERATED_REFERENCES.get(options);
+  EnumeratedReferenceParagraphPreProcessor(DataHolder options) {
+    this.options = new EnumeratedReferenceOptions(options);
+    enumeratedReferences = EnumeratedReferenceExtension.ENUMERATED_REFERENCES.get(options);
+  }
+
+  public static ParagraphPreProcessorFactory Factory() {
+    return new ParagraphPreProcessorFactory() {
+      @Nullable
+      @Override
+      public Set<Class<?>> getAfterDependents() {
+        return null;
+      }
+
+      @NotNull
+      @Override
+      public Set<Class<?>> getBeforeDependents() {
+        HashSet<Class<?>> set = new HashSet<>();
+        set.add(ReferencePreProcessorFactory.class);
+        return set;
+      }
+
+      @Override
+      public boolean affectsGlobalScope() {
+        return true;
+      }
+
+      @Override
+      public ParagraphPreProcessor apply(ParserState state) {
+        return new EnumeratedReferenceParagraphPreProcessor(state.getProperties());
+      }
+    };
+  }
+
+  @Override
+  public int preProcessBlock(Paragraph block, ParserState state) {
+    BasedSequence trySequence = block.getChars();
+    Matcher matcher = ENUM_REF_DEF_PARAGRAPH_PATTERN.matcher(trySequence);
+    int lastFound = 0;
+    while (matcher.find()) {
+      if (matcher.start() != lastFound) break;
+
+      lastFound = matcher.end();
+
+      int openingStart = matcher.start(1);
+      int openingEnd = matcher.end(1);
+      BasedSequence openingMarker = trySequence.subSequence(openingStart, openingStart + 2);
+      BasedSequence text = trySequence.subSequence(openingStart + 2, openingEnd - 2).trim();
+      BasedSequence closingMarker = trySequence.subSequence(openingEnd - 2, openingEnd);
+
+      EnumeratedReferenceBlock enumeratedReferenceBlock = new EnumeratedReferenceBlock();
+      enumeratedReferenceBlock.setOpeningMarker(openingMarker);
+      enumeratedReferenceBlock.setText(text);
+      enumeratedReferenceBlock.setClosingMarker(closingMarker);
+
+      BasedSequence enumeratedReference = trySequence.subSequence(matcher.start(3), matcher.end(3));
+      enumeratedReferenceBlock.setEnumeratedReference(enumeratedReference);
+      Paragraph paragraph = new Paragraph(enumeratedReference);
+      enumeratedReferenceBlock.appendChild(paragraph);
+      enumeratedReferenceBlock.setCharsFromContent();
+
+      block.insertBefore(enumeratedReferenceBlock);
+      state.blockAdded(enumeratedReferenceBlock);
+
+      enumeratedReferences.put(enumeratedReferenceBlock.getText().toString(), enumeratedReferenceBlock);
     }
-
-    @Override
-    public int preProcessBlock(Paragraph block, ParserState state) {
-        BasedSequence trySequence = block.getChars();
-        Matcher matcher = ENUM_REF_DEF_PARAGRAPH_PATTERN.matcher(trySequence);
-        int lastFound = 0;
-        while (matcher.find()) {
-            if (matcher.start() != lastFound) break;
-
-            lastFound = matcher.end();
-
-            int openingStart = matcher.start(1);
-            int openingEnd = matcher.end(1);
-            BasedSequence openingMarker = trySequence.subSequence(openingStart, openingStart + 2);
-            BasedSequence text = trySequence.subSequence(openingStart + 2, openingEnd - 2).trim();
-            BasedSequence closingMarker = trySequence.subSequence(openingEnd - 2, openingEnd);
-
-            EnumeratedReferenceBlock enumeratedReferenceBlock = new EnumeratedReferenceBlock();
-            enumeratedReferenceBlock.setOpeningMarker(openingMarker);
-            enumeratedReferenceBlock.setText(text);
-            enumeratedReferenceBlock.setClosingMarker(closingMarker);
-
-            BasedSequence enumeratedReference = trySequence.subSequence(matcher.start(3), matcher.end(3));
-            enumeratedReferenceBlock.setEnumeratedReference(enumeratedReference);
-            Paragraph paragraph = new Paragraph(enumeratedReference);
-            enumeratedReferenceBlock.appendChild(paragraph);
-            enumeratedReferenceBlock.setCharsFromContent();
-
-            block.insertBefore(enumeratedReferenceBlock);
-            state.blockAdded(enumeratedReferenceBlock);
-
-            enumeratedReferences.put(enumeratedReferenceBlock.getText().toString(), enumeratedReferenceBlock);
-        }
-        return lastFound;
-    }
-
-    public static ParagraphPreProcessorFactory Factory() {
-        return new ParagraphPreProcessorFactory() {
-            @Override
-            public boolean affectsGlobalScope() {
-                return true;
-            }
-
-            @Nullable
-            @Override
-            public Set<Class<?>> getAfterDependents() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public Set<Class<?>> getBeforeDependents() {
-                HashSet<Class<?>> set = new HashSet<>();
-                set.add(ReferencePreProcessorFactory.class);
-                return set;
-            }
-
-            @Override
-            public ParagraphPreProcessor apply(ParserState state) {
-                return new EnumeratedReferenceParagraphPreProcessor(state.getProperties());
-            }
-        };
-    }
+    return lastFound;
+  }
 }

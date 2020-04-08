@@ -7,17 +7,17 @@ import java.util.Set;
 import java.util.function.Function;
 
 public interface HtmlLinkResolverFactory extends Function<HtmlNodeConverterContext, HtmlLinkResolver>, Dependent {
-    @Nullable
-    @Override
-    Set<Class<?>> getAfterDependents();
+  @Nullable
+  @Override
+  Set<Class<?>> getAfterDependents();
 
-    @Nullable
-    @Override
-    Set<Class<?>> getBeforeDependents();
+  @Nullable
+  @Override
+  Set<Class<?>> getBeforeDependents();
 
-    @Override
-    boolean affectsGlobalScope();
+  @Override
+  boolean affectsGlobalScope();
 
-    @Override
-    HtmlLinkResolver apply(HtmlNodeConverterContext context);
+  @Override
+  HtmlLinkResolver apply(HtmlNodeConverterContext context);
 }

@@ -13,18 +13,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class ComboMediaTagsEmbedLinkSpecTest extends RendererSpecTest {
-    final private static String SPEC_RESOURCE = "/ext_media_tags_embed_link_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singleton(MediaTagsExtension.create()))
-            .toImmutable();
+  final private static String SPEC_RESOURCE = "/ext_media_tags_embed_link_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Collections.singleton(MediaTagsExtension.create()))
+      .toImmutable();
 
-    public ComboMediaTagsEmbedLinkSpecTest(@NotNull SpecExample example) {
-        super(example, null, OPTIONS);
-    }
+  public ComboMediaTagsEmbedLinkSpecTest(@NotNull SpecExample example) {
+    super(example, null, OPTIONS);
+  }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

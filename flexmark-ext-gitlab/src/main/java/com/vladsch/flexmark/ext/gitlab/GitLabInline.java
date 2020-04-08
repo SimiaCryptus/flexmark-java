@@ -9,57 +9,57 @@ import org.jetbrains.annotations.NotNull;
  * A Ins node
  */
 public class GitLabInline extends Node implements DelimitedNode {
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence text = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence text = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        //return EMPTY_SEGMENTS;
-        return new BasedSequence[] { openingMarker, text, closingMarker };
-    }
+  public GitLabInline() {
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        delimitedSegmentSpanChars(out, openingMarker, text, closingMarker, "text");
-    }
+  public GitLabInline(BasedSequence chars) {
+    super(chars);
+  }
 
-    public GitLabInline() {
-    }
+  public GitLabInline(BasedSequence openingMarker, BasedSequence text, BasedSequence closingMarker) {
+    super(openingMarker.baseSubSequence(openingMarker.getStartOffset(), closingMarker.getEndOffset()));
+    this.openingMarker = openingMarker;
+    this.text = text;
+    this.closingMarker = closingMarker;
+  }
 
-    public GitLabInline(BasedSequence chars) {
-        super(chars);
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    public GitLabInline(BasedSequence openingMarker, BasedSequence text, BasedSequence closingMarker) {
-        super(openingMarker.baseSubSequence(openingMarker.getStartOffset(), closingMarker.getEndOffset()));
-        this.openingMarker = openingMarker;
-        this.text = text;
-        this.closingMarker = closingMarker;
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getText() {
-        return text;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    //return EMPTY_SEGMENTS;
+    return new BasedSequence[]{openingMarker, text, closingMarker};
+  }
 
-    public void setText(BasedSequence text) {
-        this.text = text;
-    }
+  public BasedSequence getText() {
+    return text;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  public void setText(BasedSequence text) {
+    this.text = text;
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    delimitedSegmentSpanChars(out, openingMarker, text, closingMarker, "text");
+  }
 }

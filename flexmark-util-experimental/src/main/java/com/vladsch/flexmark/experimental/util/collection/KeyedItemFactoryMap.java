@@ -10,71 +10,95 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class KeyedItemFactoryMap<K, I, P> implements Map<K, Function<P, I>> {
-    protected final @NotNull HashMap<K, Function<P, I>> factoryMap;
-    protected final @NotNull HashMap<K, I> itemMap;
-    protected final @NotNull P param;
+  protected final @NotNull HashMap<K, Function<P, I>> factoryMap;
+  protected final @NotNull HashMap<K, I> itemMap;
+  protected final @NotNull P param;
 
-    public KeyedItemFactoryMap(@NotNull P param) {
-        this(param, 0);
+  public KeyedItemFactoryMap(@NotNull P param) {
+    this(param, 0);
+  }
+
+  public KeyedItemFactoryMap(@NotNull P param, int capacity) {
+    this.factoryMap = new HashMap<>(capacity);
+    this.itemMap = new HashMap<>();
+    this.param = param;
+  }
+
+  @Override
+  public boolean isEmpty() {
+    return factoryMap.isEmpty();
+  }
+
+  public @Nullable I getItem(@NotNull K key) {
+    I item = itemMap.get(key);
+
+    if (item == null) {
+      Function<P, I> factory = factoryMap.get(key);
+      if (factory == null) {
+        throw new IllegalStateException("Factory for key: " + key + " is not defined");
+      }
+      item = factory.apply(param);
+      itemMap.put(key, item);
     }
 
-    public KeyedItemFactoryMap(@NotNull P param, int capacity) {
-        this.factoryMap = new HashMap<>(capacity);
-        this.itemMap = new HashMap<>();
-        this.param = param;
-    }
+    return item;
+  }
 
-    public @Nullable I getItem(@NotNull K key) {
-        I item = itemMap.get(key);
+  @Override
+  public int size() {
+    return factoryMap.size();
+  }
 
-        if (item == null) {
-            Function<P, I> factory = factoryMap.get(key);
-            if (factory == null) {
-                throw new IllegalStateException("Factory for key: " + key + " is not defined");
-            }
-            item = factory.apply(param);
-            itemMap.put(key, item);
-        }
+  @Override
+  public @Nullable Function<P, I> get(@Nullable Object o) {
+    return factoryMap.get(o);
+  }
 
-        return item;
-    }
+  @Override
+  public boolean containsKey(@Nullable Object o) {
+    return factoryMap.containsKey(o);
+  }
 
-    @Override
-    public int size() {return factoryMap.size();}
+  @Override
+  public @Nullable Function<P, I> put(@NotNull K k, @NotNull Function<P, I> factory) {
+    return factoryMap.put(k, factory);
+  }
 
-    @Override
-    public boolean isEmpty() {return factoryMap.isEmpty();}
+  @Override
+  public void putAll(@NotNull Map<? extends K, ? extends Function<P, I>> map) {
+    factoryMap.putAll(map);
+  }
 
-    @Override
-    public @Nullable Function<P, I> get(@Nullable Object o) {return factoryMap.get(o);}
+  @Override
+  public @Nullable Function<P, I> remove(@Nullable Object o) {
+    return factoryMap.remove(o);
+  }
 
-    @Override
-    public boolean containsKey(@Nullable Object o) {return factoryMap.containsKey(o);}
+  @Override
+  public void clear() {
+    factoryMap.clear();
+  }
 
-    @Override
-    public @Nullable Function<P, I> put(@NotNull K k, @NotNull Function<P, I> factory) {return factoryMap.put(k, factory);}
+  @Override
+  public boolean containsValue(Object o) {
+    return factoryMap.containsValue(o);
+  }
 
-    @Override
-    public void putAll(@NotNull Map<? extends K, ? extends Function<P, I>> map) {factoryMap.putAll(map);}
+  @NotNull
+  @Override
+  public Set<K> keySet() {
+    return factoryMap.keySet();
+  }
 
-    @Override
-    public @Nullable Function<P, I> remove(@Nullable Object o) {return factoryMap.remove(o);}
+  @NotNull
+  @Override
+  public Collection<Function<P, I>> values() {
+    return factoryMap.values();
+  }
 
-    @Override
-    public void clear() {factoryMap.clear();}
-
-    @Override
-    public boolean containsValue(Object o) {return factoryMap.containsValue(o);}
-
-    @NotNull
-    @Override
-    public Set<K> keySet() {return factoryMap.keySet();}
-
-    @NotNull
-    @Override
-    public Collection<Function<P, I>> values() {return factoryMap.values();}
-
-    @NotNull
-    @Override
-    public Set<Entry<K, Function<P, I>>> entrySet() {return factoryMap.entrySet();}
+  @NotNull
+  @Override
+  public Set<Entry<K, Function<P, I>>> entrySet() {
+    return factoryMap.entrySet();
+  }
 }

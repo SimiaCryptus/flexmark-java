@@ -20,31 +20,49 @@ import java.util.Map;
  */
 public interface InlineParser extends LightInlineParser {
 
-    void initializeDocument(@NotNull Document document);
-    void finalizeDocument(@NotNull Document document);
+  @Nullable Bracket getLastBracket();
 
-    /**
-     * @param input the content to parse as inline
-     * @param node  the node to append resulting nodes to (as children)
-     */
-    void parse(@NotNull BasedSequence input, @NotNull Node node);
+  @Nullable Delimiter getLastDelimiter();
 
-    @Nullable Delimiter getLastDelimiter();
-    @Nullable Bracket getLastBracket();
-    @Nullable List<Node> parseCustom(@NotNull BasedSequence input, @NotNull Node node, @NotNull BitSet customCharacters, @NotNull Map<Character, CharacterNodeFactory> nodeFactoryMap);
-    void mergeTextNodes(@Nullable Node fromNode, @Nullable Node toNode);
-    void mergeIfNeeded(@Nullable Text first, @Nullable Text last);
-    @Nullable BasedSequence toEOL();
-    boolean parseNewline();
-    @Nullable BasedSequence parseLinkDestination();
-    @Nullable BasedSequence parseLinkTitle();
-    int parseLinkLabel();
-    boolean parseAutolink();
-    boolean parseHtmlInline();
-    boolean parseEntity();
-    void processDelimiters(@Nullable Delimiter stackBottom);
-    void removeDelimitersBetween(@NotNull Delimiter opener, @NotNull Delimiter closer);
-    void removeDelimiterAndNode(@NotNull Delimiter delim);
-    void removeDelimiterKeepNode(@NotNull Delimiter delim);
-    void removeDelimiter(@NotNull Delimiter delim);
+  void initializeDocument(@NotNull Document document);
+
+  void finalizeDocument(@NotNull Document document);
+
+  /**
+   * @param input the content to parse as inline
+   * @param node  the node to append resulting nodes to (as children)
+   */
+  void parse(@NotNull BasedSequence input, @NotNull Node node);
+
+  @Nullable List<Node> parseCustom(@NotNull BasedSequence input, @NotNull Node node, @NotNull BitSet customCharacters, @NotNull Map<Character, CharacterNodeFactory> nodeFactoryMap);
+
+  void mergeTextNodes(@Nullable Node fromNode, @Nullable Node toNode);
+
+  void mergeIfNeeded(@Nullable Text first, @Nullable Text last);
+
+  @Nullable BasedSequence toEOL();
+
+  boolean parseNewline();
+
+  @Nullable BasedSequence parseLinkDestination();
+
+  @Nullable BasedSequence parseLinkTitle();
+
+  int parseLinkLabel();
+
+  boolean parseAutolink();
+
+  boolean parseHtmlInline();
+
+  boolean parseEntity();
+
+  void processDelimiters(@Nullable Delimiter stackBottom);
+
+  void removeDelimitersBetween(@NotNull Delimiter opener, @NotNull Delimiter closer);
+
+  void removeDelimiterAndNode(@NotNull Delimiter delim);
+
+  void removeDelimiterKeepNode(@NotNull Delimiter delim);
+
+  void removeDelimiter(@NotNull Delimiter delim);
 }

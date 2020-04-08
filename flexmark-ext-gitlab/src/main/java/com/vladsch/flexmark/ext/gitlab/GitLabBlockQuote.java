@@ -13,79 +13,79 @@ import java.util.List;
  * A GitLab block node
  */
 public class GitLabBlockQuote extends Block implements ParagraphContainer {
-    private BasedSequence openingMarker = BasedSequence.NULL;
-    private BasedSequence openingTrailing = BasedSequence.NULL;
-    private BasedSequence closingMarker = BasedSequence.NULL;
-    private BasedSequence closingTrailing = BasedSequence.NULL;
+  private BasedSequence openingMarker = BasedSequence.NULL;
+  private BasedSequence openingTrailing = BasedSequence.NULL;
+  private BasedSequence closingMarker = BasedSequence.NULL;
+  private BasedSequence closingTrailing = BasedSequence.NULL;
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        segmentSpanChars(out, openingMarker, "open");
-        segmentSpanChars(out, openingTrailing, "openTrail");
-        segmentSpanChars(out, closingMarker, "close");
-        segmentSpanChars(out, closingTrailing, "closeTrail");
-    }
+  public GitLabBlockQuote() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] { openingMarker, openingTrailing, closingMarker, closingTrailing };
-    }
+  public GitLabBlockQuote(BasedSequence chars) {
+    super(chars);
+  }
 
-    @Override
-    public boolean isParagraphEndWrappingDisabled(Paragraph node) {
-        return node == getLastChild() || node.getNext() instanceof GitLabBlockQuote;
-    }
+  public GitLabBlockQuote(BasedSequence chars, List<BasedSequence> segments) {
+    super(chars, segments);
+  }
 
-    @Override
-    public boolean isParagraphStartWrappingDisabled(Paragraph node) {
-        return node == getFirstChild() || node.getPrevious() instanceof GitLabBlockQuote;
-    }
+  public GitLabBlockQuote(BlockContent blockContent) {
+    super(blockContent);
+  }
 
-    public GitLabBlockQuote() {
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    public GitLabBlockQuote(BasedSequence chars) {
-        super(chars);
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public GitLabBlockQuote(BasedSequence chars, List<BasedSequence> segments) {
-        super(chars, segments);
-    }
+  public BasedSequence getClosingTrailing() {
+    return closingTrailing;
+  }
 
-    public GitLabBlockQuote(BlockContent blockContent) {
-        super(blockContent);
-    }
+  public void setClosingTrailing(BasedSequence closingTrailing) {
+    this.closingTrailing = closingTrailing;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  public BasedSequence getOpeningTrailing() {
+    return openingTrailing;
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  public void setOpeningTrailing(BasedSequence openingTrailing) {
+    this.openingTrailing = openingTrailing;
+  }
 
-    public BasedSequence getOpeningTrailing() {
-        return openingTrailing;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{openingMarker, openingTrailing, closingMarker, closingTrailing};
+  }
 
-    public void setOpeningTrailing(BasedSequence openingTrailing) {
-        this.openingTrailing = openingTrailing;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    segmentSpanChars(out, openingMarker, "open");
+    segmentSpanChars(out, openingTrailing, "openTrail");
+    segmentSpanChars(out, closingMarker, "close");
+    segmentSpanChars(out, closingTrailing, "closeTrail");
+  }
 
-    public BasedSequence getClosingTrailing() {
-        return closingTrailing;
-    }
+  @Override
+  public boolean isParagraphEndWrappingDisabled(Paragraph node) {
+    return node == getLastChild() || node.getNext() instanceof GitLabBlockQuote;
+  }
 
-    public void setClosingTrailing(BasedSequence closingTrailing) {
-        this.closingTrailing = closingTrailing;
-    }
+  @Override
+  public boolean isParagraphStartWrappingDisabled(Paragraph node) {
+    return node == getFirstChild() || node.getPrevious() instanceof GitLabBlockQuote;
+  }
 }

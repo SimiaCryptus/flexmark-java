@@ -6,59 +6,59 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TemplateUtil {
-    final public static Resolver NULL_RESOLVER = groups -> null;
+  final public static Resolver NULL_RESOLVER = groups -> null;
 
-    public static class MappedResolver implements Resolver {
-        final protected Map<String, String> resolved;
+  public static String resolveRefs(CharSequence text, Pattern pattern, Resolver resolver) {
+    if (text == null) return "";
 
-        public MappedResolver(Map<String, String> map) {
-            resolved = map;
+    Matcher matcher = pattern.matcher(text);
+    if (matcher.find()) {
+      StringBuffer sb = new StringBuffer();
+
+      do {
+        String[] groups = new String[matcher.groupCount() + 1];
+        for (int i = 0; i < groups.length; i++) {
+          groups[i] = matcher.group(i);
         }
 
-        public MappedResolver() {
-            this(new HashMap<>());
-        }
+        String resolved = resolver.resolve(groups);
 
-        public MappedResolver set(String name, String value) {
-            resolved.put(name, value);
-            return this;
-        }
+        matcher.appendReplacement(sb, resolved == null ? "" : resolved.replace("\\", "\\\\").replace("$", "\\$"));
+      } while (matcher.find());
 
-        public Map<String, String> getMMap() {
-            return resolved;
-        }
+      matcher.appendTail(sb);
+      return sb.toString();
+    }
+    return text.toString();
+  }
 
-        @Override
-        public String resolve(String[] groups) {
-            return groups.length > 2 ? null : resolved.get(groups[1]);
-        }
+  public interface Resolver {
+    String resolve(String[] groups);
+  }
+
+  public static class MappedResolver implements Resolver {
+    final protected Map<String, String> resolved;
+
+    public MappedResolver(Map<String, String> map) {
+      resolved = map;
     }
 
-    public interface Resolver {
-        String resolve(String[] groups);
+    public MappedResolver() {
+      this(new HashMap<>());
     }
 
-    public static String resolveRefs(CharSequence text, Pattern pattern, Resolver resolver) {
-        if (text == null) return "";
-
-        Matcher matcher = pattern.matcher(text);
-        if (matcher.find()) {
-            StringBuffer sb = new StringBuffer();
-
-            do {
-                String[] groups = new String[matcher.groupCount() + 1];
-                for (int i = 0; i < groups.length; i++) {
-                    groups[i] = matcher.group(i);
-                }
-
-                String resolved = resolver.resolve(groups);
-
-                matcher.appendReplacement(sb, resolved == null ? "" : resolved.replace("\\", "\\\\").replace("$", "\\$"));
-            } while (matcher.find());
-
-            matcher.appendTail(sb);
-            return sb.toString();
-        }
-        return text.toString();
+    public Map<String, String> getMMap() {
+      return resolved;
     }
+
+    public MappedResolver set(String name, String value) {
+      resolved.put(name, value);
+      return this;
+    }
+
+    @Override
+    public String resolve(String[] groups) {
+      return groups.length > 2 ? null : resolved.get(groups[1]);
+    }
+  }
 }

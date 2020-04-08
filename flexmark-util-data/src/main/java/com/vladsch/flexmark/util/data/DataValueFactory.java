@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Function;
 
 public interface DataValueFactory<T> extends Function<DataHolder, T> {
-    @Override
-    @Nullable T apply(@NotNull DataHolder dataHolder);
+  @Override
+  @Nullable T apply(@NotNull DataHolder dataHolder);
 }
 

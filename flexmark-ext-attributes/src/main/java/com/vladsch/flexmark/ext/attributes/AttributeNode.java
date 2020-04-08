@@ -11,98 +11,98 @@ import org.jetbrains.annotations.Nullable;
  * An Attribute node representing a single attribute name and value in attributes node
  */
 public class AttributeNode extends Node implements DoNotDecorate {
-    protected BasedSequence name = BasedSequence.NULL;
-    protected BasedSequence attributeSeparator = BasedSequence.NULL;
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence value = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected BasedSequence name = BasedSequence.NULL;
+  protected BasedSequence attributeSeparator = BasedSequence.NULL;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence value = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        //return EMPTY_SEGMENTS;
-        return new BasedSequence[] { name, attributeSeparator, openingMarker, value, closingMarker };
-    }
+  public AttributeNode() {
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        segmentSpanChars(out, name, "name");
-        segmentSpanChars(out, attributeSeparator, "sep");
-        delimitedSegmentSpanChars(out, openingMarker, value, closingMarker, "value");
-        if (isImplicitName()) out.append(" isImplicit");
-        if (isClass()) out.append(" isClass");
-        if (isId()) out.append(" isId");
-    }
+  public AttributeNode(BasedSequence chars) {
+    super(chars);
+  }
 
-    public AttributeNode() {
-    }
+  public AttributeNode(@Nullable BasedSequence name, @Nullable BasedSequence attributeSeparator, @Nullable BasedSequence openingMarker, @Nullable BasedSequence value, @Nullable BasedSequence closingMarker) {
+    super(spanningChars(name, attributeSeparator, openingMarker, value, closingMarker));
+    this.name = name != null ? name : BasedSequence.NULL;
+    this.attributeSeparator = attributeSeparator != null ? attributeSeparator : BasedSequence.NULL;
+    this.openingMarker = openingMarker != null ? openingMarker : BasedSequence.NULL;
+    this.value = value != null ? value : BasedSequence.NULL;
+    this.closingMarker = closingMarker != null ? closingMarker : BasedSequence.NULL;
+  }
 
-    public AttributeNode(BasedSequence chars) {
-        super(chars);
-    }
+  public BasedSequence getAttributeSeparator() {
+    return attributeSeparator;
+  }
 
-    public AttributeNode(@Nullable BasedSequence name, @Nullable BasedSequence attributeSeparator, @Nullable BasedSequence openingMarker, @Nullable BasedSequence value, @Nullable BasedSequence closingMarker) {
-        super(spanningChars(name, attributeSeparator, openingMarker, value, closingMarker));
-        this.name = name != null ? name : BasedSequence.NULL;
-        this.attributeSeparator = attributeSeparator != null ? attributeSeparator : BasedSequence.NULL;
-        this.openingMarker = openingMarker != null ? openingMarker : BasedSequence.NULL;
-        this.value = value != null ? value : BasedSequence.NULL;
-        this.closingMarker = closingMarker != null ? closingMarker : BasedSequence.NULL;
-    }
+  public void setAttributeSeparator(BasedSequence attributeSeparator) {
+    this.attributeSeparator = attributeSeparator;
+  }
 
-    public static boolean isImplicitName(CharSequence text) {
-        return text.length() > 0 && (text.charAt(0) == '.' || text.charAt(0) == '#');
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    public boolean isImplicitName() {
-        return (value.isNotNull() && attributeSeparator.isNull() && name.isNotNull());
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public boolean isClass() {
-        return (isImplicitName() && name.equals(".")) || (!isImplicitName() && name.equals(Attribute.CLASS_ATTR));
-    }
+  public BasedSequence getName() {
+    return name;
+  }
 
-    public boolean isId() {
-        return (isImplicitName() && name.equals("#")) || (!isImplicitName() && name.equals(Attribute.ID_ATTR));
-    }
+  public void setName(BasedSequence name) {
+    this.name = name;
+  }
 
-    public BasedSequence getName() {
-        return name;
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public void setName(BasedSequence name) {
-        this.name = name;
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getAttributeSeparator() {
-        return attributeSeparator;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    //return EMPTY_SEGMENTS;
+    return new BasedSequence[]{name, attributeSeparator, openingMarker, value, closingMarker};
+  }
 
-    public void setAttributeSeparator(BasedSequence attributeSeparator) {
-        this.attributeSeparator = attributeSeparator;
-    }
+  public BasedSequence getValue() {
+    return value;
+  }
 
-    public BasedSequence getValue() {
-        return value;
-    }
+  public void setValue(BasedSequence value) {
+    this.value = value;
+  }
 
-    public void setValue(BasedSequence value) {
-        this.value = value;
-    }
+  public boolean isClass() {
+    return (isImplicitName() && name.equals(".")) || (!isImplicitName() && name.equals(Attribute.CLASS_ATTR));
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public boolean isId() {
+    return (isImplicitName() && name.equals("#")) || (!isImplicitName() && name.equals(Attribute.ID_ATTR));
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public boolean isImplicitName() {
+    return (value.isNotNull() && attributeSeparator.isNull() && name.isNotNull());
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  public static boolean isImplicitName(CharSequence text) {
+    return text.length() > 0 && (text.charAt(0) == '.' || text.charAt(0) == '#');
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    segmentSpanChars(out, name, "name");
+    segmentSpanChars(out, attributeSeparator, "sep");
+    delimitedSegmentSpanChars(out, openingMarker, value, closingMarker, "value");
+    if (isImplicitName()) out.append(" isImplicit");
+    if (isClass()) out.append(" isClass");
+    if (isId()) out.append(" isId");
+  }
 }

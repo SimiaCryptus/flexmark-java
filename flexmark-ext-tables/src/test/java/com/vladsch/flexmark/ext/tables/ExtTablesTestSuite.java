@@ -5,15 +5,15 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboTableSpecTest.class,
-        ComboTableFormatterSpecTest.class,
-        ComboTableManipulationSpecTest.class,
-        TableTextCollectingVisitorTest.class,
-        MarkdownTableTest.class,
-        MarkdownTransposeTableTest.class,
-        MarkdownSortTableTest.class,
-        TableCellOffsetInfoTest.class,
-        //JiraTablesSpecTest.class,
+    ComboTableSpecTest.class,
+    ComboTableFormatterSpecTest.class,
+    ComboTableManipulationSpecTest.class,
+    TableTextCollectingVisitorTest.class,
+    MarkdownTableTest.class,
+    MarkdownTransposeTableTest.class,
+    MarkdownSortTableTest.class,
+    TableCellOffsetInfoTest.class,
+    //JiraTablesSpecTest.class,
 })
 public class ExtTablesTestSuite {
 }

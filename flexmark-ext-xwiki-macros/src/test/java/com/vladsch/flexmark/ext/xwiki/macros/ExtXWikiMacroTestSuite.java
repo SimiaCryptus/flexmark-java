@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboMacroSpecTest.class,
+    ComboMacroSpecTest.class,
 })
 public class ExtXWikiMacroTestSuite {
 }

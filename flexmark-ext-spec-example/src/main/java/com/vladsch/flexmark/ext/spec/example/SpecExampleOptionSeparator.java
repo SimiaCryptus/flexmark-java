@@ -8,20 +8,20 @@ import org.jetbrains.annotations.NotNull;
  * A SpecExample block node
  */
 public class SpecExampleOptionSeparator extends Node {
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-    }
+  public SpecExampleOptionSeparator() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return EMPTY_SEGMENTS;
-    }
+  public SpecExampleOptionSeparator(BasedSequence chars) {
+    super(chars);
+  }
 
-    public SpecExampleOptionSeparator() {
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return EMPTY_SEGMENTS;
+  }
 
-    public SpecExampleOptionSeparator(BasedSequence chars) {
-        super(chars);
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+  }
 }

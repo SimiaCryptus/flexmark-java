@@ -6,8 +6,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        FlexmarkTestSuiteNoDocx.class,
-        DocxConverterTestSuite.class,
+    FlexmarkTestSuiteNoDocx.class,
+    DocxConverterTestSuite.class,
 })
 public class FlexmarkTestSuite {
 }

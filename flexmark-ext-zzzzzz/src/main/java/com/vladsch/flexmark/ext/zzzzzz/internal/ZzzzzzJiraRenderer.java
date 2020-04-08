@@ -15,33 +15,33 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ZzzzzzJiraRenderer implements NodeRenderer {
-    public ZzzzzzJiraRenderer(DataHolder options) {
+  public ZzzzzzJiraRenderer(DataHolder options) {
 
-    }
+  }
 
+  @Override
+  public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
+    return new HashSet<>(Arrays.asList(
+        new NodeRenderingHandler<>(Zzzzzz.class, this::render),// zzzoptionszzz(CUSTOM_NODE)
+        new NodeRenderingHandler<>(ZzzzzzBlock.class, this::render)// zzzoptionszzz(CUSTOM_BLOCK_NODE)
+    ));
+  }
+
+  private void render(Zzzzzz node, NodeRendererContext context, HtmlWriter html) {
+    html.raw("");
+  }
+
+  private void render(ZzzzzzBlock node, NodeRendererContext context, HtmlWriter html) {
+    html.raw("{}");
+    html.raw(node.getText().unescape());
+    html.raw("{}");
+  }
+
+  public static class Factory implements NodeRendererFactory {
+    @NotNull
     @Override
-    public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
-        return new HashSet<>(Arrays.asList(
-                new NodeRenderingHandler<>(Zzzzzz.class, this::render),// zzzoptionszzz(CUSTOM_NODE)
-                new NodeRenderingHandler<>(ZzzzzzBlock.class, this::render)// zzzoptionszzz(CUSTOM_BLOCK_NODE)
-        ));
+    public NodeRenderer apply(@NotNull DataHolder options) {
+      return new ZzzzzzJiraRenderer(options);
     }
-
-    private void render(Zzzzzz node, NodeRendererContext context, HtmlWriter html) {
-        html.raw("");
-    }
-
-    private void render(ZzzzzzBlock node, NodeRendererContext context, HtmlWriter html) {
-        html.raw("{}");
-        html.raw(node.getText().unescape());
-        html.raw("{}");
-    }
-
-    public static class Factory implements NodeRendererFactory {
-        @NotNull
-        @Override
-        public NodeRenderer apply(@NotNull DataHolder options) {
-            return new ZzzzzzJiraRenderer(options);
-        }
-    }
+  }
 }

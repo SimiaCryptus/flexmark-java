@@ -16,134 +16,134 @@ import java.util.List;
  * A MacroReference block node
  */
 public class MacroDefinitionBlock extends Block implements ReferenceNode<MacroDefinitionRepository, MacroDefinitionBlock, MacroReference> {
-    private BasedSequence openingMarker = BasedSequence.NULL;
-    private BasedSequence name = BasedSequence.NULL;
-    private BasedSequence openingTrailing = BasedSequence.NULL;
-    private BasedSequence closingMarker = BasedSequence.NULL;
-    private BasedSequence closingTrailing = BasedSequence.NULL;
-    private int ordinal = 0;
-    private int firstReferenceOffset = Integer.MAX_VALUE;
-    private int footnoteReferences = 0;
-    private boolean inExpansion = false;
+  private BasedSequence openingMarker = BasedSequence.NULL;
+  private BasedSequence name = BasedSequence.NULL;
+  private BasedSequence openingTrailing = BasedSequence.NULL;
+  private BasedSequence closingMarker = BasedSequence.NULL;
+  private BasedSequence closingTrailing = BasedSequence.NULL;
+  private int ordinal = 0;
+  private int firstReferenceOffset = Integer.MAX_VALUE;
+  private int footnoteReferences = 0;
+  private boolean inExpansion = false;
 
-    public int getFootnoteReferences() {
-        return footnoteReferences;
-    }
+  public MacroDefinitionBlock() {
+  }
 
-    public void setFootnoteReferences(int footnoteReferences) {
-        this.footnoteReferences = footnoteReferences;
-    }
+  public MacroDefinitionBlock(BasedSequence chars) {
+    super(chars);
+  }
 
-    public int getFirstReferenceOffset() {
-        return firstReferenceOffset;
-    }
+  public MacroDefinitionBlock(BasedSequence chars, List<BasedSequence> segments) {
+    super(chars, segments);
+  }
 
-    public void setFirstReferenceOffset(int firstReferenceOffset) {
-        this.firstReferenceOffset = firstReferenceOffset;
-    }
+  public MacroDefinitionBlock(BlockContent blockContent) {
+    super(blockContent);
+  }
 
-    public void addFirstReferenceOffset(int firstReferenceOffset) {
-        if (this.firstReferenceOffset < firstReferenceOffset) this.firstReferenceOffset = firstReferenceOffset;
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    public boolean isReferenced() {
-        return this.firstReferenceOffset < Integer.MAX_VALUE;
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public int getOrdinal() {
-        return ordinal;
-    }
+  public BasedSequence getClosingTrailing() {
+    return closingTrailing;
+  }
 
-    public void setOrdinal(int ordinal) {
-        this.ordinal = ordinal;
-    }
+  public void setClosingTrailing(BasedSequence closingTrailing) {
+    this.closingTrailing = closingTrailing;
+  }
 
-    public boolean isInExpansion() {
-        return inExpansion;
-    }
+  public int getFirstReferenceOffset() {
+    return firstReferenceOffset;
+  }
 
-    public void setInExpansion(boolean inExpansion) {
-        this.inExpansion = inExpansion;
-    }
+  public void setFirstReferenceOffset(int firstReferenceOffset) {
+    this.firstReferenceOffset = firstReferenceOffset;
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        segmentSpanChars(out, openingMarker, "open");
-        segmentSpanChars(out, name, "name");
-        segmentSpanChars(out, openingTrailing, "openTrail");
-        segmentSpanChars(out, closingMarker, "close");
-        segmentSpanChars(out, closingTrailing, "closeTrail");
-    }
+  public int getFootnoteReferences() {
+    return footnoteReferences;
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] { openingMarker, name, openingTrailing, closingMarker, closingTrailing };
-    }
+  public void setFootnoteReferences(int footnoteReferences) {
+    this.footnoteReferences = footnoteReferences;
+  }
 
-    @Nullable
-    @Override
-    public MacroReference getReferencingNode(@NotNull Node node) {
-        return node instanceof MacroReference ? (MacroReference) node : null;
-    }
+  public BasedSequence getName() {
+    return name;
+  }
 
-    @Override
-    public int compareTo(MacroDefinitionBlock other) {
-        return SequenceUtils.compare(name, other.name, true);
-    }
+  public void setName(BasedSequence name) {
+    this.name = name;
+  }
 
-    public MacroDefinitionBlock() {
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public MacroDefinitionBlock(BasedSequence chars) {
-        super(chars);
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public MacroDefinitionBlock(BasedSequence chars, List<BasedSequence> segments) {
-        super(chars, segments);
-    }
+  public BasedSequence getOpeningTrailing() {
+    return openingTrailing;
+  }
 
-    public MacroDefinitionBlock(BlockContent blockContent) {
-        super(blockContent);
-    }
+  public void setOpeningTrailing(BasedSequence openingTrailing) {
+    this.openingTrailing = openingTrailing;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public int getOrdinal() {
+    return ordinal;
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public void setOrdinal(int ordinal) {
+    this.ordinal = ordinal;
+  }
 
-    public BasedSequence getName() {
-        return name;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{openingMarker, name, openingTrailing, closingMarker, closingTrailing};
+  }
 
-    public void setName(BasedSequence name) {
-        this.name = name;
-    }
+  public boolean isInExpansion() {
+    return inExpansion;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  public void setInExpansion(boolean inExpansion) {
+    this.inExpansion = inExpansion;
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  public boolean isReferenced() {
+    return this.firstReferenceOffset < Integer.MAX_VALUE;
+  }
 
-    public BasedSequence getOpeningTrailing() {
-        return openingTrailing;
-    }
+  public void addFirstReferenceOffset(int firstReferenceOffset) {
+    if (this.firstReferenceOffset < firstReferenceOffset) this.firstReferenceOffset = firstReferenceOffset;
+  }
 
-    public void setOpeningTrailing(BasedSequence openingTrailing) {
-        this.openingTrailing = openingTrailing;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    segmentSpanChars(out, openingMarker, "open");
+    segmentSpanChars(out, name, "name");
+    segmentSpanChars(out, openingTrailing, "openTrail");
+    segmentSpanChars(out, closingMarker, "close");
+    segmentSpanChars(out, closingTrailing, "closeTrail");
+  }
 
-    public BasedSequence getClosingTrailing() {
-        return closingTrailing;
-    }
+  @Nullable
+  @Override
+  public MacroReference getReferencingNode(@NotNull Node node) {
+    return node instanceof MacroReference ? (MacroReference) node : null;
+  }
 
-    public void setClosingTrailing(BasedSequence closingTrailing) {
-        this.closingTrailing = closingTrailing;
-    }
+  @Override
+  public int compareTo(MacroDefinitionBlock other) {
+    return SequenceUtils.compare(name, other.name, true);
+  }
 }

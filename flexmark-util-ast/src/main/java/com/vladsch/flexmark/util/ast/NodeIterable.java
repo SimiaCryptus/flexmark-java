@@ -8,72 +8,71 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 public class NodeIterable implements ReversiblePeekingIterable<Node> {
-    final Node firstNode;
-    final Node lastNode;
-    final boolean reversed;
-
-    public NodeIterable(Node firstNode, Node lastNode, boolean reversed) {
-        this.firstNode = firstNode;
-        this.lastNode = lastNode;
-        this.reversed = reversed;
+  final public static ReversiblePeekingIterable<Node> EMPTY = new ReversiblePeekingIterable<Node>() {
+    @Override
+    public boolean isReversed() {
+      return false;
     }
 
     @NotNull
     @Override
     public ReversiblePeekingIterator<Node> iterator() {
-        return new NodeIterator(firstNode, lastNode, reversed);
-    }
-
-    public void forEach(Consumer<? super Node> consumer) {
-        ReversibleIterator<Node> iterator = iterator();
-        while (iterator.hasNext()) {
-            consumer.accept(iterator.next());
-        }
+      return NodeIterator.EMPTY;
     }
 
     @NotNull
     @Override
     public ReversiblePeekingIterable<Node> reversed() {
-        return new NodeIterable(firstNode, lastNode, !reversed);
+      return this;
     }
 
-    @Override
-    public boolean isReversed() {
-        return reversed;
+    public void forEach(Consumer<? super Node> consumer) {
+
     }
 
     @NotNull
     @Override
     public ReversiblePeekingIterator<Node> reversedIterator() {
-        return new NodeIterator(firstNode, lastNode, !reversed);
+      return NodeIterator.EMPTY;
     }
+  };
+  final Node firstNode;
+  final Node lastNode;
+  final boolean reversed;
 
-    final public static ReversiblePeekingIterable<Node> EMPTY = new ReversiblePeekingIterable<Node>() {
-        @NotNull
-        @Override
-        public ReversiblePeekingIterator<Node> iterator() {
-            return NodeIterator.EMPTY;
-        }
+  public NodeIterable(Node firstNode, Node lastNode, boolean reversed) {
+    this.firstNode = firstNode;
+    this.lastNode = lastNode;
+    this.reversed = reversed;
+  }
 
-        @NotNull
-        @Override
-        public ReversiblePeekingIterable<Node> reversed() {
-            return this;
-        }
+  @Override
+  public boolean isReversed() {
+    return reversed;
+  }
 
-        public void forEach(Consumer<? super Node> consumer) {
+  @NotNull
+  @Override
+  public ReversiblePeekingIterator<Node> iterator() {
+    return new NodeIterator(firstNode, lastNode, reversed);
+  }
 
-        }
+  public void forEach(Consumer<? super Node> consumer) {
+    ReversibleIterator<Node> iterator = iterator();
+    while (iterator.hasNext()) {
+      consumer.accept(iterator.next());
+    }
+  }
 
-        @Override
-        public boolean isReversed() {
-            return false;
-        }
+  @NotNull
+  @Override
+  public ReversiblePeekingIterable<Node> reversed() {
+    return new NodeIterable(firstNode, lastNode, !reversed);
+  }
 
-        @NotNull
-        @Override
-        public ReversiblePeekingIterator<Node> reversedIterator() {
-            return NodeIterator.EMPTY;
-        }
-    };
+  @NotNull
+  @Override
+  public ReversiblePeekingIterator<Node> reversedIterator() {
+    return new NodeIterator(firstNode, lastNode, !reversed);
+  }
 }

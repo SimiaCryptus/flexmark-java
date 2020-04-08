@@ -14,33 +14,33 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TypographicNodeRenderer implements NodeRenderer {
-    public TypographicNodeRenderer(DataHolder options) {
+  public TypographicNodeRenderer(DataHolder options) {
 
-    }
+  }
 
+  @Override
+  public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
+    HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
+    set.add(new NodeRenderingHandler<>(TypographicSmarts.class, this::render));
+    set.add(new NodeRenderingHandler<>(TypographicQuotes.class, this::render));
+    return set;
+  }
+
+  private void render(TypographicQuotes node, NodeRendererContext context, HtmlWriter html) {
+    if (node.getTypographicOpening() != null && !node.getTypographicOpening().isEmpty()) html.raw(node.getTypographicOpening());
+    context.renderChildren(node);
+    if (node.getTypographicClosing() != null && !node.getTypographicClosing().isEmpty()) html.raw(node.getTypographicClosing());
+  }
+
+  private void render(TypographicSmarts node, NodeRendererContext context, HtmlWriter html) {
+    html.raw(node.getTypographicText());
+  }
+
+  public static class Factory implements NodeRendererFactory {
+    @NotNull
     @Override
-    public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
-        HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
-        set.add(new NodeRenderingHandler<>(TypographicSmarts.class, this::render));
-        set.add(new NodeRenderingHandler<>(TypographicQuotes.class, this::render));
-        return set;
+    public NodeRenderer apply(@NotNull DataHolder options) {
+      return new TypographicNodeRenderer(options);
     }
-
-    private void render(TypographicQuotes node, NodeRendererContext context, HtmlWriter html) {
-        if (node.getTypographicOpening() != null && !node.getTypographicOpening().isEmpty()) html.raw(node.getTypographicOpening());
-        context.renderChildren(node);
-        if (node.getTypographicClosing() != null && !node.getTypographicClosing().isEmpty()) html.raw(node.getTypographicClosing());
-    }
-
-    private void render(TypographicSmarts node, NodeRendererContext context, HtmlWriter html) {
-        html.raw(node.getTypographicText());
-    }
-
-    public static class Factory implements NodeRendererFactory {
-        @NotNull
-        @Override
-        public NodeRenderer apply(@NotNull DataHolder options) {
-            return new TypographicNodeRenderer(options);
-        }
-    }
+  }
 }

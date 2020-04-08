@@ -19,29 +19,29 @@ import java.util.function.Function;
  * @param <S> type for the setting
  */
 final public class SettableExtractedInstance<T, S> {
-    final private @NotNull DataKey<Consumer<S>> myConsumerKey;
-    final private @NotNull Function<T, S> myDataExtractor;
+  final private @NotNull DataKey<Consumer<S>> myConsumerKey;
+  final private @NotNull Function<T, S> myDataExtractor;
 
-    public SettableExtractedInstance(@NotNull DataKey<Consumer<S>> consumerKey, @NotNull Function<T, S> dataExtractor) {
-        myConsumerKey = consumerKey;
-        myDataExtractor = dataExtractor;
+  public SettableExtractedInstance(@NotNull DataKey<Consumer<S>> consumerKey, @NotNull Function<T, S> dataExtractor) {
+    myConsumerKey = consumerKey;
+    myDataExtractor = dataExtractor;
+  }
+
+  public void aggregate(@NotNull T instance, @NotNull DataHolder dataHolder) {
+    if (dataHolder.contains(myConsumerKey)) {
+      myConsumerKey.get(dataHolder).accept(myDataExtractor.apply(instance));
+    }
+  }
+
+  @NotNull
+  public DataHolder aggregateActions(@NotNull DataHolder dataHolder, @Nullable DataHolder other, @Nullable DataHolder overrides) {
+    if (other != null && other.contains(myConsumerKey) && overrides != null && overrides.contains(myConsumerKey)) {
+      // both, need to combine
+      Consumer<S> otherSetter = myConsumerKey.get(other);
+      Consumer<S> overridesSetter = myConsumerKey.get(overrides);
+      dataHolder = dataHolder.toMutable().set(myConsumerKey, otherSetter.andThen(overridesSetter));
     }
 
-    public void aggregate(@NotNull T instance, @NotNull DataHolder dataHolder) {
-        if (dataHolder.contains(myConsumerKey)) {
-            myConsumerKey.get(dataHolder).accept(myDataExtractor.apply(instance));
-        }
-    }
-
-    @NotNull
-    public DataHolder aggregateActions(@NotNull DataHolder dataHolder, @Nullable DataHolder other, @Nullable DataHolder overrides) {
-        if (other != null && other.contains(myConsumerKey) && overrides != null && overrides.contains(myConsumerKey)) {
-            // both, need to combine
-            Consumer<S> otherSetter = myConsumerKey.get(other);
-            Consumer<S> overridesSetter = myConsumerKey.get(overrides);
-            dataHolder = dataHolder.toMutable().set(myConsumerKey, otherSetter.andThen(overridesSetter));
-        }
-
-        return dataHolder;
-    }
+    return dataHolder;
+  }
 }

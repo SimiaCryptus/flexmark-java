@@ -14,25 +14,25 @@ import java.util.List;
 import java.util.Map;
 
 public class ComboAbbreviationFormatterSpecTest extends FormatterSpecTest {
-    final private static String SPEC_RESOURCE = "/ext_abbreviation_formatter_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singleton(AbbreviationExtension.create()))
-            .set(Parser.LISTS_AUTO_LOOSE, false)
-            .toImmutable();
+  final private static String SPEC_RESOURCE = "/ext_abbreviation_formatter_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Collections.singleton(AbbreviationExtension.create()))
+      .set(Parser.LISTS_AUTO_LOOSE, false)
+      .toImmutable();
 
-    final private static Map<String, DataHolder> optionsMap = placementAndSortOptions(
-            AbbreviationExtension.ABBREVIATIONS_KEEP,
-            AbbreviationExtension.ABBREVIATIONS_PLACEMENT,
-            AbbreviationExtension.ABBREVIATIONS_SORT
-    );
+  final private static Map<String, DataHolder> optionsMap = placementAndSortOptions(
+      AbbreviationExtension.ABBREVIATIONS_KEEP,
+      AbbreviationExtension.ABBREVIATIONS_PLACEMENT,
+      AbbreviationExtension.ABBREVIATIONS_SORT
+  );
 
-    public ComboAbbreviationFormatterSpecTest(@NotNull SpecExample example) {
-        super(example, optionsMap, OPTIONS);
-    }
+  public ComboAbbreviationFormatterSpecTest(@NotNull SpecExample example) {
+    super(example, optionsMap, OPTIONS);
+  }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

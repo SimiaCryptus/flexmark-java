@@ -17,38 +17,38 @@ import org.jetbrains.annotations.NotNull;
  * The parsed jekyll_front_matter text is turned into {@link JekyllFrontMatterBlock} nodes.
  */
 public class JekyllFrontMatterExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, Formatter.FormatterExtension {
-    private JekyllFrontMatterExtension() {
+  private JekyllFrontMatterExtension() {
+  }
+
+  public static JekyllFrontMatterExtension create() {
+    return new JekyllFrontMatterExtension();
+  }
+
+  @Override
+  public void extend(Formatter.Builder formatterBuilder) {
+    formatterBuilder.nodeFormatterFactory(new JekyllFrontMatterNodeFormatter.Factory());
+  }
+
+  @Override
+  public void rendererOptions(@NotNull MutableDataHolder options) {
+
+  }
+
+  @Override
+  public void parserOptions(MutableDataHolder options) {
+
+  }
+
+  @Override
+  public void extend(Parser.Builder parserBuilder) {
+    parserBuilder.customBlockParserFactory(new JekyllFrontMatterBlockParser.Factory());
+  }
+
+  @Override
+  public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
+    if (htmlRendererBuilder.isRendererType("HTML")) {
+      htmlRendererBuilder.nodeRendererFactory(new JekyllFrontMatterNodeRenderer.Factory());
+    } else if (htmlRendererBuilder.isRendererType("JIRA")) {
     }
-
-    public static JekyllFrontMatterExtension create() {
-        return new JekyllFrontMatterExtension();
-    }
-
-    @Override
-    public void extend(Formatter.Builder formatterBuilder) {
-        formatterBuilder.nodeFormatterFactory(new JekyllFrontMatterNodeFormatter.Factory());
-    }
-
-    @Override
-    public void rendererOptions(@NotNull MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void parserOptions(MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void extend(Parser.Builder parserBuilder) {
-        parserBuilder.customBlockParserFactory(new JekyllFrontMatterBlockParser.Factory());
-    }
-
-    @Override
-    public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
-        if (htmlRendererBuilder.isRendererType("HTML")) {
-            htmlRendererBuilder.nodeRendererFactory(new JekyllFrontMatterNodeRenderer.Factory());
-        } else if (htmlRendererBuilder.isRendererType("JIRA")) {
-        }
-    }
+  }
 }

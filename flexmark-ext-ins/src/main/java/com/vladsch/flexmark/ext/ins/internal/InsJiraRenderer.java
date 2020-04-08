@@ -13,28 +13,28 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class InsJiraRenderer implements NodeRenderer {
-    public InsJiraRenderer(DataHolder options) {
+  public InsJiraRenderer(DataHolder options) {
 
-    }
+  }
 
+  @Override
+  public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
+    HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
+    set.add(new NodeRenderingHandler<>(Ins.class, this::render));
+    return set;
+  }
+
+  private void render(Ins node, NodeRendererContext context, HtmlWriter html) {
+    html.raw("+");
+    context.renderChildren(node);
+    html.raw("+");
+  }
+
+  public static class Factory implements NodeRendererFactory {
+    @NotNull
     @Override
-    public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
-        HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
-        set.add(new NodeRenderingHandler<>(Ins.class, this::render));
-        return set;
+    public NodeRenderer apply(@NotNull DataHolder options) {
+      return new InsJiraRenderer(options);
     }
-
-    private void render(Ins node, NodeRendererContext context, HtmlWriter html) {
-        html.raw("+");
-        context.renderChildren(node);
-        html.raw("+");
-    }
-
-    public static class Factory implements NodeRendererFactory {
-        @NotNull
-        @Override
-        public NodeRenderer apply(@NotNull DataHolder options) {
-            return new InsJiraRenderer(options);
-        }
-    }
+  }
 }

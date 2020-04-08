@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        BoundsIntegrationTest.class,
-        SpecIntegrationTest.class,
+    BoundsIntegrationTest.class,
+    SpecIntegrationTest.class,
 })
 public class IntegrationTestSuite {
 }

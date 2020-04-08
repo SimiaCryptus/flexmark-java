@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TrackedOffsetListTest.class,
-        MarkdownParagraphTest.class,
+    TrackedOffsetListTest.class,
+    MarkdownParagraphTest.class,
 })
 public class FormatTestSuite {
 }

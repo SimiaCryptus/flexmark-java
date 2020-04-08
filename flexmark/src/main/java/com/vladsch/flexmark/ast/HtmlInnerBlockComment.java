@@ -9,21 +9,21 @@ import org.jetbrains.annotations.NotNull;
  * @see <a href="http://spec.commonmark.org/0.24/#raw-html">CommonMark Spec</a>
  */
 public class HtmlInnerBlockComment extends HtmlBlockBase {
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return EMPTY_SEGMENTS;
-    }
+  public HtmlInnerBlockComment() {
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        astExtraChars(out);
-    }
+  public HtmlInnerBlockComment(BasedSequence chars) {
+    super(chars);
+  }
 
-    public HtmlInnerBlockComment() {
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return EMPTY_SEGMENTS;
+  }
 
-    public HtmlInnerBlockComment(BasedSequence chars) {
-        super(chars);
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    astExtraChars(out);
+  }
 }

@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboJiraConverterSpecTest.class,
+    ComboJiraConverterSpecTest.class,
 })
 public class JiraConverterTestSuite {
 }

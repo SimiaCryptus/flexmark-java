@@ -12,20 +12,22 @@ import java.util.List;
  */
 public interface MatchedBlockParser {
 
-    /**
-     * @return current matched block parser instance
-     */
-    BlockParser getBlockParser();
+  /**
+   * @return current matched block parser instance
+   */
+  BlockParser getBlockParser();
 
-    /**
-     * Returns the current content of the paragraph if the matched block is a paragraph. The content can be multiple
-     * lines separated by {@code '\n'}.
-     *
-     * @return paragraph content or {@code null}
-     */
-    BasedSequence getParagraphContent();
+  /**
+   * Returns the current content of the paragraph if the matched block is a paragraph. The content can be multiple
+   * lines separated by {@code '\n'}.
+   *
+   * @return paragraph content or {@code null}
+   */
+  BasedSequence getParagraphContent();
 
-    List<BasedSequence> getParagraphLines();
-    List<Integer> getParagraphEolLengths();
-    MutableDataHolder getParagraphDataHolder();
+  MutableDataHolder getParagraphDataHolder();
+
+  List<Integer> getParagraphEolLengths();
+
+  List<BasedSequence> getParagraphLines();
 }

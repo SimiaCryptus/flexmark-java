@@ -13,18 +13,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class ComboAdmonitionTranslationFormatterSpecTest extends TranslationFormatterSpecTest {
-    final private static String SPEC_RESOURCE = "/ext_admonition_translation_formatter_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singleton(AdmonitionExtension.create()))
-            .set(Parser.LISTS_AUTO_LOOSE, false);
+  final private static String SPEC_RESOURCE = "/ext_admonition_translation_formatter_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Collections.singleton(AdmonitionExtension.create()))
+      .set(Parser.LISTS_AUTO_LOOSE, false);
 
-    public ComboAdmonitionTranslationFormatterSpecTest(@NotNull SpecExample example) {
-        super(example, null, OPTIONS);
-    }
+  public ComboAdmonitionTranslationFormatterSpecTest(@NotNull SpecExample example) {
+    super(example, null, OPTIONS);
+  }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

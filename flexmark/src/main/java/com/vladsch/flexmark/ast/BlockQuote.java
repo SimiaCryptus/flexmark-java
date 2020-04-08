@@ -10,39 +10,39 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class BlockQuote extends Block implements BlockQuoteLike, KeepTrailingBlankLineContainer {
-    private BasedSequence openingMarker = BasedSequence.NULL;
+  private BasedSequence openingMarker = BasedSequence.NULL;
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        segmentSpanChars(out, openingMarker, "marker");
-    }
+  public BlockQuote() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] { openingMarker };
-    }
+  public BlockQuote(BasedSequence chars) {
+    super(chars);
+  }
 
-    public BlockQuote() {
-    }
+  public BlockQuote(BasedSequence chars, List<BasedSequence> segments) {
+    super(chars, segments);
+  }
 
-    public BlockQuote(BasedSequence chars) {
-        super(chars);
-    }
+  public BlockQuote(BlockContent blockContent) {
+    super(blockContent);
+  }
 
-    public BlockQuote(BasedSequence chars, List<BasedSequence> segments) {
-        super(chars, segments);
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public BlockQuote(BlockContent blockContent) {
-        super(blockContent);
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{openingMarker};
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    segmentSpanChars(out, openingMarker, "marker");
+  }
 }

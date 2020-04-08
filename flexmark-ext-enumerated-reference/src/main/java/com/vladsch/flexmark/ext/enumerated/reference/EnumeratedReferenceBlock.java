@@ -16,87 +16,87 @@ import org.jetbrains.annotations.Nullable;
  * A EnumeratedReference block node
  */
 public class EnumeratedReferenceBlock extends Block implements ReferenceNode<EnumeratedReferenceRepository, EnumeratedReferenceBlock, EnumeratedReferenceText>, ParagraphItemContainer {
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence text = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
-    protected BasedSequence enumeratedReference = BasedSequence.NULL;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence text = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected BasedSequence enumeratedReference = BasedSequence.NULL;
 
-    @Override
-    public int compareTo(EnumeratedReferenceBlock other) {
-        return SequenceUtils.compare(text, other.text, true);
-    }
+  public EnumeratedReferenceBlock() {
+  }
 
-    @Nullable
-    @Override
-    public EnumeratedReferenceText getReferencingNode(@NotNull Node node) {
-        return node instanceof EnumeratedReferenceText ? (EnumeratedReferenceText) node : null;
-    }
+  public EnumeratedReferenceBlock(BasedSequence chars) {
+    super(chars);
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        segmentSpan(out, openingMarker, "open");
-        segmentSpan(out, text, "text");
-        segmentSpan(out, closingMarker, "close");
-        segmentSpan(out, enumeratedReference, "enumeratedReference");
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] { openingMarker, text, closingMarker, enumeratedReference };
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public EnumeratedReferenceBlock() {
-    }
+  public BasedSequence getEnumeratedReference() {
+    return enumeratedReference;
+  }
 
-    public EnumeratedReferenceBlock(BasedSequence chars) {
-        super(chars);
-    }
+  public void setEnumeratedReference(BasedSequence enumeratedReference) {
+    this.enumeratedReference = enumeratedReference;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getText() {
-        return text;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{openingMarker, text, closingMarker, enumeratedReference};
+  }
 
-    public void setText(BasedSequence text) {
-        this.text = text;
-    }
+  public BasedSequence getText() {
+    return text;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  public void setText(BasedSequence text) {
+    this.text = text;
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  @Override
+  public int compareTo(EnumeratedReferenceBlock other) {
+    return SequenceUtils.compare(text, other.text, true);
+  }
 
-    public BasedSequence getEnumeratedReference() {
-        return enumeratedReference;
-    }
+  @Nullable
+  @Override
+  public EnumeratedReferenceText getReferencingNode(@NotNull Node node) {
+    return node instanceof EnumeratedReferenceText ? (EnumeratedReferenceText) node : null;
+  }
 
-    public void setEnumeratedReference(BasedSequence enumeratedReference) {
-        this.enumeratedReference = enumeratedReference;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    segmentSpan(out, openingMarker, "open");
+    segmentSpan(out, text, "text");
+    segmentSpan(out, closingMarker, "close");
+    segmentSpan(out, enumeratedReference, "enumeratedReference");
+  }
 
-    @Override
-    public boolean isItemParagraph(Paragraph node) {
-        return node == getFirstChild();
-    }
+  @Override
+  public boolean isItemParagraph(Paragraph node) {
+    return node == getFirstChild();
+  }
 
-    @Override
-    public boolean isParagraphWrappingDisabled(Paragraph node, ListOptions listOptions, DataHolder options) {
-        return true;
-    }
+  @Override
+  public boolean isParagraphWrappingDisabled(Paragraph node, ListOptions listOptions, DataHolder options) {
+    return true;
+  }
 
-    @Override
-    public boolean isParagraphInTightListItem(Paragraph node) {
-        return true;
-    }
+  @Override
+  public boolean isParagraphInTightListItem(Paragraph node) {
+    return true;
+  }
 }

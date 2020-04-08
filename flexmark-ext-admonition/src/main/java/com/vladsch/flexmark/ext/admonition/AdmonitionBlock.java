@@ -12,126 +12,126 @@ import java.util.List;
  * An Admonition block node
  */
 public class AdmonitionBlock extends Block implements ParagraphContainer {
-    private BasedSequence openingMarker = BasedSequence.NULL;
-    private BasedSequence info = BasedSequence.NULL;
-    protected BasedSequence titleOpeningMarker = BasedSequence.NULL;
-    protected BasedSequence title = BasedSequence.NULL;
-    protected BasedSequence titleClosingMarker = BasedSequence.NULL;
+  protected BasedSequence titleOpeningMarker = BasedSequence.NULL;
+  protected BasedSequence title = BasedSequence.NULL;
+  protected BasedSequence titleClosingMarker = BasedSequence.NULL;
+  private BasedSequence openingMarker = BasedSequence.NULL;
+  private BasedSequence info = BasedSequence.NULL;
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] {
-                openingMarker,
-                info,
-                titleOpeningMarker,
-                title,
-                titleClosingMarker,
-        };
-    }
+  public AdmonitionBlock() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegmentsForChars() {
-        return new BasedSequence[] {
-                openingMarker,
-                info,
-                titleOpeningMarker,
-                title,
-                titleClosingMarker,
-        };
-    }
+  public AdmonitionBlock(BasedSequence chars) {
+    super(chars);
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        segmentSpanChars(out, openingMarker, "open");
-        segmentSpanChars(out, info, "info");
-        delimitedSegmentSpanChars(out, titleOpeningMarker, title, titleClosingMarker, "title");
-    }
+  public AdmonitionBlock(BasedSequence chars, BasedSequence openingMarker, BasedSequence info, List<BasedSequence> segments) {
+    super(chars, segments);
+    this.openingMarker = openingMarker;
+    this.info = info;
+  }
 
-    public AdmonitionBlock() {
-    }
+  public BasedSequence getInfo() {
+    return info;
+  }
 
-    public AdmonitionBlock(BasedSequence chars) {
-        super(chars);
-    }
+  public void setInfo(BasedSequence info) {
+    this.info = info;
+  }
 
-    public AdmonitionBlock(BasedSequence chars, BasedSequence openingMarker, BasedSequence info, List<BasedSequence> segments) {
-        super(chars, segments);
-        this.openingMarker = openingMarker;
-        this.info = info;
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{
+        openingMarker,
+        info,
+        titleOpeningMarker,
+        title,
+        titleClosingMarker,
+    };
+  }
 
-    public void setInfo(BasedSequence info) {
-        this.info = info;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegmentsForChars() {
+    return new BasedSequence[]{
+        openingMarker,
+        info,
+        titleOpeningMarker,
+        title,
+        titleClosingMarker,
+    };
+  }
 
-    public BasedSequence getInfo() {
-        return info;
-    }
+  public BasedSequence getTitle() {
+    return title;
+  }
 
-    public BasedSequence getTitle() {
-        return title;
-    }
+  public void setTitle(BasedSequence title) {
+    this.title = title;
+  }
 
-    public BasedSequence getTitleOpeningMarker() {
-        return titleOpeningMarker;
-    }
+  public BasedSequence getTitleChars() {
+    return spanningChars(titleOpeningMarker, title, titleClosingMarker);
+  }
 
-    public void setTitleOpeningMarker(BasedSequence titleOpeningMarker) {
-        this.titleOpeningMarker = titleOpeningMarker;
+  public void setTitleChars(BasedSequence titleChars) {
+    if (titleChars != null && titleChars != BasedSequence.NULL) {
+      int titleCharsLength = titleChars.length();
+      titleOpeningMarker = titleChars.subSequence(0, 1);
+      title = titleChars.subSequence(1, titleCharsLength - 1);
+      titleClosingMarker = titleChars.subSequence(titleCharsLength - 1, titleCharsLength);
+    } else {
+      titleOpeningMarker = BasedSequence.NULL;
+      title = BasedSequence.NULL;
+      titleClosingMarker = BasedSequence.NULL;
     }
+  }
 
-    public void setTitle(BasedSequence title) {
-        this.title = title;
-    }
+  public BasedSequence getTitleClosingMarker() {
+    return titleClosingMarker;
+  }
 
-    public BasedSequence getTitleClosingMarker() {
-        return titleClosingMarker;
-    }
+  public void setTitleClosingMarker(BasedSequence titleClosingMarker) {
+    this.titleClosingMarker = titleClosingMarker;
+  }
 
-    public void setTitleClosingMarker(BasedSequence titleClosingMarker) {
-        this.titleClosingMarker = titleClosingMarker;
-    }
+  public BasedSequence getTitleOpeningMarker() {
+    return titleOpeningMarker;
+  }
 
-    public BasedSequence getTitleChars() {
-        return spanningChars(titleOpeningMarker, title, titleClosingMarker);
-    }
+  public void setTitleOpeningMarker(BasedSequence titleOpeningMarker) {
+    this.titleOpeningMarker = titleOpeningMarker;
+  }
 
-    public void setTitleChars(BasedSequence titleChars) {
-        if (titleChars != null && titleChars != BasedSequence.NULL) {
-            int titleCharsLength = titleChars.length();
-            titleOpeningMarker = titleChars.subSequence(0, 1);
-            title = titleChars.subSequence(1, titleCharsLength - 1);
-            titleClosingMarker = titleChars.subSequence(titleCharsLength - 1, titleCharsLength);
-        } else {
-            titleOpeningMarker = BasedSequence.NULL;
-            title = BasedSequence.NULL;
-            titleClosingMarker = BasedSequence.NULL;
-        }
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    segmentSpanChars(out, openingMarker, "open");
+    segmentSpanChars(out, info, "info");
+    delimitedSegmentSpanChars(out, titleOpeningMarker, title, titleClosingMarker, "title");
+  }
 
-    @Override
-    public boolean isParagraphEndWrappingDisabled(Paragraph node) {
-        return false;
-    }
+  @Override
+  public boolean isParagraphEndWrappingDisabled(Paragraph node) {
+    return false;
+  }
 
-    @Override
-    public boolean isParagraphStartWrappingDisabled(Paragraph node) {
-        if (node == getFirstChild()) {
-            // need to see if there is a blank line between it and our start
-            int ourEOL = getChars().getBaseSequence().endOfLine(getChars().getStartOffset());
-            int childStartEOL = node.getStartOfLine();
-            return ourEOL + 1 == childStartEOL;
-        }
-        return false;
+  @Override
+  public boolean isParagraphStartWrappingDisabled(Paragraph node) {
+    if (node == getFirstChild()) {
+      // need to see if there is a blank line between it and our start
+      int ourEOL = getChars().getBaseSequence().endOfLine(getChars().getStartOffset());
+      int childStartEOL = node.getStartOfLine();
+      return ourEOL + 1 == childStartEOL;
     }
+    return false;
+  }
 }

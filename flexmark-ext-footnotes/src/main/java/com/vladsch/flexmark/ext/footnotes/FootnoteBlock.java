@@ -17,123 +17,123 @@ import org.jetbrains.annotations.Nullable;
  * A Footnote definition node containing text and other inline nodes nodes as children.
  */
 public class FootnoteBlock extends Block implements ReferenceNode<FootnoteRepository, FootnoteBlock, Footnote>, ParagraphItemContainer {
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence text = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
-    protected BasedSequence footnote = BasedSequence.NULL;
-    private int footnoteOrdinal = 0;
-    private int firstReferenceOffset = Integer.MAX_VALUE;
-    private int footnoteReferences = 0;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence text = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected BasedSequence footnote = BasedSequence.NULL;
+  private int footnoteOrdinal = 0;
+  private int firstReferenceOffset = Integer.MAX_VALUE;
+  private int footnoteReferences = 0;
 
-    @Override
-    public int compareTo(FootnoteBlock other) {
-        return SequenceUtils.compare(text, other.text, true);
-    }
+  public FootnoteBlock() {
+  }
 
-    public int getFootnoteReferences() {
-        return footnoteReferences;
-    }
+  public FootnoteBlock(BasedSequence chars) {
+    super(chars);
+  }
 
-    public void setFootnoteReferences(int footnoteReferences) {
-        this.footnoteReferences = footnoteReferences;
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    @Nullable
-    @Override
-    public Footnote getReferencingNode(@NotNull Node node) {
-        return node instanceof Footnote ? (Footnote) node : null;
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public int getFirstReferenceOffset() {
-        return firstReferenceOffset;
-    }
+  public int getFirstReferenceOffset() {
+    return firstReferenceOffset;
+  }
 
-    public void setFirstReferenceOffset(int firstReferenceOffset) {
-        this.firstReferenceOffset = firstReferenceOffset;
-    }
+  public void setFirstReferenceOffset(int firstReferenceOffset) {
+    this.firstReferenceOffset = firstReferenceOffset;
+  }
 
-    public void addFirstReferenceOffset(int firstReferenceOffset) {
-        if (this.firstReferenceOffset < firstReferenceOffset) this.firstReferenceOffset = firstReferenceOffset;
-    }
+  public BasedSequence getFootnote() {
+    return footnote;
+  }
 
-    public boolean isReferenced() {
-        return this.firstReferenceOffset < Integer.MAX_VALUE;
-    }
+  public void setFootnote(BasedSequence footnote) {
+    this.footnote = footnote;
+  }
 
-    public int getFootnoteOrdinal() {
-        return footnoteOrdinal;
-    }
+  public int getFootnoteOrdinal() {
+    return footnoteOrdinal;
+  }
 
-    public void setFootnoteOrdinal(int footnoteOrdinal) {
-        this.footnoteOrdinal = footnoteOrdinal;
-    }
+  public void setFootnoteOrdinal(int footnoteOrdinal) {
+    this.footnoteOrdinal = footnoteOrdinal;
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        out.append(" ordinal: ").append(footnoteOrdinal).append(" ");
-        segmentSpan(out, openingMarker, "open");
-        segmentSpan(out, text, "text");
-        segmentSpan(out, closingMarker, "close");
-        segmentSpan(out, footnote, "footnote");
-    }
+  public int getFootnoteReferences() {
+    return footnoteReferences;
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] { openingMarker, text, closingMarker, footnote };
-    }
+  public void setFootnoteReferences(int footnoteReferences) {
+    this.footnoteReferences = footnoteReferences;
+  }
 
-    public FootnoteBlock() {
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public FootnoteBlock(BasedSequence chars) {
-        super(chars);
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{openingMarker, text, closingMarker, footnote};
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public BasedSequence getText() {
+    return text;
+  }
 
-    public BasedSequence getText() {
-        return text;
-    }
+  public void setText(BasedSequence text) {
+    this.text = text;
+  }
 
-    public void setText(BasedSequence text) {
-        this.text = text;
-    }
+  public boolean isReferenced() {
+    return this.firstReferenceOffset < Integer.MAX_VALUE;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  @Override
+  public int compareTo(FootnoteBlock other) {
+    return SequenceUtils.compare(text, other.text, true);
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  @Nullable
+  @Override
+  public Footnote getReferencingNode(@NotNull Node node) {
+    return node instanceof Footnote ? (Footnote) node : null;
+  }
 
-    public BasedSequence getFootnote() {
-        return footnote;
-    }
+  public void addFirstReferenceOffset(int firstReferenceOffset) {
+    if (this.firstReferenceOffset < firstReferenceOffset) this.firstReferenceOffset = firstReferenceOffset;
+  }
 
-    public void setFootnote(BasedSequence footnote) {
-        this.footnote = footnote;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    out.append(" ordinal: ").append(footnoteOrdinal).append(" ");
+    segmentSpan(out, openingMarker, "open");
+    segmentSpan(out, text, "text");
+    segmentSpan(out, closingMarker, "close");
+    segmentSpan(out, footnote, "footnote");
+  }
 
-    @Override
-    public boolean isItemParagraph(Paragraph node) {
-        return node == getFirstChild();
-    }
+  @Override
+  public boolean isItemParagraph(Paragraph node) {
+    return node == getFirstChild();
+  }
 
-    @Override
-    public boolean isParagraphWrappingDisabled(Paragraph node, ListOptions listOptions, DataHolder options) {
-        return false;
-    }
+  @Override
+  public boolean isParagraphWrappingDisabled(Paragraph node, ListOptions listOptions, DataHolder options) {
+    return false;
+  }
 
-    @Override
-    public boolean isParagraphInTightListItem(Paragraph node) {
-        return false;
-    }
+  @Override
+  public boolean isParagraphInTightListItem(Paragraph node) {
+    return false;
+  }
 }

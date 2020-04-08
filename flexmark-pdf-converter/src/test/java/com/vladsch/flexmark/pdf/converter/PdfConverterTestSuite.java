@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboPdfConverterSpecTest.class,
+    ComboPdfConverterSpecTest.class,
 })
 public class PdfConverterTestSuite {
 }

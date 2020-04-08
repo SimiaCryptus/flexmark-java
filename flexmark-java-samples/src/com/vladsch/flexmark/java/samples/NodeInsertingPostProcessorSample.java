@@ -29,113 +29,115 @@ import java.util.Collections;
  */
 public class NodeInsertingPostProcessorSample {
 
-    static final DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singletonList(NodeInsertingPostProcessorExtension.create()))
-            .toImmutable();
+  static final DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Collections.singletonList(NodeInsertingPostProcessorExtension.create()))
+      .toImmutable();
 
-    static final Parser PARSER = Parser.builder(OPTIONS).build();
-    static final HtmlRenderer RENDERER = HtmlRenderer.builder(OPTIONS).build();
+  static final Parser PARSER = Parser.builder(OPTIONS).build();
+  static final HtmlRenderer RENDERER = HtmlRenderer.builder(OPTIONS).build();
 
-    static class NodeInsertingPostProcessor extends NodePostProcessor {
-        private static class NodeInsertingFactory extends NodePostProcessorFactory {
-            private NodeInsertingFactory(DataHolder options) {
-                super(false);
+  public static void main(String[] args) {
+    String original = "![Figure 1. Some description here.](http://example.com/image.png) **baz**\n" +
+        "\n" +
+        "![bar]\n" +
+        "\n" +
+        "![Figure 1. Some description here.][bar]\n" +
+        "\n" +
+        "[bar]: http://example.com/image.png 'Image Title'\n" +
+        "\n";
 
-                addNodes(Image.class);
-                addNodes(ImageRef.class);
-            }
+    Node document = PARSER.parse(original);
+    String html = RENDERER.render(document);
 
-            @NotNull
-            @Override
-            public NodePostProcessor apply(@NotNull Document document) {
-                return new NodeInsertingPostProcessor();
-            }
-        }
+    // <p>foo bar <strong>baz</strong></p>
+    System.out.println("\n---- Markdown ------------------------\n");
+    System.out.println(original);
 
-        public static NodePostProcessorFactory Factory(DataHolder options) {
-            return new NodeInsertingFactory(options);
-        }
+    System.out.println("\n---- HTML ------------------------\n");
+    System.out.println(html);
 
-        @Override
-        public void process(@NotNull NodeTracker state, @NotNull Node node) {
-            BasedSequence paragraphText = BasedSequence.NULL;
-            if (node instanceof ImageRef) { // [foo](http://example.com)
-                ImageRef imageRef = (ImageRef) node;
-                paragraphText = imageRef.isReferenceTextCombined() ? imageRef.getReference() : imageRef.getText();
-            } else if (node instanceof Image) { // ![bar](http://example.com)
-                Image image = (Image) node;
-                paragraphText = image.getText();
-            }
+    System.out.println("\n---- AST ------------------------\n");
+    System.out.println(new AstCollectingVisitor().collectAndGetAstText(document));
+  }
 
-            if (!paragraphText.isBlank()) {
-                Node paragraphParent = node.getAncestorOfType(Paragraph.class);
-
-                // should always have a paragraph wrapper
-                assert paragraphParent != null;
-
-                // create a text element to hold the text
-                Text text = new Text(PrefixedSubSequence.prefixOf(paragraphText.toString(), paragraphParent.getChars().getEmptySuffix()));
-
-                // create a paragraph for the text
-                Paragraph paragraph = new Paragraph(text.getChars());
-
-                // this will allows us add attributes in the AST without needing to modify the attribute provider
-                Attributes attributes = new Attributes();
-                attributes.addValue("class", "caption");
-
-                paragraph.appendChild(new EmbeddedAttributeProvider.EmbeddedNodeAttributes(paragraph, attributes));
-                paragraph.appendChild(text);
-                paragraph.setCharsFromContent();
-
-                paragraphParent.insertAfter(paragraph);
-                paragraphParent.setCharsFromContent();
-
-                state.nodeAddedWithChildren(paragraph);
-            }
-        }
+  static class NodeInsertingPostProcessor extends NodePostProcessor {
+    public static NodePostProcessorFactory Factory(DataHolder options) {
+      return new NodeInsertingFactory(options);
     }
 
-    /**
-     * An extension that registers a post processor which intentionally strips (replaces)
-     * specific link and image-link tokens after parsing.
-     */
-    static class NodeInsertingPostProcessorExtension implements Parser.ParserExtension {
-        private NodeInsertingPostProcessorExtension() { }
+    @Override
+    public void process(@NotNull NodeTracker state, @NotNull Node node) {
+      BasedSequence paragraphText = BasedSequence.NULL;
+      if (node instanceof ImageRef) { // [foo](http://example.com)
+        ImageRef imageRef = (ImageRef) node;
+        paragraphText = imageRef.isReferenceTextCombined() ? imageRef.getReference() : imageRef.getText();
+      } else if (node instanceof Image) { // ![bar](http://example.com)
+        Image image = (Image) node;
+        paragraphText = image.getText();
+      }
 
-        @Override
-        public void parserOptions(MutableDataHolder options) { }
+      if (!paragraphText.isBlank()) {
+        Node paragraphParent = node.getAncestorOfType(Paragraph.class);
 
-        @Override
-        public void extend(Parser.Builder parserBuilder) {
-            parserBuilder.postProcessorFactory(NodeInsertingPostProcessor.Factory(parserBuilder));
-        }
+        // should always have a paragraph wrapper
+        assert paragraphParent != null;
 
-        public static NodeInsertingPostProcessorExtension create() {
-            return new NodeInsertingPostProcessorExtension();
-        }
+        // create a text element to hold the text
+        Text text = new Text(PrefixedSubSequence.prefixOf(paragraphText.toString(), paragraphParent.getChars().getEmptySuffix()));
+
+        // create a paragraph for the text
+        Paragraph paragraph = new Paragraph(text.getChars());
+
+        // this will allows us add attributes in the AST without needing to modify the attribute provider
+        Attributes attributes = new Attributes();
+        attributes.addValue("class", "caption");
+
+        paragraph.appendChild(new EmbeddedAttributeProvider.EmbeddedNodeAttributes(paragraph, attributes));
+        paragraph.appendChild(text);
+        paragraph.setCharsFromContent();
+
+        paragraphParent.insertAfter(paragraph);
+        paragraphParent.setCharsFromContent();
+
+        state.nodeAddedWithChildren(paragraph);
+      }
     }
 
-    public static void main(String[] args) {
-        String original = "![Figure 1. Some description here.](http://example.com/image.png) **baz**\n" +
-                "\n" +
-                "![bar]\n" +
-                "\n" +
-                "![Figure 1. Some description here.][bar]\n" +
-                "\n" +
-                "[bar]: http://example.com/image.png 'Image Title'\n" +
-                "\n";
+    private static class NodeInsertingFactory extends NodePostProcessorFactory {
+      private NodeInsertingFactory(DataHolder options) {
+        super(false);
 
-        Node document = PARSER.parse(original);
-        String html = RENDERER.render(document);
+        addNodes(Image.class);
+        addNodes(ImageRef.class);
+      }
 
-        // <p>foo bar <strong>baz</strong></p>
-        System.out.println("\n---- Markdown ------------------------\n");
-        System.out.println(original);
-
-        System.out.println("\n---- HTML ------------------------\n");
-        System.out.println(html);
-
-        System.out.println("\n---- AST ------------------------\n");
-        System.out.println(new AstCollectingVisitor().collectAndGetAstText(document));
+      @NotNull
+      @Override
+      public NodePostProcessor apply(@NotNull Document document) {
+        return new NodeInsertingPostProcessor();
+      }
     }
+  }
+
+  /**
+   * An extension that registers a post processor which intentionally strips (replaces)
+   * specific link and image-link tokens after parsing.
+   */
+  static class NodeInsertingPostProcessorExtension implements Parser.ParserExtension {
+    private NodeInsertingPostProcessorExtension() {
+    }
+
+    public static NodeInsertingPostProcessorExtension create() {
+      return new NodeInsertingPostProcessorExtension();
+    }
+
+    @Override
+    public void parserOptions(MutableDataHolder options) {
+    }
+
+    @Override
+    public void extend(Parser.Builder parserBuilder) {
+      parserBuilder.postProcessorFactory(NodeInsertingPostProcessor.Factory(parserBuilder));
+    }
+  }
 }

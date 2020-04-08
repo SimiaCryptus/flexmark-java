@@ -20,177 +20,177 @@ import java.util.Stack;
  * The context for node rendering, including configuration and functionality for the node renderer to use.
  */
 public interface HtmlNodeConverterContext extends NodeContext<Node, HtmlNodeConverterContext> {
-    /**
-     * @return the {@link LineAppendable} writer to use
-     */
-    HtmlMarkdownWriter getMarkdown();
+  /**
+   * @return the current node being rendered
+   */
+  Node getCurrentNode();
 
-    void delegateRender();
+  /**
+   * @return the {@link Document} node of the current context
+   */
+  Document getDocument();
 
-    /**
-     * Creates a child rendering context that can be used to collect rendered html text. The child context inherits
-     * everything but the HtmlRenderer and doNotRenderLinksNesting from the parent.
-     *
-     * @return a new rendering context with a given appendable for its output
-     */
-    HtmlNodeConverterContext getSubContext();
+  HashSet<Reference> getExternalReferences();
 
-    /**
-     * Creates a child rendering context that can be used to collect rendered html text. The child context inherits
-     * everything but the HtmlRenderer and doNotRenderLinksNesting from the parent.
-     *
-     * @param options options to use for the context (only options which do not affect the context construction will be used)
-     * @return a new rendering context with a given appendable for its output
-     */
-    HtmlNodeConverterContext getSubContext(DataHolder options);
+  /**
+   * @return the {@link com.vladsch.flexmark.util.ast.Document} node of the current context
+   */
+  com.vladsch.flexmark.util.ast.Document getForDocument();
 
-    /**
-     * Creates a child rendering context that can be used to collect rendered html text. The child context inherits
-     * everything but the HtmlRenderer and doNotRenderLinksNesting from the parent.
-     *
-     * @param options options to use for the context (only options which do not affect the context construction will be used)
-     * @param builder sequence builder to user for appended text for tracking original base offsets
-     * @return a new rendering context with a given appendable for its output
-     */
-    HtmlNodeConverterContext getSubContext(DataHolder options, @NotNull ISequenceBuilder<?, ?> builder);
+  /**
+   * @return current rendering phase
+   */
+  HtmlConverterPhase getFormattingPhase();
 
-    /**
-     * Render the specified node and its children using the configured renderers. This should be used to render child
-     * nodes; be careful not to pass the node that is being rendered, that would result in an endless loop.
-     *
-     * @param node the node to render
-     */
-    void render(Node node);
+  /**
+   * @return the {@link HtmlConverterOptions} for the context.
+   */
+  HtmlConverterOptions getHtmlConverterOptions();
 
-    /**
-     * Render the children of the node, used by custom renderers
-     *
-     * @param parent           node the children of which are to be rendered
-     * @param outputAttributes true if attributes should be output
-     * @param prePopAction     runnable to run before popping state
-     */
-    void renderChildren(Node parent, boolean outputAttributes, Runnable prePopAction);
+  /**
+   * @return the {@link LineAppendable} writer to use
+   */
+  HtmlMarkdownWriter getMarkdown();
 
-    /**
-     * @return current rendering phase
-     */
-    HtmlConverterPhase getFormattingPhase();
+  /**
+   * Get the current rendering context {@link DataHolder}. These are the options passed or set on the {@link FlexmarkHtmlConverter#builder()} or passed to {@link FlexmarkHtmlConverter#builder(DataHolder)}.
+   * To get the document options you should use {@link #getDocument()} as the data holder.
+   *
+   * @return the current renderer options {@link DataHolder}
+   */
+  DataHolder getOptions();
 
-    /**
-     * Get the current rendering context {@link DataHolder}. These are the options passed or set on the {@link FlexmarkHtmlConverter#builder()} or passed to {@link FlexmarkHtmlConverter#builder(DataHolder)}.
-     * To get the document options you should use {@link #getDocument()} as the data holder.
-     *
-     * @return the current renderer options {@link DataHolder}
-     */
-    DataHolder getOptions();
+  HashMap<String, Reference> getReferenceUrlToReferenceMap();
 
-    /**
-     * @return the {@link HtmlConverterOptions} for the context.
-     */
-    HtmlConverterOptions getHtmlConverterOptions();
+  HtmlConverterState getState();
 
-    /**
-     * @return the {@link Document} node of the current context
-     */
-    Document getDocument();
+  Stack<HtmlConverterState> getStateStack();
 
-    /**
-     * @return the {@link com.vladsch.flexmark.util.ast.Document} node of the current context
-     */
-    com.vladsch.flexmark.util.ast.Document getForDocument();
+  /**
+   * Creates a child rendering context that can be used to collect rendered html text. The child context inherits
+   * everything but the HtmlRenderer and doNotRenderLinksNesting from the parent.
+   *
+   * @return a new rendering context with a given appendable for its output
+   */
+  HtmlNodeConverterContext getSubContext();
 
-    HtmlConverterState getState();
+  boolean isInlineCode();
 
-    HashMap<String, Reference> getReferenceUrlToReferenceMap();
+  void setInlineCode(boolean inlineCode);
 
-    HashSet<Reference> getExternalReferences();
+  boolean isTrace();
 
-    boolean isTrace();
+  void setTrace(boolean trace);
 
-    Stack<HtmlConverterState> getStateStack();
+  void delegateRender();
 
-    void setTrace(boolean trace);
+  /**
+   * Creates a child rendering context that can be used to collect rendered html text. The child context inherits
+   * everything but the HtmlRenderer and doNotRenderLinksNesting from the parent.
+   *
+   * @param options options to use for the context (only options which do not affect the context construction will be used)
+   * @return a new rendering context with a given appendable for its output
+   */
+  HtmlNodeConverterContext getSubContext(DataHolder options);
 
-    com.vladsch.flexmark.util.ast.Node parseMarkdown(String markdown);
+  /**
+   * Creates a child rendering context that can be used to collect rendered html text. The child context inherits
+   * everything but the HtmlRenderer and doNotRenderLinksNesting from the parent.
+   *
+   * @param options options to use for the context (only options which do not affect the context construction will be used)
+   * @param builder sequence builder to user for appended text for tracking original base offsets
+   * @return a new rendering context with a given appendable for its output
+   */
+  HtmlNodeConverterContext getSubContext(DataHolder options, @NotNull ISequenceBuilder<?, ?> builder);
 
-    Reference getOrCreateReference(String url, String text, String title);
+  /**
+   * Render the specified node and its children using the configured renderers. This should be used to render child
+   * nodes; be careful not to pass the node that is being rendered, that would result in an endless loop.
+   *
+   * @param node the node to render
+   */
+  void render(Node node);
 
-    ResolvedLink resolveLink(LinkType linkType, CharSequence url, Boolean urlEncode);
+  /**
+   * Render the children of the node, used by custom renderers
+   *
+   * @param parent           node the children of which are to be rendered
+   * @param outputAttributes true if attributes should be output
+   * @param prePopAction     runnable to run before popping state
+   */
+  void renderChildren(Node parent, boolean outputAttributes, Runnable prePopAction);
 
-    ResolvedLink resolveLink(LinkType linkType, CharSequence url, Attributes attributes, Boolean urlEncode);
+  com.vladsch.flexmark.util.ast.Node parseMarkdown(String markdown);
 
-    /**
-     * @return the current node being rendered
-     */
-    Node getCurrentNode();
+  Reference getOrCreateReference(String url, String text, String title);
 
-    void pushState(Node parent);
+  ResolvedLink resolveLink(LinkType linkType, CharSequence url, Boolean urlEncode);
 
-    void popState(LineAppendable out);
+  ResolvedLink resolveLink(LinkType linkType, CharSequence url, Attributes attributes, Boolean urlEncode);
 
-    void excludeAttributes(String... excludes);
+  void pushState(Node parent);
 
-    void processAttributes(Node node);
+  void popState(LineAppendable out);
 
-    int outputAttributes(LineAppendable out, String initialSep);
+  void excludeAttributes(String... excludes);
 
-    void transferIdToParent();
+  void processAttributes(Node node);
 
-    void transferToParentExcept(String... excludes);
+  int outputAttributes(LineAppendable out, String initialSep);
 
-    void transferToParentOnly(String... includes);
+  void transferIdToParent();
 
-    Node peek();
+  void transferToParentExcept(String... excludes);
 
-    Node peek(int skip);
+  void transferToParentOnly(String... includes);
 
-    Node next();
+  Node peek();
 
-    void skip();
+  Node peek(int skip);
 
-    Node next(int skip);
+  Node next();
 
-    void skip(int skip);
+  void skip();
 
-    // processing related helpers
-    void processUnwrapped(Node element);
+  Node next(int skip);
 
-    void processWrapped(Node node, Boolean isBlock, boolean escapeMarkdown);
+  void skip(int skip);
 
-    void processTextNodes(Node node, boolean stripIdAttribute);
+  // processing related helpers
+  void processUnwrapped(Node element);
 
-    void processTextNodes(Node node, boolean stripIdAttribute, CharSequence wrapText);
+  void processWrapped(Node node, Boolean isBlock, boolean escapeMarkdown);
 
-    void processTextNodes(
-            Node node,
-            boolean stripIdAttribute,
-            CharSequence textPrefix,
-            CharSequence textSuffix
-    );
+  void processTextNodes(Node node, boolean stripIdAttribute);
 
-    void wrapTextNodes(
-            Node node,
-            CharSequence wrapText,
-            boolean needSpaceAround
-    );
+  void processTextNodes(Node node, boolean stripIdAttribute, CharSequence wrapText);
 
-    String processTextNodes(Node node);
+  void processTextNodes(
+      Node node,
+      boolean stripIdAttribute,
+      CharSequence textPrefix,
+      CharSequence textSuffix
+  );
 
-    void appendOuterHtml(Node node);
+  void wrapTextNodes(
+      Node node,
+      CharSequence wrapText,
+      boolean needSpaceAround
+  );
 
-    boolean isInlineCode();
+  String processTextNodes(Node node);
 
-    void setInlineCode(boolean inlineCode);
+  void appendOuterHtml(Node node);
 
-    String escapeSpecialChars(String text);
+  String escapeSpecialChars(String text);
 
-    String prepareText(String text);
+  String prepareText(String text);
 
-    String prepareText(String text, boolean inCode);
+  String prepareText(String text, boolean inCode);
 
-    void inlineCode(Runnable inlineRunnable);
+  void inlineCode(Runnable inlineRunnable);
 
-    void processConditional(ExtensionConversion extensionConversion, Node node, Runnable processNode);
+  void processConditional(ExtensionConversion extensionConversion, Node node, Runnable processNode);
 
-    void renderDefault(Node node);
+  void renderDefault(Node node);
 }

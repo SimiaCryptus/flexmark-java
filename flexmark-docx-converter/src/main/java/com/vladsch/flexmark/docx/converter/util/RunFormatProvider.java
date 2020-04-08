@@ -3,8 +3,8 @@ package com.vladsch.flexmark.docx.converter.util;
 import org.docx4j.wml.RPr;
 
 public interface RunFormatProvider<T> extends FormatProvider<T> {
-    // for space preservation
-    String SPACE_PRESERVE = "preserve";
+  // for space preservation
+  String SPACE_PRESERVE = "preserve";
 
 /*
 
@@ -23,11 +23,11 @@ public interface RunFormatProvider<T> extends FormatProvider<T> {
 
     */
 
-    // these are extracted and combined using format merge by each run formatter
-    // using the docx context for helping with the mash-up of formatting
+  // these are extracted and combined using format merge by each run formatter
+  // using the docx context for helping with the mash-up of formatting
 
-    // set the final PPr for the next P of this provider, that is different from what the style provides
-    void getRPr(RPr rPr);
+  RunFormatProvider<T> getRunParent();
 
-    RunFormatProvider<T> getRunParent();
+  // set the final PPr for the next P of this provider, that is different from what the style provides
+  void getRPr(RPr rPr);
 }

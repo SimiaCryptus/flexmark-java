@@ -4,9 +4,9 @@ import com.vladsch.flexmark.ext.abbreviation.AbbreviationExtension;
 import com.vladsch.flexmark.util.data.DataHolder;
 
 public class AbbreviationOptions {
-    protected final boolean useLinks;
+  protected final boolean useLinks;
 
-    public AbbreviationOptions(DataHolder options) {
-        this.useLinks = AbbreviationExtension.USE_LINKS.get(options);
-    }
+  public AbbreviationOptions(DataHolder options) {
+    this.useLinks = AbbreviationExtension.USE_LINKS.get(options);
+  }
 }

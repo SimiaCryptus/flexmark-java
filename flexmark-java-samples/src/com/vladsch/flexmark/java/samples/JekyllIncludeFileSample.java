@@ -16,87 +16,87 @@ import java.util.List;
 import java.util.Map;
 
 public class JekyllIncludeFileSample {
-    static String commonMark(String markdown, Map<String, String> included) {
-        MutableDataHolder options = new MutableDataSet();
-        options.set(Parser.EXTENSIONS, Arrays.asList(AutolinkExtension.create(), JekyllTagExtension.create()));
+  public static void main(String[] args) {
+    Map<String, String> included = new HashMap<>();
+    included.put("test.md", "## Included Heading\n" +
+        "\n" +
+        "Included paragraph\n" +
+        "\n" +
+        "[ref]: http://example.com\n" +
+        "");
 
-        // change soft break to hard break
-        options.set(HtmlRenderer.SOFT_BREAK, "<br/>");
+    included.put("test.html", "<p>some text</p>\n" +
+        "");
 
-        Parser parser = Parser.builder(options).build();
-        HtmlRenderer renderer = HtmlRenderer.builder(options).build();
+    String html = commonMark("http://github.com/vsch/flexmark-java\n" +
+        "\n" +
+        "[ref]\n" +
+        "\n" +
+        "{% include test.md %}\n" +
+        "\n" +
+        "", included);
+    System.out.println(html);
 
-        Node document = parser.parse(markdown);
+    html = commonMark("http://github.com/vsch/flexmark-java\n" +
+        "\n" +
+        "[ref]\n" +
+        "\n" +
+        "{% include test.html %}\n" +
+        "\n" +
+        "", included);
+    System.out.println(html);
+  }
 
-        // see if document has includes
-        if (document instanceof Document) {
-            Document doc = (Document) document;
-            if (doc.contains(JekyllTagExtension.TAG_LIST)) {
-                List<JekyllTag> tagList = JekyllTagExtension.TAG_LIST.get(doc);
-                Map<String, String> includeHtmlMap = new HashMap<>();
+  static String commonMark(String markdown, Map<String, String> included) {
+    MutableDataHolder options = new MutableDataSet();
+    options.set(Parser.EXTENSIONS, Arrays.asList(AutolinkExtension.create(), JekyllTagExtension.create()));
 
-                for (JekyllTag tag : tagList) {
-                    String includeFile = tag.getParameters().toString();
-                    if (tag.getTag().equals("include") && !includeFile.isEmpty() && !includeHtmlMap.containsKey(includeFile)) {
-                        // see if it exists
-                        if (included.containsKey(includeFile)) {
-                            // have the file
-                            String text = included.get(includeFile);
+    // change soft break to hard break
+    options.set(HtmlRenderer.SOFT_BREAK, "<br/>");
 
-                            if (includeFile.endsWith(".md")) {
-                                Document includeDoc = parser.parse(text);
-                                String includeHtml = renderer.render(includeDoc);
-                                includeHtmlMap.put(includeFile, includeHtml);
+    Parser parser = Parser.builder(options).build();
+    HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
-                                if (includeDoc instanceof Document) {
-                                    // copy any definition of reference elements from included file to our document
-                                    parser.transferReferences(doc, includeDoc, null);
-                                }
-                            } else {
-                                includeHtmlMap.put(includeFile, text);
-                            }
-                        }
-                    }
+    Node document = parser.parse(markdown);
 
-                    if (!includeHtmlMap.isEmpty()) {
-                        doc.set(JekyllTagExtension.INCLUDED_HTML, includeHtmlMap);
-                    }
+    // see if document has includes
+    if (document instanceof Document) {
+      Document doc = (Document) document;
+      if (doc.contains(JekyllTagExtension.TAG_LIST)) {
+        List<JekyllTag> tagList = JekyllTagExtension.TAG_LIST.get(doc);
+        Map<String, String> includeHtmlMap = new HashMap<>();
+
+        for (JekyllTag tag : tagList) {
+          String includeFile = tag.getParameters().toString();
+          if (tag.getTag().equals("include") && !includeFile.isEmpty() && !includeHtmlMap.containsKey(includeFile)) {
+            // see if it exists
+            if (included.containsKey(includeFile)) {
+              // have the file
+              String text = included.get(includeFile);
+
+              if (includeFile.endsWith(".md")) {
+                Document includeDoc = parser.parse(text);
+                String includeHtml = renderer.render(includeDoc);
+                includeHtmlMap.put(includeFile, includeHtml);
+
+                if (includeDoc instanceof Document) {
+                  // copy any definition of reference elements from included file to our document
+                  parser.transferReferences(doc, includeDoc, null);
                 }
+              } else {
+                includeHtmlMap.put(includeFile, text);
+              }
             }
+          }
+
+          if (!includeHtmlMap.isEmpty()) {
+            doc.set(JekyllTagExtension.INCLUDED_HTML, includeHtmlMap);
+          }
         }
-
-        String html = renderer.render(document);
-        return html;
+      }
     }
 
-    public static void main(String[] args) {
-        Map<String, String> included = new HashMap<>();
-        included.put("test.md", "## Included Heading\n" +
-                "\n" +
-                "Included paragraph\n" +
-                "\n" +
-                "[ref]: http://example.com\n" +
-                "");
-
-        included.put("test.html", "<p>some text</p>\n" +
-                "");
-
-        String html = commonMark("http://github.com/vsch/flexmark-java\n" +
-                "\n" +
-                "[ref]\n" +
-                "\n" +
-                "{% include test.md %}\n" +
-                "\n" +
-                "", included);
-        System.out.println(html);
-
-        html = commonMark("http://github.com/vsch/flexmark-java\n" +
-                "\n" +
-                "[ref]\n" +
-                "\n" +
-                "{% include test.html %}\n" +
-                "\n" +
-                "", included);
-        System.out.println(html);
-    }
+    String html = renderer.render(document);
+    return html;
+  }
 }

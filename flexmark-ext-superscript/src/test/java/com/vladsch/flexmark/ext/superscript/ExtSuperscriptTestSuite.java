@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboSuperscriptSpecTest.class,
+    ComboSuperscriptSpecTest.class,
 })
 public class ExtSuperscriptTestSuite {
 }

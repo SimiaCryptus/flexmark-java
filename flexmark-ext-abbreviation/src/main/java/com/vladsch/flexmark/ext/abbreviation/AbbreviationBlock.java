@@ -13,72 +13,72 @@ import org.jetbrains.annotations.Nullable;
  * A block node that contains the abbreviation definition
  */
 public class AbbreviationBlock extends Block implements ReferenceNode<AbbreviationRepository, AbbreviationBlock, Abbreviation> {
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence text = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
-    protected BasedSequence abbreviation = BasedSequence.NULL;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence text = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected BasedSequence abbreviation = BasedSequence.NULL;
 
-    @Nullable
-    @Override
-    public Abbreviation getReferencingNode(@NotNull Node node) {
-        return node instanceof Abbreviation ? (Abbreviation) node : null;
-    }
+  public AbbreviationBlock() {
+  }
 
-    @Override
-    public int compareTo(AbbreviationBlock other) {
-        return SequenceUtils.compare(text, other.text, true);
-    }
+  public AbbreviationBlock(BasedSequence chars) {
+    super(chars);
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        segmentSpan(out, openingMarker, "open");
-        segmentSpan(out, text, "text");
-        segmentSpan(out, closingMarker, "close");
-        segmentSpan(out, abbreviation, "abbreviation");
-    }
+  public BasedSequence getAbbreviation() {
+    return abbreviation;
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] { openingMarker, text, closingMarker, abbreviation };
-    }
+  public void setAbbreviation(BasedSequence abbreviation) {
+    this.abbreviation = abbreviation;
+  }
 
-    public AbbreviationBlock() {
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    public AbbreviationBlock(BasedSequence chars) {
-        super(chars);
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getText() {
-        return text;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{openingMarker, text, closingMarker, abbreviation};
+  }
 
-    public void setText(BasedSequence text) {
-        this.text = text;
-    }
+  public BasedSequence getText() {
+    return text;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  public void setText(BasedSequence text) {
+    this.text = text;
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  @Nullable
+  @Override
+  public Abbreviation getReferencingNode(@NotNull Node node) {
+    return node instanceof Abbreviation ? (Abbreviation) node : null;
+  }
 
-    public BasedSequence getAbbreviation() {
-        return abbreviation;
-    }
+  @Override
+  public int compareTo(AbbreviationBlock other) {
+    return SequenceUtils.compare(text, other.text, true);
+  }
 
-    public void setAbbreviation(BasedSequence abbreviation) {
-        this.abbreviation = abbreviation;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    segmentSpan(out, openingMarker, "open");
+    segmentSpan(out, text, "text");
+    segmentSpan(out, closingMarker, "close");
+    segmentSpan(out, abbreviation, "abbreviation");
+  }
 }

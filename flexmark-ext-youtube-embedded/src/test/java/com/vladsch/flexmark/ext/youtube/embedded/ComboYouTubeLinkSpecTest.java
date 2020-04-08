@@ -13,18 +13,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class ComboYouTubeLinkSpecTest extends RendererSpecTest {
-    final private static String SPEC_RESOURCE = "/ext_youtube_link_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singleton(YouTubeLinkExtension.create()))
-            .toImmutable();
+  final private static String SPEC_RESOURCE = "/ext_youtube_link_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Collections.singleton(YouTubeLinkExtension.create()))
+      .toImmutable();
 
-    public ComboYouTubeLinkSpecTest(@NotNull SpecExample example) {
-        super(example, null, OPTIONS);
-    }
+  public ComboYouTubeLinkSpecTest(@NotNull SpecExample example) {
+    super(example, null, OPTIONS);
+  }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

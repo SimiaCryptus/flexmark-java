@@ -9,16 +9,16 @@ import org.jetbrains.annotations.NotNull;
  * call {@link #visitChildren}.
  */
 public abstract class NodeVisitorBase {
-    protected abstract void visit(@NotNull Node node);
-
-    public void visitChildren(@NotNull Node parent) {
-        Node node = parent.getFirstChild();
-        while (node != null) {
-            // A subclass of this visitor might modify the node, resulting in getNext returning a different node or no
-            // node after visiting it. So get the next node before visiting.
-            Node next = node.getNext();
-            visit(node);
-            node = next;
-        }
+  public void visitChildren(@NotNull Node parent) {
+    Node node = parent.getFirstChild();
+    while (node != null) {
+      // A subclass of this visitor might modify the node, resulting in getNext returning a different node or no
+      // node after visiting it. So get the next node before visiting.
+      Node next = node.getNext();
+      visit(node);
+      node = next;
     }
+  }
+
+  protected abstract void visit(@NotNull Node node);
 }

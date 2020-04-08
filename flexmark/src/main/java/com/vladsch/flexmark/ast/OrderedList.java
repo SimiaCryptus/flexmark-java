@@ -7,50 +7,50 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class OrderedList extends ListBlock {
-    private int startNumber;
-    private char delimiter;
+  private int startNumber;
+  private char delimiter;
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return EMPTY_SEGMENTS;
-    }
+  public OrderedList() {
+  }
 
-    public OrderedList() {
-    }
+  public OrderedList(BasedSequence chars) {
+    super(chars);
+  }
 
-    public OrderedList(BasedSequence chars) {
-        super(chars);
-    }
+  public OrderedList(BasedSequence chars, List<BasedSequence> segments) {
+    super(chars, segments);
+  }
 
-    public OrderedList(BasedSequence chars, List<BasedSequence> segments) {
-        super(chars, segments);
-    }
+  public OrderedList(BlockContent blockContent) {
+    super(blockContent);
+  }
 
-    public OrderedList(BlockContent blockContent) {
-        super(blockContent);
-    }
+  public char getDelimiter() {
+    return delimiter;
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        super.getAstExtra(out);
-        if (startNumber > 1) out.append(" start:").append(startNumber);
-        out.append(" delimiter:'").append(delimiter).append("'");
-    }
+  public void setDelimiter(char delimiter) {
+    this.delimiter = delimiter;
+  }
 
-    public int getStartNumber() {
-        return startNumber;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return EMPTY_SEGMENTS;
+  }
 
-    public void setStartNumber(int startNumber) {
-        this.startNumber = startNumber;
-    }
+  public int getStartNumber() {
+    return startNumber;
+  }
 
-    public char getDelimiter() {
-        return delimiter;
-    }
+  public void setStartNumber(int startNumber) {
+    this.startNumber = startNumber;
+  }
 
-    public void setDelimiter(char delimiter) {
-        this.delimiter = delimiter;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    super.getAstExtra(out);
+    if (startNumber > 1) out.append(" start:").append(startNumber);
+    out.append(" delimiter:'").append(delimiter).append("'");
+  }
 }

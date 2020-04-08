@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboYouTubeLinkSpecTest.class,
+    ComboYouTubeLinkSpecTest.class,
 })
 public class ExtYouTubeLinkTestSuite {
 }

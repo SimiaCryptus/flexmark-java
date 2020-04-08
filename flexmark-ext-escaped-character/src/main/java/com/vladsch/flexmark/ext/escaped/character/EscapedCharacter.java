@@ -9,47 +9,47 @@ import org.jetbrains.annotations.NotNull;
  * A EscapedCharacter node
  */
 public class EscapedCharacter extends Node implements DoNotDecorate {
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence text = BasedSequence.NULL;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence text = BasedSequence.NULL;
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        //return EMPTY_SEGMENTS;
-        return new BasedSequence[] { openingMarker, text };
-    }
+  public EscapedCharacter() {
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        delimitedSegmentSpanChars(out, openingMarker, text, BasedSequence.NULL, "text");
-    }
+  public EscapedCharacter(BasedSequence chars) {
+    super(chars);
+  }
 
-    public EscapedCharacter() {
-    }
+  public EscapedCharacter(BasedSequence openingMarker, BasedSequence text) {
+    super(openingMarker.baseSubSequence(openingMarker.getStartOffset(), text.getEndOffset()));
+    this.openingMarker = openingMarker;
+    this.text = text;
+  }
 
-    public EscapedCharacter(BasedSequence chars) {
-        super(chars);
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public EscapedCharacter(BasedSequence openingMarker, BasedSequence text) {
-        super(openingMarker.baseSubSequence(openingMarker.getStartOffset(), text.getEndOffset()));
-        this.openingMarker = openingMarker;
-        this.text = text;
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    //return EMPTY_SEGMENTS;
+    return new BasedSequence[]{openingMarker, text};
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public BasedSequence getText() {
+    return text;
+  }
 
-    public BasedSequence getText() {
-        return text;
-    }
+  public void setText(BasedSequence text) {
+    this.text = text;
+  }
 
-    public void setText(BasedSequence text) {
-        this.text = text;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    delimitedSegmentSpanChars(out, openingMarker, text, BasedSequence.NULL, "text");
+  }
 }

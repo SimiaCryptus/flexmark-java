@@ -5,10 +5,10 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboMediaTagsAudioLinkSpecTest.class,
-        ComboMediaTagsEmbedLinkSpecTest.class,
-        ComboMediaTagsPictureLinkSpecTest.class,
-        ComboMediaTagsVideoLinkSpecTest.class
+    ComboMediaTagsAudioLinkSpecTest.class,
+    ComboMediaTagsEmbedLinkSpecTest.class,
+    ComboMediaTagsPictureLinkSpecTest.class,
+    ComboMediaTagsVideoLinkSpecTest.class
 })
 public class ExtMediaTagsTestSuite {
 }

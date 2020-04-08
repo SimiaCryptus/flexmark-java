@@ -16,39 +16,39 @@ import org.jetbrains.annotations.NotNull;
  */
 public class JiraConverterExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension {
 
-    private JiraConverterExtension() {
+  private JiraConverterExtension() {
+  }
+
+  public static JiraConverterExtension create() {
+    return new JiraConverterExtension();
+  }
+
+  @Override
+  public void extend(Parser.Builder parserBuilder) {
+
+  }
+
+  @Override
+  public void rendererOptions(@NotNull MutableDataHolder options) {
+    String rendererType = HtmlRenderer.TYPE.get(options);
+    if (rendererType.equals("HTML")) {
+      options.set(HtmlRenderer.TYPE, "JIRA");
+    } else if (!rendererType.equals("JIRA")) {
+      throw new IllegalStateException("Non HTML Renderer is already set to " + rendererType);
     }
+  }
 
-    public static JiraConverterExtension create() {
-        return new JiraConverterExtension();
+  @Override
+  public void parserOptions(MutableDataHolder options) {
+
+  }
+
+  @Override
+  public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
+    if (htmlRendererBuilder.isRendererType("JIRA")) {
+      htmlRendererBuilder.nodeRendererFactory(new JiraConverterNodeRenderer.Factory());
+    } else {
+      throw new IllegalStateException("Jira Converter Extension used with non Jira Renderer " + rendererType);
     }
-
-    @Override
-    public void extend(Parser.Builder parserBuilder) {
-
-    }
-
-    @Override
-    public void rendererOptions(@NotNull MutableDataHolder options) {
-        String rendererType = HtmlRenderer.TYPE.get(options);
-        if (rendererType.equals("HTML")) {
-            options.set(HtmlRenderer.TYPE, "JIRA");
-        } else if (!rendererType.equals("JIRA")) {
-            throw new IllegalStateException("Non HTML Renderer is already set to " + rendererType);
-        }
-    }
-
-    @Override
-    public void parserOptions(MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
-        if (htmlRendererBuilder.isRendererType("JIRA")) {
-            htmlRendererBuilder.nodeRendererFactory(new JiraConverterNodeRenderer.Factory());
-        } else {
-            throw new IllegalStateException("Jira Converter Extension used with non Jira Renderer " + rendererType);
-        }
-    }
+  }
 }

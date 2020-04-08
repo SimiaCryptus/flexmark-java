@@ -9,11 +9,17 @@ import java.util.List;
  * A node that uses delimiters in the source form (e.g. <code>*bold*</code>).
  */
 public interface Content {
-    @NotNull BasedSequence getSpanningChars();
-    int getLineCount();
-    @NotNull BasedSequence getLineChars(int index);
-    @NotNull BasedSequence getContentChars();
-    @NotNull BasedSequence getContentChars(int startLine, int endLine);
-    @NotNull List<BasedSequence> getContentLines();
-    @NotNull List<BasedSequence> getContentLines(int startLine, int endLine);
+  @NotNull BasedSequence getContentChars();
+
+  @NotNull List<BasedSequence> getContentLines();
+
+  int getLineCount();
+
+  @NotNull BasedSequence getSpanningChars();
+
+  @NotNull BasedSequence getLineChars(int index);
+
+  @NotNull BasedSequence getContentChars(int startLine, int endLine);
+
+  @NotNull List<BasedSequence> getContentLines(int startLine, int endLine);
 }

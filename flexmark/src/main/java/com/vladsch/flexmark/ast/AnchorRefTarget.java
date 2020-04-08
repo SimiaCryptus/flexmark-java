@@ -1,10 +1,13 @@
 package com.vladsch.flexmark.ast;
 
 public interface AnchorRefTarget {
-    String getAnchorRefText();
-    String getAnchorRefId();
-    void setAnchorRefId(String anchorRefId);
+  String getAnchorRefId();
 
-    boolean isExplicitAnchorRefId();
-    void setExplicitAnchorRefId(boolean value);
+  void setAnchorRefId(String anchorRefId);
+
+  String getAnchorRefText();
+
+  boolean isExplicitAnchorRefId();
+
+  void setExplicitAnchorRefId(boolean value);
 }

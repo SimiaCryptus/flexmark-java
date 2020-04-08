@@ -10,182 +10,182 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Reference extends LinkNodeBase implements ReferenceNode<ReferenceRepository, Reference, RefNode> {
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence reference = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence reference = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] {
-                openingMarker,
-                reference,
-                closingMarker,
-                urlOpeningMarker,
-                url,
-                pageRef,
-                anchorMarker,
-                anchorRef,
-                urlClosingMarker,
-                titleOpeningMarker,
-                title,
-                titleClosingMarker
-        };
+  public Reference(BasedSequence label, BasedSequence url, BasedSequence title) {
+    super(BasedSequence.NULL);
+
+    this.openingMarker = label.subSequence(0, 1);
+    this.reference = label.subSequence(1, label.length() - 2).trim();
+    this.closingMarker = label.subSequence(label.length() - 2, label.length());
+
+    setUrlChars(url);
+
+    if (title != null) {
+      this.titleOpeningMarker = title.subSequence(0, 1);
+      this.title = title.subSequence(1, title.length() - 1);
+      this.titleClosingMarker = title.subSequence(title.length() - 1, title.length());
     }
+    setCharsFromContent();
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegmentsForChars() {
-        return new BasedSequence[] {
-                openingMarker,
-                reference,
-                closingMarker,
-                PrefixedSubSequence.prefixOf(" ", closingMarker.getEmptySuffix()),
-                urlOpeningMarker,
-                pageRef,
-                anchorMarker,
-                anchorRef,
-                urlClosingMarker,
-                titleOpeningMarker,
-                title,
-                titleClosingMarker
-        };
-    }
+  public BasedSequence getAnchorMarker() {
+    return anchorMarker;
+  }
 
-    @Override
-    public int compareTo(Reference other) {
-        return SequenceUtils.compare(getReference(), other.getReference(), true);
-    }
+  public void setAnchorMarker(BasedSequence anchorMarker) {
+    this.anchorMarker = anchorMarker;
+  }
 
-    @Nullable
-    @Override
-    public RefNode getReferencingNode(@NotNull Node node) {
-        return node instanceof RefNode ? (RefNode) node : null;
-    }
+  public BasedSequence getAnchorRef() {
+    return anchorRef;
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        delimitedSegmentSpanChars(out, openingMarker, reference, closingMarker, "ref");
-        delimitedSegmentSpanChars(out, urlOpeningMarker, url, urlClosingMarker, "url");
-        delimitedSegmentSpanChars(out, titleOpeningMarker, title, titleClosingMarker, "title");
-    }
+  public void setAnchorRef(BasedSequence anchorRef) {
+    this.anchorRef = anchorRef;
+  }
 
-    public Reference(BasedSequence label, BasedSequence url, BasedSequence title) {
-        super(BasedSequence.NULL);
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-        this.openingMarker = label.subSequence(0, 1);
-        this.reference = label.subSequence(1, label.length() - 2).trim();
-        this.closingMarker = label.subSequence(label.length() - 2, label.length());
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-        setUrlChars(url);
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-        if (title != null) {
-            this.titleOpeningMarker = title.subSequence(0, 1);
-            this.title = title.subSequence(1, title.length() - 1);
-            this.titleClosingMarker = title.subSequence(title.length() - 1, title.length());
-        }
-        setCharsFromContent();
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public BasedSequence getPageRef() {
+    return pageRef;
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public void setPageRef(BasedSequence pageRef) {
+    this.pageRef = pageRef;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  public BasedSequence getReference() {
+    return reference;
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  public void setReference(BasedSequence reference) {
+    this.reference = reference;
+  }
 
-    public BasedSequence getUrlOpeningMarker() {
-        return urlOpeningMarker;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{
+        openingMarker,
+        reference,
+        closingMarker,
+        urlOpeningMarker,
+        url,
+        pageRef,
+        anchorMarker,
+        anchorRef,
+        urlClosingMarker,
+        titleOpeningMarker,
+        title,
+        titleClosingMarker
+    };
+  }
 
-    public void setUrlOpeningMarker(BasedSequence urlOpeningMarker) {
-        this.urlOpeningMarker = urlOpeningMarker;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegmentsForChars() {
+    return new BasedSequence[]{
+        openingMarker,
+        reference,
+        closingMarker,
+        PrefixedSubSequence.prefixOf(" ", closingMarker.getEmptySuffix()),
+        urlOpeningMarker,
+        pageRef,
+        anchorMarker,
+        anchorRef,
+        urlClosingMarker,
+        titleOpeningMarker,
+        title,
+        titleClosingMarker
+    };
+  }
 
-    public BasedSequence getUrlClosingMarker() {
-        return urlClosingMarker;
-    }
+  public BasedSequence getTitle() {
+    return title;
+  }
 
-    public void setUrlClosingMarker(BasedSequence urlClosingMarker) {
-        this.urlClosingMarker = urlClosingMarker;
-    }
+  public void setTitle(BasedSequence title) {
+    this.title = title;
+  }
 
-    public BasedSequence getTitleOpeningMarker() {
-        return titleOpeningMarker;
-    }
+  public BasedSequence getTitleClosingMarker() {
+    return titleClosingMarker;
+  }
 
-    public void setTitleOpeningMarker(BasedSequence titleOpeningMarker) {
-        this.titleOpeningMarker = titleOpeningMarker;
-    }
+  public void setTitleClosingMarker(BasedSequence titleClosingMarker) {
+    this.titleClosingMarker = titleClosingMarker;
+  }
 
-    public BasedSequence getTitleClosingMarker() {
-        return titleClosingMarker;
-    }
+  public BasedSequence getTitleOpeningMarker() {
+    return titleOpeningMarker;
+  }
 
-    public void setTitleClosingMarker(BasedSequence titleClosingMarker) {
-        this.titleClosingMarker = titleClosingMarker;
-    }
+  public void setTitleOpeningMarker(BasedSequence titleOpeningMarker) {
+    this.titleOpeningMarker = titleOpeningMarker;
+  }
 
-    public BasedSequence getReference() {
-        return reference;
-    }
+  public BasedSequence getUrl() {
+    return url;
+  }
 
-    public void setReference(BasedSequence reference) {
-        this.reference = reference;
-    }
+  public void setUrl(BasedSequence url) {
+    this.url = url;
+  }
 
-    public BasedSequence getUrl() {
-        return url;
-    }
+  public BasedSequence getUrlClosingMarker() {
+    return urlClosingMarker;
+  }
 
-    public void setUrl(BasedSequence url) {
-        this.url = url;
-    }
+  public void setUrlClosingMarker(BasedSequence urlClosingMarker) {
+    this.urlClosingMarker = urlClosingMarker;
+  }
 
-    public BasedSequence getPageRef() {
-        return pageRef;
-    }
+  public BasedSequence getUrlOpeningMarker() {
+    return urlOpeningMarker;
+  }
 
-    public void setPageRef(BasedSequence pageRef) {
-        this.pageRef = pageRef;
-    }
+  public void setUrlOpeningMarker(BasedSequence urlOpeningMarker) {
+    this.urlOpeningMarker = urlOpeningMarker;
+  }
 
-    public BasedSequence getAnchorMarker() {
-        return anchorMarker;
-    }
+  @Override
+  public int compareTo(Reference other) {
+    return SequenceUtils.compare(getReference(), other.getReference(), true);
+  }
 
-    public void setAnchorMarker(BasedSequence anchorMarker) {
-        this.anchorMarker = anchorMarker;
-    }
+  @Nullable
+  @Override
+  public RefNode getReferencingNode(@NotNull Node node) {
+    return node instanceof RefNode ? (RefNode) node : null;
+  }
 
-    public BasedSequence getAnchorRef() {
-        return anchorRef;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    delimitedSegmentSpanChars(out, openingMarker, reference, closingMarker, "ref");
+    delimitedSegmentSpanChars(out, urlOpeningMarker, url, urlClosingMarker, "url");
+    delimitedSegmentSpanChars(out, titleOpeningMarker, title, titleClosingMarker, "title");
+  }
 
-    public void setAnchorRef(BasedSequence anchorRef) {
-        this.anchorRef = anchorRef;
-    }
-
-    public BasedSequence getTitle() {
-        return title;
-    }
-
-    public void setTitle(BasedSequence title) {
-        this.title = title;
-    }
-
-    @NotNull
-    @Override
-    protected String toStringAttributes() {
-        return "reference=" + reference + ", url=" + url;
-    }
+  @NotNull
+  @Override
+  protected String toStringAttributes() {
+    return "reference=" + reference + ", url=" + url;
+  }
 }

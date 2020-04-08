@@ -17,45 +17,45 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 
 public class ZzzzzzLinkResolver implements LinkResolver {
-    final private LinkResolverAdapter nodeAdapter;
+  final private LinkResolverAdapter nodeAdapter;
 
-    public ZzzzzzLinkResolver(LinkResolverContext context) {
-        nodeAdapter = new LinkResolverAdapter(
-                new LinkResolvingHandler<>(Image.class, this::resolveLink),
-                new LinkResolvingHandler<>(ImageRef.class, this::resolveLink),
-                new LinkResolvingHandler<>(LinkRef.class, this::resolveLink),
-                new LinkResolvingHandler<>(Link.class, this::resolveLink)
-        );
+  public ZzzzzzLinkResolver(LinkResolverContext context) {
+    nodeAdapter = new LinkResolverAdapter(
+        new LinkResolvingHandler<>(Image.class, this::resolveLink),
+        new LinkResolvingHandler<>(ImageRef.class, this::resolveLink),
+        new LinkResolvingHandler<>(LinkRef.class, this::resolveLink),
+        new LinkResolvingHandler<>(Link.class, this::resolveLink)
+    );
+  }
+
+  @NotNull
+  @Override
+  public ResolvedLink resolveLink(@NotNull Node node, @NotNull LinkResolverContext context, @NotNull ResolvedLink link) {
+    return nodeAdapter.resolveLink(node, context, link);
+  }
+
+  public static class Factory implements LinkResolverFactory {
+    @Nullable
+    @Override
+    public Set<Class<?>> getAfterDependents() {
+      return null;
+    }
+
+    @Nullable
+    @Override
+    public Set<Class<?>> getBeforeDependents() {
+      return null;
+    }
+
+    @Override
+    public boolean affectsGlobalScope() {
+      return false;
     }
 
     @NotNull
     @Override
-    public ResolvedLink resolveLink(@NotNull Node node, @NotNull LinkResolverContext context, @NotNull ResolvedLink link) {
-        return nodeAdapter.resolveLink(node, context, link);
+    public LinkResolver apply(@NotNull LinkResolverContext context) {
+      return new ZzzzzzLinkResolver(context);
     }
-
-    public static class Factory implements LinkResolverFactory {
-        @Nullable
-        @Override
-        public Set<Class<?>> getAfterDependents() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public Set<Class<?>> getBeforeDependents() {
-            return null;
-        }
-
-        @Override
-        public boolean affectsGlobalScope() {
-            return false;
-        }
-
-        @NotNull
-        @Override
-        public LinkResolver apply(@NotNull LinkResolverContext context) {
-            return new ZzzzzzLinkResolver(context);
-        }
-    }
+  }
 }

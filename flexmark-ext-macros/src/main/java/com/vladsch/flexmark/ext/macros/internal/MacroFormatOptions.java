@@ -7,11 +7,11 @@ import com.vladsch.flexmark.util.format.options.ElementPlacementSort;
 
 public class MacroFormatOptions {
 
-    final public ElementPlacement macrosPlacement;
-    final public ElementPlacementSort macrosSort;
+  final public ElementPlacement macrosPlacement;
+  final public ElementPlacementSort macrosSort;
 
-    public MacroFormatOptions(DataHolder options) {
-        macrosPlacement = MacrosExtension.MACRO_DEFINITIONS_PLACEMENT.get(options);
-        macrosSort = MacrosExtension.MACRO_DEFINITIONS_SORT.get(options);
-    }
+  public MacroFormatOptions(DataHolder options) {
+    macrosPlacement = MacrosExtension.MACRO_DEFINITIONS_PLACEMENT.get(options);
+    macrosSort = MacrosExtension.MACRO_DEFINITIONS_SORT.get(options);
+  }
 }

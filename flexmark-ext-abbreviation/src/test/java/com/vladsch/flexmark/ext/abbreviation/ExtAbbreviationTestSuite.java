@@ -5,9 +5,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboAbbreviationSpecTest.class,
-        ComboAbbreviationFormatterSpecTest.class,
-        MergeAbbreviationsTest.class,
+    ComboAbbreviationSpecTest.class,
+    ComboAbbreviationFormatterSpecTest.class,
+    MergeAbbreviationsTest.class,
 })
 public class ExtAbbreviationTestSuite {
 }

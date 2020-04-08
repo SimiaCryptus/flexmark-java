@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboEnumeratedReferenceFormatterSpecTest.class,
-        ComboExtEnumeratedReferenceSpecTest.class,
+    ComboEnumeratedReferenceFormatterSpecTest.class,
+    ComboExtEnumeratedReferenceSpecTest.class,
 })
 public class ExtEnumeratedReferenceTestSuite {
 }

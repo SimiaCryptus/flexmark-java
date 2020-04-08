@@ -13,57 +13,57 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AnchorLinkNodeRenderer implements NodeRenderer {
-    final private AnchorLinkOptions options;
+  final private AnchorLinkOptions options;
 
-    public AnchorLinkNodeRenderer(DataHolder options) {
-        this.options = new AnchorLinkOptions(options);
-    }
+  public AnchorLinkNodeRenderer(DataHolder options) {
+    this.options = new AnchorLinkOptions(options);
+  }
 
-    @Override
-    public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
-        HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
-        set.add(new NodeRenderingHandler<>(AnchorLink.class, this::render));
-        return set;
-    }
+  @Override
+  public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
+    HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
+    set.add(new NodeRenderingHandler<>(AnchorLink.class, this::render));
+    return set;
+  }
 
-    private void render(AnchorLink node, NodeRendererContext context, HtmlWriter html) {
-        if (context.isDoNotRenderLinks()) {
-            if (options.wrapText) {
-                context.renderChildren(node);
-            }
+  private void render(AnchorLink node, NodeRendererContext context, HtmlWriter html) {
+    if (context.isDoNotRenderLinks()) {
+      if (options.wrapText) {
+        context.renderChildren(node);
+      }
+    } else {
+      String id = context.getNodeId(node.getParent());
+      if (id != null) {
+        html.attr("href", "#" + id);
+        if (options.setId) html.attr("id", id);
+        if (options.setName) html.attr("name", id);
+        if (!options.anchorClass.isEmpty()) html.attr("class", options.anchorClass);
+
+        if (!options.wrapText) {
+          html.withAttr().tag("a");
+          if (!options.textPrefix.isEmpty()) html.raw(options.textPrefix);
+          if (!options.textSuffix.isEmpty()) html.raw(options.textSuffix);
+          html.tag("/a");
         } else {
-            String id = context.getNodeId(node.getParent());
-            if (id != null) {
-                html.attr("href", "#" + id);
-                if (options.setId) html.attr("id", id);
-                if (options.setName) html.attr("name", id);
-                if (!options.anchorClass.isEmpty()) html.attr("class", options.anchorClass);
-
-                if (!options.wrapText) {
-                    html.withAttr().tag("a");
-                    if (!options.textPrefix.isEmpty()) html.raw(options.textPrefix);
-                    if (!options.textSuffix.isEmpty()) html.raw(options.textSuffix);
-                    html.tag("/a");
-                } else {
-                    html.withAttr().tag("a", false, false, () -> {
-                        if (!options.textPrefix.isEmpty()) html.raw(options.textPrefix);
-                        context.renderChildren(node);
-                        if (!options.textSuffix.isEmpty()) html.raw(options.textSuffix);
-                    });
-                }
-            } else {
-                if (options.wrapText) {
-                    context.renderChildren(node);
-                }
-            }
+          html.withAttr().tag("a", false, false, () -> {
+            if (!options.textPrefix.isEmpty()) html.raw(options.textPrefix);
+            context.renderChildren(node);
+            if (!options.textSuffix.isEmpty()) html.raw(options.textSuffix);
+          });
         }
-    }
-
-    public static class Factory implements NodeRendererFactory {
-        @NotNull
-        @Override
-        public NodeRenderer apply(@NotNull DataHolder options) {
-            return new AnchorLinkNodeRenderer(options);
+      } else {
+        if (options.wrapText) {
+          context.renderChildren(node);
         }
+      }
     }
+  }
+
+  public static class Factory implements NodeRendererFactory {
+    @NotNull
+    @Override
+    public NodeRenderer apply(@NotNull DataHolder options) {
+      return new AnchorLinkNodeRenderer(options);
+    }
+  }
 }

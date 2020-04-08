@@ -11,39 +11,39 @@ import java.util.Set;
 
 public class AsideNodeFormatter implements NodeFormatter {
 
-    public AsideNodeFormatter(DataHolder options) {
+  public AsideNodeFormatter(DataHolder options) {
 
-    }
+  }
 
-    @Nullable
+  @Override
+  public char getBlockQuoteLikePrefixChar() {
+    return '|';
+  }
+
+  @Nullable
+  @Override
+  public Set<Class<?>> getNodeClasses() {
+    return null;
+  }
+
+  // only registered if assignTextAttributes is enabled
+  @Nullable
+  @Override
+  public Set<NodeFormattingHandler<?>> getNodeFormattingHandlers() {
+    HashSet<NodeFormattingHandler<?>> set = new HashSet<>();
+    set.add(new NodeFormattingHandler<>(AsideBlock.class, AsideNodeFormatter.this::render));
+    return set;
+  }
+
+  private void render(AsideBlock node, NodeFormatterContext context, MarkdownWriter markdown) {
+    FormatterUtils.renderBlockQuoteLike(node, context, markdown);
+  }
+
+  public static class Factory implements NodeFormatterFactory {
+    @NotNull
     @Override
-    public Set<Class<?>> getNodeClasses() {
-        return null;
+    public NodeFormatter create(@NotNull DataHolder options) {
+      return new AsideNodeFormatter(options);
     }
-
-    @Override
-    public char getBlockQuoteLikePrefixChar() {
-        return '|';
-    }
-
-    // only registered if assignTextAttributes is enabled
-    @Nullable
-    @Override
-    public Set<NodeFormattingHandler<?>> getNodeFormattingHandlers() {
-        HashSet<NodeFormattingHandler<?>> set = new HashSet<>();
-        set.add(new NodeFormattingHandler<>(AsideBlock.class, AsideNodeFormatter.this::render));
-        return set;
-    }
-
-    private void render(AsideBlock node, NodeFormatterContext context, MarkdownWriter markdown) {
-        FormatterUtils.renderBlockQuoteLike(node, context, markdown);
-    }
-
-    public static class Factory implements NodeFormatterFactory {
-        @NotNull
-        @Override
-        public NodeFormatter create(@NotNull DataHolder options) {
-            return new AsideNodeFormatter(options);
-        }
-    }
+  }
 }

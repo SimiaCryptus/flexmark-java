@@ -19,26 +19,58 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 public class AttributeProviderSample {
-    static class SampleExtension implements HtmlRenderer.HtmlRendererExtension {
-        @Override
-        public void rendererOptions(@NotNull MutableDataHolder options) {
-            // add any configuration settings to options you want to apply to everything, here
-        }
+  public static void main(String[] args) {
+    String html = commonMark("http://github.com/vsch/flexmark-java");
+    System.out.println(html); // output: <p><a href="http://github.com/vsch/flexmark-java" class="my-autolink-class">http://github.com/vsch/flexmark-java</a></p>
 
-        @Override
-        public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
-            htmlRendererBuilder.attributeProviderFactory(SampleAttributeProvider.Factory());
-        }
+    html = commonMark("hello\nworld");
+    System.out.println(html); // output: <p>hello<br/>world</p>
+  }
 
-        static SampleExtension create() {
-            return new SampleExtension();
-        }
+  static String commonMark(String markdown) {
+    MutableDataHolder options = new MutableDataSet();
+    options.set(Parser.EXTENSIONS, Arrays.asList(new Extension[]{AutolinkExtension.create(), SampleExtension.create()}));
+
+    // change soft break to hard break
+    options.set(HtmlRenderer.SOFT_BREAK, "<br/>");
+
+    Parser parser = Parser.builder(options).build();
+    Node document = parser.parse(markdown);
+    HtmlRenderer renderer = HtmlRenderer.builder(options).build();
+    String html = renderer.render(document);
+    return html;
+  }
+
+  static class SampleExtension implements HtmlRenderer.HtmlRendererExtension {
+    static SampleExtension create() {
+      return new SampleExtension();
     }
 
-    static class SampleAttributeProvider implements AttributeProvider {
+    @Override
+    public void rendererOptions(@NotNull MutableDataHolder options) {
+      // add any configuration settings to options you want to apply to everything, here
+    }
+
+    @Override
+    public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
+      htmlRendererBuilder.attributeProviderFactory(SampleAttributeProvider.Factory());
+    }
+  }
+
+  static class SampleAttributeProvider implements AttributeProvider {
+    static AttributeProviderFactory Factory() {
+      return new IndependentAttributeProviderFactory() {
+        @NotNull
         @Override
-        public void setAttributes(@NotNull Node node, @NotNull AttributablePart part, @NotNull Attributes attributes) {
-            if (node instanceof AutoLink && part == AttributablePart.LINK) {
+        public AttributeProvider apply(@NotNull LinkResolverContext context) {
+          return new SampleAttributeProvider();
+        }
+      };
+    }
+
+    @Override
+    public void setAttributes(@NotNull Node node, @NotNull AttributablePart part, @NotNull Attributes attributes) {
+      if (node instanceof AutoLink && part == AttributablePart.LINK) {
 
 /*
                 // test any link resolver status if needed
@@ -65,41 +97,9 @@ public class AttributeProviderSample {
                 AutoLink autoLink = (AutoLink) node;
 */
 
-                // Put info in custom attribute instead
-                attributes.replaceValue("class", "my-autolink-class");
-            }
-        }
-
-        static AttributeProviderFactory Factory() {
-            return new IndependentAttributeProviderFactory() {
-                @NotNull
-                @Override
-                public AttributeProvider apply(@NotNull LinkResolverContext context) {
-                    return new SampleAttributeProvider();
-                }
-            };
-        }
+        // Put info in custom attribute instead
+        attributes.replaceValue("class", "my-autolink-class");
+      }
     }
-
-    static String commonMark(String markdown) {
-        MutableDataHolder options = new MutableDataSet();
-        options.set(Parser.EXTENSIONS, Arrays.asList(new Extension[] { AutolinkExtension.create(), SampleExtension.create() }));
-
-        // change soft break to hard break
-        options.set(HtmlRenderer.SOFT_BREAK, "<br/>");
-
-        Parser parser = Parser.builder(options).build();
-        Node document = parser.parse(markdown);
-        HtmlRenderer renderer = HtmlRenderer.builder(options).build();
-        String html = renderer.render(document);
-        return html;
-    }
-
-    public static void main(String[] args) {
-        String html = commonMark("http://github.com/vsch/flexmark-java");
-        System.out.println(html); // output: <p><a href="http://github.com/vsch/flexmark-java" class="my-autolink-class">http://github.com/vsch/flexmark-java</a></p>
-
-        html = commonMark("hello\nworld");
-        System.out.println(html); // output: <p>hello<br/>world</p>
-    }
+  }
 }

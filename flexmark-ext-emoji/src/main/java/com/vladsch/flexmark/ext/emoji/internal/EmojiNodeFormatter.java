@@ -11,36 +11,36 @@ import java.util.Set;
 
 public class EmojiNodeFormatter implements NodeFormatter {
 
-    public EmojiNodeFormatter(DataHolder options) {
+  public EmojiNodeFormatter(DataHolder options) {
 
-    }
+  }
 
-    @Nullable
+  @Nullable
+  @Override
+  public Set<Class<?>> getNodeClasses() {
+    return null;
+  }
+
+  // only registered if assignTextAttributes is enabled
+  @Nullable
+  @Override
+  public Set<NodeFormattingHandler<?>> getNodeFormattingHandlers() {
+    HashSet<NodeFormattingHandler<?>> set = new HashSet<>();
+    set.add(new NodeFormattingHandler<>(Emoji.class, EmojiNodeFormatter.this::render));
+    return set;
+  }
+
+  void render(Emoji node, NodeFormatterContext context, MarkdownWriter markdown) {
+    markdown.append(node.getOpeningMarker());
+    markdown.appendNonTranslating(node.getText());
+    markdown.append(node.getClosingMarker());
+  }
+
+  public static class Factory implements NodeFormatterFactory {
+    @NotNull
     @Override
-    public Set<Class<?>> getNodeClasses() {
-        return null;
+    public NodeFormatter create(@NotNull DataHolder options) {
+      return new EmojiNodeFormatter(options);
     }
-
-    // only registered if assignTextAttributes is enabled
-    @Nullable
-    @Override
-    public Set<NodeFormattingHandler<?>> getNodeFormattingHandlers() {
-        HashSet<NodeFormattingHandler<?>> set = new HashSet<>();
-        set.add(new NodeFormattingHandler<>(Emoji.class, EmojiNodeFormatter.this::render));
-        return set;
-    }
-
-    void render(Emoji node, NodeFormatterContext context, MarkdownWriter markdown) {
-        markdown.append(node.getOpeningMarker());
-        markdown.appendNonTranslating(node.getText());
-        markdown.append(node.getClosingMarker());
-    }
-
-    public static class Factory implements NodeFormatterFactory {
-        @NotNull
-        @Override
-        public NodeFormatter create(@NotNull DataHolder options) {
-            return new EmojiNodeFormatter(options);
-        }
-    }
+  }
 }

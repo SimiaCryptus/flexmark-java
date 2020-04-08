@@ -15,20 +15,20 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ComboEmojiJiraTest extends RendererSpecTest {
-    final private static String SPEC_RESOURCE = "/ext_emoji_jira_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(HtmlRenderer.RENDER_HEADER_ID, false)
-            .set(HtmlRenderer.GENERATE_HEADER_ID, true)
-            .set(Parser.EXTENSIONS, Arrays.asList(JiraConverterExtension.create(), EmojiExtension.create()))
-            .toImmutable();
+  final private static String SPEC_RESOURCE = "/ext_emoji_jira_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(HtmlRenderer.RENDER_HEADER_ID, false)
+      .set(HtmlRenderer.GENERATE_HEADER_ID, true)
+      .set(Parser.EXTENSIONS, Arrays.asList(JiraConverterExtension.create(), EmojiExtension.create()))
+      .toImmutable();
 
-    public ComboEmojiJiraTest(@NotNull SpecExample example) {
-        super(example, null, OPTIONS);
-    }
+  public ComboEmojiJiraTest(@NotNull SpecExample example) {
+    super(example, null, OPTIONS);
+  }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

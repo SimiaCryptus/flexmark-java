@@ -5,37 +5,37 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlankLine extends Block {
-    private Block claimedBlankLine = null;
+  private Block claimedBlankLine = null;
 
-    public boolean isClaimed() {
-        return claimedBlankLine != null;
-    }
+  public BlankLine(@NotNull BasedSequence chars) {
+    super(chars);
+    setCharsFromContent();
+  }
 
-    @Nullable
-    public Block getClaimedBlankLine() {
-        return claimedBlankLine;
-    }
+  public BlankLine(@NotNull BasedSequence chars, @NotNull Block claimedBlankLine) {
+    super(chars);
+    setCharsFromContent();
+    this.claimedBlankLine = claimedBlankLine;
+  }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public BlankLine setClaimedBlankLine(@NotNull Block claimedBlankLine) {
-        this.claimedBlankLine = claimedBlankLine;
-        return this;
-    }
+  @Nullable
+  public Block getClaimedBlankLine() {
+    return claimedBlankLine;
+  }
 
-    public BlankLine(@NotNull BasedSequence chars) {
-        super(chars);
-        setCharsFromContent();
-    }
+  @SuppressWarnings("UnusedReturnValue")
+  public BlankLine setClaimedBlankLine(@NotNull Block claimedBlankLine) {
+    this.claimedBlankLine = claimedBlankLine;
+    return this;
+  }
 
-    public BlankLine(@NotNull BasedSequence chars, @NotNull Block claimedBlankLine) {
-        super(chars);
-        setCharsFromContent();
-        this.claimedBlankLine = claimedBlankLine;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return EMPTY_SEGMENTS;
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return EMPTY_SEGMENTS;
-    }
+  public boolean isClaimed() {
+    return claimedBlankLine != null;
+  }
 }

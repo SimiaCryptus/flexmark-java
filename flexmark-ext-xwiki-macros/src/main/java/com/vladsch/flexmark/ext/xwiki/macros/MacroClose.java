@@ -8,57 +8,57 @@ import org.jetbrains.annotations.NotNull;
  * A macros node
  */
 public class MacroClose extends Node {
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence name = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence name = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        //return EMPTY_SEGMENTS;
-        return new BasedSequence[] { openingMarker, name, closingMarker };
-    }
+  public MacroClose() {
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        delimitedSegmentSpanChars(out, openingMarker, name, closingMarker, "name");
-    }
+  public MacroClose(BasedSequence chars) {
+    super(chars);
+  }
 
-    public MacroClose() {
-    }
+  public MacroClose(BasedSequence openingMarker, BasedSequence name, BasedSequence closingMarker) {
+    super(openingMarker.baseSubSequence(openingMarker.getStartOffset(), closingMarker.getEndOffset()));
+    this.openingMarker = openingMarker;
+    this.name = name;
+    this.closingMarker = closingMarker;
+  }
 
-    public MacroClose(BasedSequence chars) {
-        super(chars);
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    public MacroClose(BasedSequence openingMarker, BasedSequence name, BasedSequence closingMarker) {
-        super(openingMarker.baseSubSequence(openingMarker.getStartOffset(), closingMarker.getEndOffset()));
-        this.openingMarker = openingMarker;
-        this.name = name;
-        this.closingMarker = closingMarker;
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public BasedSequence getName() {
+    return name;
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public void setName(BasedSequence name) {
+    this.name = name;
+  }
 
-    public BasedSequence getName() {
-        return name;
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public void setName(BasedSequence name) {
-        this.name = name;
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    //return EMPTY_SEGMENTS;
+    return new BasedSequence[]{openingMarker, name, closingMarker};
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    delimitedSegmentSpanChars(out, openingMarker, name, closingMarker, "name");
+  }
 }

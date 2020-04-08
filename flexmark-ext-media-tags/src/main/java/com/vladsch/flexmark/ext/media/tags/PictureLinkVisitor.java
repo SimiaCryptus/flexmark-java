@@ -1,5 +1,5 @@
 package com.vladsch.flexmark.ext.media.tags;
 
 public interface PictureLinkVisitor {
-    void visit(PictureLink node);
+  void visit(PictureLink node);
 }

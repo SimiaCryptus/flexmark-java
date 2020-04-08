@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboZzzzzzSpecTest.class,
+    ComboZzzzzzSpecTest.class,
 })
 public class ExtZzzzzzTestSuite {
 }

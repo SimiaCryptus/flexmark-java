@@ -9,24 +9,24 @@ import java.util.List;
 
 public class IndentedCodeBlock extends Block {
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return EMPTY_SEGMENTS;
-    }
+  public IndentedCodeBlock() {
+  }
 
-    public IndentedCodeBlock() {
-    }
+  public IndentedCodeBlock(BasedSequence chars) {
+    super(chars);
+  }
 
-    public IndentedCodeBlock(BasedSequence chars) {
-        super(chars);
-    }
+  public IndentedCodeBlock(BasedSequence chars, List<BasedSequence> segments) {
+    super(chars, segments);
+  }
 
-    public IndentedCodeBlock(BasedSequence chars, List<BasedSequence> segments) {
-        super(chars, segments);
-    }
+  public IndentedCodeBlock(BlockContent blockContent) {
+    super(blockContent);
+  }
 
-    public IndentedCodeBlock(BlockContent blockContent) {
-        super(blockContent);
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return EMPTY_SEGMENTS;
+  }
 }

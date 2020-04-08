@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
  * call {@link #visitChildren}.
  */
 public abstract class AnchorRefTargetBlockVisitor extends NodeVisitorBase {
-    protected abstract void visit(AnchorRefTarget node);
-
-    public void visit(@NotNull Node node) {
-        if (node instanceof AnchorRefTarget) visit((AnchorRefTarget) node);
-        if (node instanceof Block) {
-            visitChildren(node);
-        }
+  public void visit(@NotNull Node node) {
+    if (node instanceof AnchorRefTarget) visit((AnchorRefTarget) node);
+    if (node instanceof Block) {
+      visitChildren(node);
     }
+  }
+
+  protected abstract void visit(AnchorRefTarget node);
 }

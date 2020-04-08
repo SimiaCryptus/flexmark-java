@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        PathologicalTest.class,
-        PathologicalSpcUrlTest.class,
+    PathologicalTest.class,
+    PathologicalSpcUrlTest.class,
 })
 final public class PathologicalTestSuite {
 }

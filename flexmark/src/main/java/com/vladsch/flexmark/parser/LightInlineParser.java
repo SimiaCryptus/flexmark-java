@@ -13,33 +13,58 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface LightInlineParser {
-    @NotNull ArrayList<BasedSequence> getCurrentText();
-    @NotNull BasedSequence getInput();
-    void setInput(BasedSequence input);
-    int getIndex();
-    void setIndex(int index);
-    @NotNull Node getBlock();
-    @Nullable BasedSequence match(Pattern re);
-    @Nullable BasedSequence[] matchWithGroups(Pattern re);
-    @Nullable Matcher matcher(Pattern re);
-    char peek();
-    char peek(int ahead);
-    boolean flushTextNode();
-    @NotNull Document getDocument();
-    void setDocument(@NotNull Document document);
-    @NotNull InlineParserOptions getOptions();
-    @NotNull Parsing getParsing();
-    void appendText(@NotNull BasedSequence text);
-    void appendText(@NotNull BasedSequence text, int beginIndex, int endIndex);
-    void appendNode(@NotNull Node node);
+  @NotNull Node getBlock();
 
-    // In some cases, we don't want the text to be appended to an existing node, we need it separate
-    @NotNull Text appendSeparateText(@NotNull BasedSequence text);
-    void setBlock(@NotNull Node block);
-    void moveNodes(@NotNull Node fromNode, @NotNull Node toNode);
-    boolean spnl();
-    boolean nonIndentSp();
-    boolean sp();
-    boolean spnlUrl();
-    @Nullable BasedSequence toEOL();
+  void setBlock(@NotNull Node block);
+
+  @NotNull ArrayList<BasedSequence> getCurrentText();
+
+  @NotNull Document getDocument();
+
+  void setDocument(@NotNull Document document);
+
+  int getIndex();
+
+  void setIndex(int index);
+
+  @NotNull BasedSequence getInput();
+
+  void setInput(BasedSequence input);
+
+  @NotNull InlineParserOptions getOptions();
+
+  @NotNull Parsing getParsing();
+
+  @Nullable BasedSequence match(Pattern re);
+
+  @Nullable BasedSequence[] matchWithGroups(Pattern re);
+
+  @Nullable Matcher matcher(Pattern re);
+
+  char peek();
+
+  char peek(int ahead);
+
+  boolean flushTextNode();
+
+  void appendText(@NotNull BasedSequence text);
+
+  void appendText(@NotNull BasedSequence text, int beginIndex, int endIndex);
+
+  void appendNode(@NotNull Node node);
+
+  // In some cases, we don't want the text to be appended to an existing node, we need it separate
+  @NotNull Text appendSeparateText(@NotNull BasedSequence text);
+
+  void moveNodes(@NotNull Node fromNode, @NotNull Node toNode);
+
+  boolean spnl();
+
+  boolean nonIndentSp();
+
+  boolean sp();
+
+  boolean spnlUrl();
+
+  @Nullable BasedSequence toEOL();
 }

@@ -6,38 +6,38 @@ import org.jsoup.nodes.Node;
 import java.io.IOException;
 
 public abstract class HtmlNodeConverterSubContext implements HtmlNodeConverterContext {
-    final protected HtmlMarkdownWriter markdown;
-    NodeRenderingHandlerWrapper<?> renderingHandlerWrapper;
-    Node myRenderingNode;
+  final protected HtmlMarkdownWriter markdown;
+  NodeRenderingHandlerWrapper<?> renderingHandlerWrapper;
+  Node myRenderingNode;
 
-    public HtmlNodeConverterSubContext(HtmlMarkdownWriter markdown) {
-        this.markdown = markdown;
-        this.myRenderingNode = null;
-        this.markdown.setContext(this);
-    }
+  public HtmlNodeConverterSubContext(HtmlMarkdownWriter markdown) {
+    this.markdown = markdown;
+    this.myRenderingNode = null;
+    this.markdown.setContext(this);
+  }
 
-    public Node getRenderingNode() {
-        return myRenderingNode;
-    }
+  public HtmlMarkdownWriter getMarkdown() {
+    return markdown;
+  }
 
-    public void setRenderingNode(Node renderingNode) {
-        this.myRenderingNode = renderingNode;
-    }
+  public Node getRenderingNode() {
+    return myRenderingNode;
+  }
 
-    public HtmlMarkdownWriter getMarkdown() {
-        return markdown;
-    }
+  public void setRenderingNode(Node renderingNode) {
+    this.myRenderingNode = renderingNode;
+  }
 
-    public void flushTo(@NotNull Appendable out, int maxTrailingBlankLines) {
-        flushTo(out, getHtmlConverterOptions().maxBlankLines, maxTrailingBlankLines);
-    }
+  public void flushTo(@NotNull Appendable out, int maxTrailingBlankLines) {
+    flushTo(out, getHtmlConverterOptions().maxBlankLines, maxTrailingBlankLines);
+  }
 
-    public void flushTo(Appendable out, int maxBlankLines, int maxTrailingBlankLines) {
-        markdown.line();
-        try {
-            markdown.appendTo(out, maxBlankLines, maxTrailingBlankLines);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+  public void flushTo(Appendable out, int maxBlankLines, int maxTrailingBlankLines) {
+    markdown.line();
+    try {
+      markdown.appendTo(out, maxBlankLines, maxTrailingBlankLines);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+  }
 }

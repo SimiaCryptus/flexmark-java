@@ -6,19 +6,19 @@ import com.vladsch.flexmark.ext.emoji.EmojiShortcutType;
 import com.vladsch.flexmark.util.data.DataHolder;
 
 public class EmojiOptions {
-    final public String rootImagePath;
-    final public EmojiShortcutType useShortcutType;
-    final public EmojiImageType useImageType;
-    final public String attrImageSize;
-    final public String attrAlign;
-    final public String attrImageClass;
+  final public String rootImagePath;
+  final public EmojiShortcutType useShortcutType;
+  final public EmojiImageType useImageType;
+  final public String attrImageSize;
+  final public String attrAlign;
+  final public String attrImageClass;
 
-    public EmojiOptions(DataHolder options) {
-        this.useShortcutType = EmojiExtension.USE_SHORTCUT_TYPE.get(options);
-        this.attrAlign = EmojiExtension.ATTR_ALIGN.get(options);
-        this.attrImageSize = EmojiExtension.ATTR_IMAGE_SIZE.get(options);
-        this.rootImagePath = EmojiExtension.ROOT_IMAGE_PATH.get(options);
-        this.useImageType = EmojiExtension.USE_IMAGE_TYPE.get(options);
-        this.attrImageClass = EmojiExtension.ATTR_IMAGE_CLASS.get(options);
-    }
+  public EmojiOptions(DataHolder options) {
+    this.useShortcutType = EmojiExtension.USE_SHORTCUT_TYPE.get(options);
+    this.attrAlign = EmojiExtension.ATTR_ALIGN.get(options);
+    this.attrImageSize = EmojiExtension.ATTR_IMAGE_SIZE.get(options);
+    this.rootImagePath = EmojiExtension.ROOT_IMAGE_PATH.get(options);
+    this.useImageType = EmojiExtension.USE_IMAGE_TYPE.get(options);
+    this.attrImageClass = EmojiExtension.ATTR_IMAGE_CLASS.get(options);
+  }
 }

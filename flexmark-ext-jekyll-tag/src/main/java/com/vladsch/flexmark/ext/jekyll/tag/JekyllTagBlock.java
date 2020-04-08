@@ -13,38 +13,38 @@ import java.util.List;
  */
 public class JekyllTagBlock extends Block {
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-    }
+  public JekyllTagBlock() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return Node.EMPTY_SEGMENTS;
-    }
+  public JekyllTagBlock(BasedSequence chars) {
+    super(chars);
+  }
 
-    public JekyllTagBlock() {
-    }
+  public JekyllTagBlock(BasedSequence chars, List<BasedSequence> lineSegments) {
+    super(chars, lineSegments);
+  }
 
-    public JekyllTagBlock(BasedSequence chars) {
-        super(chars);
-    }
+  public JekyllTagBlock(List<BasedSequence> lineSegments) {
+    super(lineSegments);
+  }
 
-    public JekyllTagBlock(BasedSequence chars, List<BasedSequence> lineSegments) {
-        super(chars, lineSegments);
-    }
+  public JekyllTagBlock(BlockContent blockContent) {
+    super(blockContent);
+  }
 
-    public JekyllTagBlock(List<BasedSequence> lineSegments) {
-        super(lineSegments);
-    }
+  public JekyllTagBlock(Node node) {
+    super();
+    appendChild(node);
+    this.setCharsFromContent();
+  }
 
-    public JekyllTagBlock(BlockContent blockContent) {
-        super(blockContent);
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return Node.EMPTY_SEGMENTS;
+  }
 
-    public JekyllTagBlock(Node node) {
-        super();
-        appendChild(node);
-        this.setCharsFromContent();
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+  }
 }

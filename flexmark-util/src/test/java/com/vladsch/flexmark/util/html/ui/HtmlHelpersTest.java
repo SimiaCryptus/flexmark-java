@@ -21,8 +21,8 @@ import static org.junit.Assert.assertEquals;
 
 public class HtmlHelpersTest {
 
-    @Test
-    public void test_mixedColor() {
-        assertEquals(Color.of("#807240").toString(), Color.of(HtmlHelpers.mixedColor(Color.BLACK, Color.ORANGE)).toString());
-    }
+  @Test
+  public void test_mixedColor() {
+    assertEquals(Color.of("#807240").toString(), Color.of(HtmlHelpers.mixedColor(Color.BLACK, Color.ORANGE)).toString());
+  }
 }

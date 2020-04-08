@@ -15,58 +15,58 @@ import static com.vladsch.flexmark.util.misc.BitFieldSet.any;
  * A TypographicSmarts node
  */
 public class TypographicSmarts extends Node implements DoNotAttributeDecorate, TypographicText {
-    private String typographicText;
+  private String typographicText;
 
-    public TypographicSmarts() {
-    }
+  public TypographicSmarts() {
+  }
 
-    public TypographicSmarts(BasedSequence chars) {
-        super(chars);
-    }
+  public TypographicSmarts(BasedSequence chars) {
+    super(chars);
+  }
 
-    public TypographicSmarts(String typographicText) {
-        this.typographicText = typographicText;
-    }
+  public TypographicSmarts(String typographicText) {
+    this.typographicText = typographicText;
+  }
 
-    public TypographicSmarts(BasedSequence chars, String typographicText) {
-        super(chars);
-        this.typographicText = typographicText;
-    }
+  public TypographicSmarts(BasedSequence chars, String typographicText) {
+    super(chars);
+    this.typographicText = typographicText;
+  }
 
-    @Override
-    public boolean collectText(ISequenceBuilder<? extends ISequenceBuilder<?, BasedSequence>, BasedSequence> out, int flags) {
-        if (any(flags, F_NODE_TEXT)) {
-            out.append(getChars());
-        } else {
-            ReplacedTextMapper textMapper = new ReplacedTextMapper(getChars());
-            BasedSequence unescaped = Escaping.unescape(getChars(), textMapper);
-            out.append(unescaped);
-        }
-        return false;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return EMPTY_SEGMENTS;
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        out.append(" typographic: ").append(typographicText).append(" ");
-    }
+  public String getTypographicText() {
+    return typographicText;
+  }
 
-    public String getTypographicText() {
-        return typographicText;
-    }
+  public void setTypographicText(String typographicText) {
+    this.typographicText = typographicText;
+  }
 
-    public void setTypographicText(String typographicText) {
-        this.typographicText = typographicText;
+  @Override
+  public boolean collectText(ISequenceBuilder<? extends ISequenceBuilder<?, BasedSequence>, BasedSequence> out, int flags) {
+    if (any(flags, F_NODE_TEXT)) {
+      out.append(getChars());
+    } else {
+      ReplacedTextMapper textMapper = new ReplacedTextMapper(getChars());
+      BasedSequence unescaped = Escaping.unescape(getChars(), textMapper);
+      out.append(unescaped);
     }
+    return false;
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return EMPTY_SEGMENTS;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    out.append(" typographic: ").append(typographicText).append(" ");
+  }
 
-    @NotNull
-    @Override
-    protected String toStringAttributes() {
-        return "text=" + getChars();
-    }
+  @NotNull
+  @Override
+  protected String toStringAttributes() {
+    return "text=" + getChars();
+  }
 }

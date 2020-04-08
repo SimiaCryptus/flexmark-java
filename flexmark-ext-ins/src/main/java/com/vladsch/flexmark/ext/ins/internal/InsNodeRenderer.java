@@ -14,42 +14,42 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class InsNodeRenderer implements NodeRenderer {
-    final private String insStyleHtmlOpen;
-    final private String insStyleHtmlClose;
+  final private String insStyleHtmlOpen;
+  final private String insStyleHtmlClose;
 
-    public InsNodeRenderer(DataHolder options) {
-        insStyleHtmlOpen = InsExtension.INS_STYLE_HTML_OPEN.get(options);
-        insStyleHtmlClose = InsExtension.INS_STYLE_HTML_CLOSE.get(options);
+  public InsNodeRenderer(DataHolder options) {
+    insStyleHtmlOpen = InsExtension.INS_STYLE_HTML_OPEN.get(options);
+    insStyleHtmlClose = InsExtension.INS_STYLE_HTML_CLOSE.get(options);
+  }
+
+  @Override
+  public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
+    HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
+    set.add(new NodeRenderingHandler<>(Ins.class, InsNodeRenderer.this::render));
+    return set;
+  }
+
+  private void render(Ins node, NodeRendererContext context, HtmlWriter html) {
+    if (insStyleHtmlOpen == null || insStyleHtmlClose == null) {
+      if (context.getHtmlOptions().sourcePositionParagraphLines) {
+        html.withAttr().tag("ins");
+      } else {
+        html.srcPos(node.getText()).withAttr().tag("ins");
+      }
+      context.renderChildren(node);
+      html.tag("/ins");
+    } else {
+      html.raw(insStyleHtmlOpen);
+      context.renderChildren(node);
+      html.raw(insStyleHtmlClose);
     }
+  }
 
+  public static class Factory implements NodeRendererFactory {
+    @NotNull
     @Override
-    public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
-        HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
-        set.add(new NodeRenderingHandler<>(Ins.class, InsNodeRenderer.this::render));
-        return set;
+    public NodeRenderer apply(@NotNull DataHolder options) {
+      return new InsNodeRenderer(options);
     }
-
-    private void render(Ins node, NodeRendererContext context, HtmlWriter html) {
-        if (insStyleHtmlOpen == null || insStyleHtmlClose == null) {
-            if (context.getHtmlOptions().sourcePositionParagraphLines) {
-                html.withAttr().tag("ins");
-            } else {
-                html.srcPos(node.getText()).withAttr().tag("ins");
-            }
-            context.renderChildren(node);
-            html.tag("/ins");
-        } else {
-            html.raw(insStyleHtmlOpen);
-            context.renderChildren(node);
-            html.raw(insStyleHtmlClose);
-        }
-    }
-
-    public static class Factory implements NodeRendererFactory {
-        @NotNull
-        @Override
-        public NodeRenderer apply(@NotNull DataHolder options) {
-            return new InsNodeRenderer(options);
-        }
-    }
+  }
 }

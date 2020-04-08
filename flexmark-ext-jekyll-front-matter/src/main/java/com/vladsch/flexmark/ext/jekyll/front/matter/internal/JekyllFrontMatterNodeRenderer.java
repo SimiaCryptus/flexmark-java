@@ -13,27 +13,27 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class JekyllFrontMatterNodeRenderer implements NodeRenderer {
-    public JekyllFrontMatterNodeRenderer(DataHolder options) {
+  public JekyllFrontMatterNodeRenderer(DataHolder options) {
 
-    }
+  }
 
+  @Override
+  public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
+    HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
+    set.add(new NodeRenderingHandler<>(JekyllFrontMatterBlock.class, this::render));
+
+    return set;
+  }
+
+  private void render(JekyllFrontMatterBlock node, NodeRendererContext context, HtmlWriter html) {
+
+  }
+
+  public static class Factory implements NodeRendererFactory {
+    @NotNull
     @Override
-    public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
-        HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
-        set.add(new NodeRenderingHandler<>(JekyllFrontMatterBlock.class, this::render));
-
-        return set;
+    public NodeRenderer apply(@NotNull DataHolder options) {
+      return new JekyllFrontMatterNodeRenderer(options);
     }
-
-    private void render(JekyllFrontMatterBlock node, NodeRendererContext context, HtmlWriter html) {
-
-    }
-
-    public static class Factory implements NodeRendererFactory {
-        @NotNull
-        @Override
-        public NodeRenderer apply(@NotNull DataHolder options) {
-            return new JekyllFrontMatterNodeRenderer(options);
-        }
-    }
+  }
 }

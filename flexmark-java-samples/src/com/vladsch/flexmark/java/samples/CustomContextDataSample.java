@@ -22,98 +22,98 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 
 public class CustomContextDataSample {
-    class XhtmlContent {
+  final public static NullableDataKey<XhtmlContent> XHTML_CONTENT = new NullableDataKey<>("XHTML_CONTENT");
+
+  public static void main(String[] args) {
+    DataHolder options = PegdownOptionsAdapter.flexmarkOptions(Extensions.ALL, CustomExtension.create());
+
+    Parser parser = Parser.builder(options).build();
+    HtmlRenderer renderer = HtmlRenderer.builder(options).build();
+    String markdown = "";
+    XhtmlContent xhtmlContent = null;
+
+    // You can re-use parser and renderer instances
+    Document document = (Document) parser.parse(markdown);
+    document.set(XHTML_CONTENT, xhtmlContent);
+    String html = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n"
+    System.out.println(html);
+  }
+
+  class XhtmlContent {
+
+  }
+
+  static class CustomExtension implements HtmlRenderer.HtmlRendererExtension {
+    static CustomExtension create() {
+      return new CustomExtension();
+    }
+
+    @Override
+    public void rendererOptions(@NotNull MutableDataHolder options) {
 
     }
 
-    final public static NullableDataKey<XhtmlContent> XHTML_CONTENT = new NullableDataKey<>("XHTML_CONTENT");
+    @Override
+    public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
+      htmlRendererBuilder.linkResolverFactory(new CustomLinkResolver.Factory());
+    }
+  }
 
-    static class CustomExtension implements HtmlRenderer.HtmlRendererExtension {
-        @Override
-        public void rendererOptions(@NotNull MutableDataHolder options) {
+  static class CustomLinkResolver implements LinkResolver {
 
-        }
-
-        @Override
-        public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
-            htmlRendererBuilder.linkResolverFactory(new CustomLinkResolver.Factory());
-        }
-
-        static CustomExtension create() {
-            return new CustomExtension();
-        }
+    public CustomLinkResolver(LinkResolverContext options) {
+      // can use context for custom settings
+      // context.getDocument();
+      // context.getHtmlOptions();
     }
 
-    static class CustomLinkResolver implements LinkResolver {
+    @NotNull
+    @Override
+    public ResolvedLink resolveLink(@NotNull Node node, @NotNull LinkResolverContext context, @NotNull ResolvedLink link) {
+      Document document = context.getDocument();
+      XhtmlContent xhtmlContent = XHTML_CONTENT.get(document);
 
-        public CustomLinkResolver(LinkResolverContext options) {
-            // can use context for custom settings
-            // context.getDocument();
-            // context.getHtmlOptions();
-        }
+      if (node instanceof WikiImage) {
+        // resolve wiki image link
+        String url = link.getUrl() + ".png";
 
-        @NotNull
-        @Override
-        public ResolvedLink resolveLink(@NotNull Node node, @NotNull LinkResolverContext context, @NotNull ResolvedLink link) {
-            Document document = context.getDocument();
-            XhtmlContent xhtmlContent = XHTML_CONTENT.get(document);
+        // resolve url, return one of LinkStatus other than LinkStatus.UNKNOWN
+        return link.withStatus(LinkStatus.VALID)
+            .withUrl(url);
+      } else if (node instanceof WikiLink) {
+        // resolve wiki link
+        String url = link.getUrl() + ".html";
 
-            if (node instanceof WikiImage) {
-                // resolve wiki image link
-                String url = link.getUrl() + ".png";
-
-                // resolve url, return one of LinkStatus other than LinkStatus.UNKNOWN
-                return link.withStatus(LinkStatus.VALID)
-                        .withUrl(url);
-            } else if (node instanceof WikiLink) {
-                // resolve wiki link
-                String url = link.getUrl() + ".html";
-
-                // resolve url, return one of LinkStatus other than LinkStatus.UNKNOWN
-                return link.withStatus(LinkStatus.VALID)
-                        .withUrl(url);
-            }
-            return link;
-        }
-
-        static class Factory implements LinkResolverFactory {
-            @Nullable
-            @Override
-            public Set<Class<?>> getAfterDependents() {
-                return null;
-            }
-
-            @Nullable
-            @Override
-            public Set<Class<?>> getBeforeDependents() {
-                return null;
-            }
-
-            @Override
-            public boolean affectsGlobalScope() {
-                return false;
-            }
-
-            @NotNull
-            @Override
-            public LinkResolver apply(@NotNull LinkResolverContext context) {
-                return new CustomLinkResolver(context);
-            }
-        }
+        // resolve url, return one of LinkStatus other than LinkStatus.UNKNOWN
+        return link.withStatus(LinkStatus.VALID)
+            .withUrl(url);
+      }
+      return link;
     }
 
-    public static void main(String[] args) {
-        DataHolder options = PegdownOptionsAdapter.flexmarkOptions(Extensions.ALL, CustomExtension.create());
+    static class Factory implements LinkResolverFactory {
+      @Nullable
+      @Override
+      public Set<Class<?>> getAfterDependents() {
+        return null;
+      }
 
-        Parser parser = Parser.builder(options).build();
-        HtmlRenderer renderer = HtmlRenderer.builder(options).build();
-        String markdown = "";
-        XhtmlContent xhtmlContent = null;
+      @Nullable
+      @Override
+      public Set<Class<?>> getBeforeDependents() {
+        return null;
+      }
 
-        // You can re-use parser and renderer instances
-        Document document = (Document) parser.parse(markdown);
-        document.set(XHTML_CONTENT, xhtmlContent);
-        String html = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n"
-        System.out.println(html);
+      @Override
+      public boolean affectsGlobalScope() {
+        return false;
+      }
+
+      @NotNull
+      @Override
+      public LinkResolver apply(@NotNull LinkResolverContext context) {
+        return new CustomLinkResolver(context);
+      }
     }
+  }
 }

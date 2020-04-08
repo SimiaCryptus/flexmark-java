@@ -7,23 +7,26 @@ import com.vladsch.flexmark.ast.Text;
  */
 public interface DelimiterRun {
 
-    DelimiterRun getPrevious();
-    DelimiterRun getNext();
-    char getDelimiterChar();
-    Text getNode();
+  char getDelimiterChar();
 
-    /**
-     * @return whether this can open a delimiter
-     */
-    boolean canOpen();
+  DelimiterRun getNext();
 
-    /**
-     * @return whether this can close a delimiter
-     */
-    boolean canClose();
+  Text getNode();
 
-    /**
-     * @return the number of characters in this delimiter run (that are left for processing)
-     */
-    int length();
+  DelimiterRun getPrevious();
+
+  /**
+   * @return whether this can open a delimiter
+   */
+  boolean canOpen();
+
+  /**
+   * @return whether this can close a delimiter
+   */
+  boolean canClose();
+
+  /**
+   * @return the number of characters in this delimiter run (that are left for processing)
+   */
+  int length();
 }

@@ -14,57 +14,57 @@ import java.util.*;
 
 @SuppressWarnings("WeakerAccess")
 public class MacroDefinitionRepository extends NodeRepository<MacroDefinitionBlock> {
-    final private ArrayList<MacroDefinitionBlock> myReferencedMacroDefinitionBlocks = new ArrayList<>();
+  final private ArrayList<MacroDefinitionBlock> myReferencedMacroDefinitionBlocks = new ArrayList<>();
 
-    public void addMacrosReference(MacroDefinitionBlock macroDefinitionBlock, MacroReference macros) {
-        if (!macroDefinitionBlock.isReferenced()) {
-            myReferencedMacroDefinitionBlocks.add(macroDefinitionBlock);
+  public MacroDefinitionRepository(DataHolder options) {
+    super(MacrosExtension.MACRO_DEFINITIONS_KEEP.get(options));
+  }
+
+  @NotNull
+  @Override
+  public DataKey<MacroDefinitionRepository> getDataKey() {
+    return MacrosExtension.MACRO_DEFINITIONS;
+  }
+
+  @NotNull
+  @Override
+  public DataKey<KeepType> getKeepDataKey() {
+    return MacrosExtension.MACRO_DEFINITIONS_KEEP;
+  }
+
+  public List<MacroDefinitionBlock> getReferencedMacroDefinitionBlocks() {
+    return myReferencedMacroDefinitionBlocks;
+  }
+
+  public void addMacrosReference(MacroDefinitionBlock macroDefinitionBlock, MacroReference macros) {
+    if (!macroDefinitionBlock.isReferenced()) {
+      myReferencedMacroDefinitionBlocks.add(macroDefinitionBlock);
+    }
+
+    macroDefinitionBlock.setFirstReferenceOffset(macros.getStartOffset());
+  }
+
+  public void resolveMacrosOrdinals() {
+    // need to sort by first referenced offset then set each to its ordinal position in the array+1
+    myReferencedMacroDefinitionBlocks.sort(Comparator.comparing(MacroDefinitionBlock::getFirstReferenceOffset));
+    int ordinal = 0;
+    for (MacroDefinitionBlock macroDefinitionBlock : myReferencedMacroDefinitionBlocks) {
+      macroDefinitionBlock.setOrdinal(++ordinal);
+    }
+  }
+
+  @NotNull
+  @Override
+  public Set<MacroDefinitionBlock> getReferencedElements(Node parent) {
+    HashSet<MacroDefinitionBlock> references = new HashSet<>();
+    visitNodes(parent, value -> {
+      if (value instanceof MacroReference) {
+        MacroDefinitionBlock reference = ((MacroReference) value).getReferenceNode(MacroDefinitionRepository.this);
+        if (reference != null) {
+          references.add(reference);
         }
-
-        macroDefinitionBlock.setFirstReferenceOffset(macros.getStartOffset());
-    }
-
-    public void resolveMacrosOrdinals() {
-        // need to sort by first referenced offset then set each to its ordinal position in the array+1
-        myReferencedMacroDefinitionBlocks.sort(Comparator.comparing(MacroDefinitionBlock::getFirstReferenceOffset));
-        int ordinal = 0;
-        for (MacroDefinitionBlock macroDefinitionBlock : myReferencedMacroDefinitionBlocks) {
-            macroDefinitionBlock.setOrdinal(++ordinal);
-        }
-    }
-
-    public List<MacroDefinitionBlock> getReferencedMacroDefinitionBlocks() {
-        return myReferencedMacroDefinitionBlocks;
-    }
-
-    public MacroDefinitionRepository(DataHolder options) {
-        super(MacrosExtension.MACRO_DEFINITIONS_KEEP.get(options));
-    }
-
-    @NotNull
-    @Override
-    public DataKey<MacroDefinitionRepository> getDataKey() {
-        return MacrosExtension.MACRO_DEFINITIONS;
-    }
-
-    @NotNull
-    @Override
-    public DataKey<KeepType> getKeepDataKey() {
-        return MacrosExtension.MACRO_DEFINITIONS_KEEP;
-    }
-
-    @NotNull
-    @Override
-    public Set<MacroDefinitionBlock> getReferencedElements(Node parent) {
-        HashSet<MacroDefinitionBlock> references = new HashSet<>();
-        visitNodes(parent, value -> {
-            if (value instanceof MacroReference) {
-                MacroDefinitionBlock reference = ((MacroReference) value).getReferenceNode(MacroDefinitionRepository.this);
-                if (reference != null) {
-                    references.add(reference);
-                }
-            }
-        }, MacroReference.class);
-        return references;
-    }
+      }
+    }, MacroReference.class);
+    return references;
+  }
 }

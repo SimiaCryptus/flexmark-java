@@ -8,45 +8,45 @@ import com.vladsch.flexmark.util.sequence.BasedSequence;
 import java.util.List;
 
 public class MatchedBlockParserImpl implements MatchedBlockParser {
-    final private BlockParser matchedBlockParser;
+  final private BlockParser matchedBlockParser;
 
-    @Override
-    public List<BasedSequence> getParagraphLines() {
-        if (matchedBlockParser.isParagraphParser()) {
-            return matchedBlockParser.getBlockContent().getLines();
-        }
-        return null;
-    }
+  public MatchedBlockParserImpl(BlockParser matchedBlockParser) {
+    this.matchedBlockParser = matchedBlockParser;
+  }
 
-    public List<Integer> getParagraphEolLengths() {
-        if (matchedBlockParser.isParagraphParser()) {
-            return matchedBlockParser.getBlockContent().getLineIndents();
-        }
-        return null;
-    }
+  @Override
+  public BlockParser getBlockParser() {
+    return matchedBlockParser;
+  }
 
-    public MatchedBlockParserImpl(BlockParser matchedBlockParser) {
-        this.matchedBlockParser = matchedBlockParser;
+  @Override
+  public BasedSequence getParagraphContent() {
+    if (matchedBlockParser.isParagraphParser()) {
+      return matchedBlockParser.getBlockContent().getContents();
     }
+    return null;
+  }
 
-    @Override
-    public BlockParser getBlockParser() {
-        return matchedBlockParser;
+  @Override
+  public MutableDataHolder getParagraphDataHolder() {
+    if (matchedBlockParser.isParagraphParser()) {
+      return matchedBlockParser.getDataHolder();
     }
+    return null;
+  }
 
-    @Override
-    public BasedSequence getParagraphContent() {
-        if (matchedBlockParser.isParagraphParser()) {
-            return matchedBlockParser.getBlockContent().getContents();
-        }
-        return null;
+  public List<Integer> getParagraphEolLengths() {
+    if (matchedBlockParser.isParagraphParser()) {
+      return matchedBlockParser.getBlockContent().getLineIndents();
     }
+    return null;
+  }
 
-    @Override
-    public MutableDataHolder getParagraphDataHolder() {
-        if (matchedBlockParser.isParagraphParser()) {
-            return matchedBlockParser.getDataHolder();
-        }
-        return null;
+  @Override
+  public List<BasedSequence> getParagraphLines() {
+    if (matchedBlockParser.isParagraphParser()) {
+      return matchedBlockParser.getBlockContent().getLines();
     }
+    return null;
+  }
 }

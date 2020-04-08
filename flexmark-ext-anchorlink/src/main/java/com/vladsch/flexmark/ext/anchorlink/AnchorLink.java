@@ -8,16 +8,16 @@ import org.jetbrains.annotations.NotNull;
  * Anchor link node
  */
 public class AnchorLink extends Node {
-    public AnchorLink() {
-    }
+  public AnchorLink() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return EMPTY_SEGMENTS;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return EMPTY_SEGMENTS;
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+  }
 }

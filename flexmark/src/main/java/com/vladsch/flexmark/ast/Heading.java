@@ -9,101 +9,101 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class Heading extends Block implements AnchorRefTarget {
-    protected int level;
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence text = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
-    protected String anchorRefId = "";
-    protected boolean explicitAnchorRefId = false;
+  protected int level;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence text = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected String anchorRefId = "";
+  protected boolean explicitAnchorRefId = false;
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        delimitedSegmentSpanChars(out, openingMarker, text, closingMarker, "text");
-    }
+  public Heading() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] { openingMarker, text, closingMarker };
-    }
+  public Heading(BasedSequence chars) {
+    super(chars);
+  }
 
-    @Override
-    public String getAnchorRefText() {
-        return new TextCollectingVisitor().collectAndGetText(this).trim();
-    }
+  public Heading(BasedSequence chars, List<BasedSequence> segments) {
+    super(chars, segments);
+  }
 
-    @Override
-    public String getAnchorRefId() {
-        return anchorRefId;
-    }
+  public Heading(BlockContent blockContent) {
+    super(blockContent);
+  }
 
-    @Override
-    public void setAnchorRefId(String anchorRefId) {
-        this.anchorRefId = anchorRefId;
-    }
+  @Override
+  public String getAnchorRefId() {
+    return anchorRefId;
+  }
 
-    @Override
-    public boolean isExplicitAnchorRefId() {
-        return explicitAnchorRefId;
-    }
+  @Override
+  public void setAnchorRefId(String anchorRefId) {
+    this.anchorRefId = anchorRefId;
+  }
 
-    @Override
-    public void setExplicitAnchorRefId(boolean explicitAnchorRefId) {
-        this.explicitAnchorRefId = explicitAnchorRefId;
-    }
+  @Override
+  public String getAnchorRefText() {
+    return new TextCollectingVisitor().collectAndGetText(this).trim();
+  }
 
-    public Heading() {
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    public Heading(BasedSequence chars) {
-        super(chars);
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker == null ? BasedSequence.NULL : closingMarker;
+  }
 
-    public Heading(BasedSequence chars, List<BasedSequence> segments) {
-        super(chars, segments);
-    }
+  public int getLevel() {
+    return level;
+  }
 
-    public Heading(BlockContent blockContent) {
-        super(blockContent);
-    }
+  public void setLevel(int level) {
+    this.level = level;
+  }
 
-    public boolean isAtxHeading() {
-        return openingMarker != BasedSequence.NULL;
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public boolean isSetextHeading() {
-        return openingMarker == BasedSequence.NULL && closingMarker != BasedSequence.NULL;
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker == null ? BasedSequence.NULL : openingMarker;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{openingMarker, text, closingMarker};
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker == null ? BasedSequence.NULL : openingMarker;
-    }
+  public BasedSequence getText() {
+    return text;
+  }
 
-    public BasedSequence getText() {
-        return text;
-    }
+  public void setText(BasedSequence text) {
+    this.text = text == null ? BasedSequence.NULL : text;
+  }
 
-    public void setText(BasedSequence text) {
-        this.text = text == null ? BasedSequence.NULL : text;
-    }
+  public boolean isAtxHeading() {
+    return openingMarker != BasedSequence.NULL;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  @Override
+  public boolean isExplicitAnchorRefId() {
+    return explicitAnchorRefId;
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker == null ? BasedSequence.NULL : closingMarker;
-    }
+  @Override
+  public void setExplicitAnchorRefId(boolean explicitAnchorRefId) {
+    this.explicitAnchorRefId = explicitAnchorRefId;
+  }
 
-    public int getLevel() {
-        return level;
-    }
+  public boolean isSetextHeading() {
+    return openingMarker == BasedSequence.NULL && closingMarker != BasedSequence.NULL;
+  }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    delimitedSegmentSpanChars(out, openingMarker, text, closingMarker, "text");
+  }
 }

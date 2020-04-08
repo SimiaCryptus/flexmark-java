@@ -9,24 +9,24 @@ import java.util.List;
 
 public class CodeBlock extends Block {
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return EMPTY_SEGMENTS;
-    }
+  public CodeBlock() {
+  }
 
-    public CodeBlock() {
-    }
+  public CodeBlock(BasedSequence chars) {
+    super(chars);
+  }
 
-    public CodeBlock(BasedSequence chars) {
-        super(chars);
-    }
+  public CodeBlock(BasedSequence chars, List<BasedSequence> segments) {
+    super(chars, segments);
+  }
 
-    public CodeBlock(BasedSequence chars, List<BasedSequence> segments) {
-        super(chars, segments);
-    }
+  public CodeBlock(BlockContent blockContent) {
+    super(blockContent);
+  }
 
-    public CodeBlock(BlockContent blockContent) {
-        super(blockContent);
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return EMPTY_SEGMENTS;
+  }
 }

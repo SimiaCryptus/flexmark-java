@@ -18,67 +18,67 @@ import static com.vladsch.flexmark.html.renderer.AttributablePart.LINK;
 import static com.vladsch.flexmark.util.html.Attribute.LINK_STATUS_ATTR;
 
 public class ZzzzzzAttributeProvider implements AttributeProvider {
-    final private String missingTargetClass;
-    final private String localOnlyTargetClass;
-    final private AttributeProviderAdapter nodeAdapter;
+  final private String missingTargetClass;
+  final private String localOnlyTargetClass;
+  final private AttributeProviderAdapter nodeAdapter;
 
-    public ZzzzzzAttributeProvider(LinkResolverContext context) {
-        DataHolder options = context.getOptions();
-        this.localOnlyTargetClass = ZzzzzzExtension.LOCAL_ONLY_TARGET_CLASS.get(options);
-        this.missingTargetClass = ZzzzzzExtension.MISSING_TARGET_CLASS.get(options);
+  public ZzzzzzAttributeProvider(LinkResolverContext context) {
+    DataHolder options = context.getOptions();
+    this.localOnlyTargetClass = ZzzzzzExtension.LOCAL_ONLY_TARGET_CLASS.get(options);
+    this.missingTargetClass = ZzzzzzExtension.MISSING_TARGET_CLASS.get(options);
 
-        this.nodeAdapter = new AttributeProviderAdapter(
-                new AttributeProvidingHandler<>(Image.class, this::setLinkAttributes),
-                new AttributeProvidingHandler<>(ImageRef.class, this::setLinkAttributes),
-                new AttributeProvidingHandler<>(LinkRef.class, this::setLinkAttributes),
-                new AttributeProvidingHandler<>(Link.class, this::setLinkAttributes)
-        );
+    this.nodeAdapter = new AttributeProviderAdapter(
+        new AttributeProvidingHandler<>(Image.class, this::setLinkAttributes),
+        new AttributeProvidingHandler<>(ImageRef.class, this::setLinkAttributes),
+        new AttributeProvidingHandler<>(LinkRef.class, this::setLinkAttributes),
+        new AttributeProvidingHandler<>(Link.class, this::setLinkAttributes)
+    );
+  }
+
+  @Override
+  public void setAttributes(@NotNull Node node, @NotNull AttributablePart part, @NotNull Attributes attributes) {
+    nodeAdapter.setAttributes(node, part, attributes);
+  }
+
+  private void setLinkAttributes(LinkNode node, AttributablePart part, Attributes attributes) {
+    setLinkAttributes(part, attributes);
+  }
+
+  private void setLinkAttributes(RefNode node, AttributablePart part, Attributes attributes) {
+    setLinkAttributes(part, attributes);
+  }
+
+  private void setLinkAttributes(AttributablePart part, Attributes attributes) {
+    if (part == LINK) {
+      String linkStatus = attributes.getValue(LINK_STATUS_ATTR);
+      if (LinkStatus.NOT_FOUND.isStatus(linkStatus)) {
+        attributes.addValue("class", missingTargetClass);
+      } else if (ZzzzzzExtension.LOCAL_ONLY.isStatus(linkStatus)) {
+        attributes.addValue("class", localOnlyTargetClass);
+      }
     }
+  }
 
+  public static class Factory extends IndependentAttributeProviderFactory {
+    //@Override
+    //public Set<Class<?>> getAfterDependents() {
+    //    return null;
+    //}
+    //
+    //@Override
+    //public Set<Class<?>> getBeforeDependents() {
+    //    return null;
+    //}
+    //
+    //@Override
+    //public boolean affectsGlobalScope() {
+    //    return false;
+    //}
+
+    @NotNull
     @Override
-    public void setAttributes(@NotNull Node node, @NotNull AttributablePart part, @NotNull Attributes attributes) {
-        nodeAdapter.setAttributes(node, part, attributes);
+    public AttributeProvider apply(@NotNull LinkResolverContext context) {
+      return new ZzzzzzAttributeProvider(context);
     }
-
-    private void setLinkAttributes(LinkNode node, AttributablePart part, Attributes attributes) {
-        setLinkAttributes(part, attributes);
-    }
-
-    private void setLinkAttributes(RefNode node, AttributablePart part, Attributes attributes) {
-        setLinkAttributes(part, attributes);
-    }
-
-    private void setLinkAttributes(AttributablePart part, Attributes attributes) {
-        if (part == LINK) {
-            String linkStatus = attributes.getValue(LINK_STATUS_ATTR);
-            if (LinkStatus.NOT_FOUND.isStatus(linkStatus)) {
-                attributes.addValue("class", missingTargetClass);
-            } else if (ZzzzzzExtension.LOCAL_ONLY.isStatus(linkStatus)) {
-                attributes.addValue("class", localOnlyTargetClass);
-            }
-        }
-    }
-
-    public static class Factory extends IndependentAttributeProviderFactory {
-        //@Override
-        //public Set<Class<?>> getAfterDependents() {
-        //    return null;
-        //}
-        //
-        //@Override
-        //public Set<Class<?>> getBeforeDependents() {
-        //    return null;
-        //}
-        //
-        //@Override
-        //public boolean affectsGlobalScope() {
-        //    return false;
-        //}
-
-        @NotNull
-        @Override
-        public AttributeProvider apply(@NotNull LinkResolverContext context) {
-            return new ZzzzzzAttributeProvider(context);
-        }
-    }
+  }
 }

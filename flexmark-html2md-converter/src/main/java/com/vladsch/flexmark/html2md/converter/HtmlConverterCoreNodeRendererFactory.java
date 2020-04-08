@@ -4,8 +4,8 @@ import com.vladsch.flexmark.html2md.converter.internal.HtmlConverterCoreNodeRend
 import com.vladsch.flexmark.util.data.DataHolder;
 
 public class HtmlConverterCoreNodeRendererFactory implements HtmlNodeRendererFactory {
-    @Override
-    public HtmlNodeRenderer apply(DataHolder options) {
-        return new HtmlConverterCoreNodeRenderer(options);
-    }
+  @Override
+  public HtmlNodeRenderer apply(DataHolder options) {
+    return new HtmlConverterCoreNodeRenderer(options);
+  }
 }

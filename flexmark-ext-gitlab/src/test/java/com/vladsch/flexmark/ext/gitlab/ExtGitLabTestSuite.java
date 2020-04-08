@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboGitLabSpecTest.class,
-        ComboGitLabFormatterSpecTest.class,
+    ComboGitLabSpecTest.class,
+    ComboGitLabFormatterSpecTest.class,
 })
 public class ExtGitLabTestSuite {
 }

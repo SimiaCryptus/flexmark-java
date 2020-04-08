@@ -11,108 +11,108 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FlexmarkSpecExampleRenderer extends SpecExampleRendererBase {
-    private @Nullable Node myIncludedDocument = null;
-    private @Nullable Node myDocument = null;
-    private @NotNull IParse myParser;
-    private @NotNull IRender myRender;
+  private @Nullable Node myIncludedDocument = null;
+  private @Nullable Node myDocument = null;
+  private @NotNull IParse myParser;
+  private @NotNull IRender myRender;
 
-    public FlexmarkSpecExampleRenderer(@NotNull SpecExample example, @Nullable DataHolder options, @NotNull IParse parser, @NotNull IRender render) {
-        this(example, options, parser, render, true);
+  public FlexmarkSpecExampleRenderer(@NotNull SpecExample example, @Nullable DataHolder options, @NotNull IParse parser, @NotNull IRender render) {
+    this(example, options, parser, render, true);
+  }
+
+  public FlexmarkSpecExampleRenderer(@NotNull SpecExample example, @Nullable DataHolder options, @NotNull IParse parser, @NotNull IRender render, boolean includeExampleCoord) {
+    super(example, options, includeExampleCoord);
+    myParser = parser;
+    myRender = render;
+  }
+
+  public @NotNull Node getDocument() {
+    assert myDocument != null;
+    return myDocument;
+  }
+
+  @NotNull
+  protected Node getIncludedDocument() {
+    assert myIncludedDocument != null;
+    return myIncludedDocument;
+  }
+
+  @NotNull
+  final public IParse getParser() {
+    return myParser;
+  }
+
+  public void setParser(@NotNull IParse parser) {
+    myParser = parser;
+  }
+
+  @NotNull
+  final public IRender getRenderer() {
+    return myRender;
+  }
+
+  public void setRender(@NotNull IRender render) {
+    myRender = render;
+  }
+
+  @Override
+  public void includeDocument(@NotNull String includedText) {
+    // flexmark parser specific
+    myIncludedDocument = null;
+
+    if (!includedText.isEmpty()) {
+      // need to parse and transfer references
+      myIncludedDocument = getParser().parse(includedText);
+      adjustParserForInclusion();
     }
+  }
 
-    public FlexmarkSpecExampleRenderer(@NotNull SpecExample example, @Nullable DataHolder options, @NotNull IParse parser, @NotNull IRender render, boolean includeExampleCoord) {
-        super(example, options, includeExampleCoord);
-        myParser = parser;
-        myRender = render;
+  @Override
+  public void parse(CharSequence input) {
+    myDocument = getParser().parse(BasedSequence.of(input));
+  }
+
+  @Override
+  public void finalizeDocument() {
+    assert myDocument != null;
+
+    if (myIncludedDocument != null) {
+      adjustParserForInclusion();
     }
+  }
 
-    @Override
-    public void includeDocument(@NotNull String includedText) {
-        // flexmark parser specific
-        myIncludedDocument = null;
+  @Override
+  public void finalizeRender() {
+    super.finalizeRender();
+  }
 
-        if (!includedText.isEmpty()) {
-            // need to parse and transfer references
-            myIncludedDocument = getParser().parse(includedText);
-            adjustParserForInclusion();
-        }
+  protected void adjustParserForInclusion() {
+    if (myDocument instanceof Document && myIncludedDocument instanceof Document) {
+      getParser().transferReferences((Document) myDocument, (Document) myIncludedDocument, null);
     }
+  }
 
-    @NotNull
-    protected Node getIncludedDocument() {
-        assert myIncludedDocument != null;
-        return myIncludedDocument;
-    }
+  /**
+   * Override to customize
+   *
+   * @return HTML string, will be cached after document is finalized to allow for timing collection iterations,
+   */
+  @NotNull
+  @Override
+  protected String renderHtml() {
+    assert myDocument != null;
+    return getRenderer().render(myDocument);
+  }
 
-    @Override
-    public void parse(CharSequence input) {
-        myDocument = getParser().parse(BasedSequence.of(input));
-    }
-
-    @Override
-    public void finalizeDocument() {
-        assert myDocument != null;
-
-        if (myIncludedDocument != null) {
-            adjustParserForInclusion();
-        }
-    }
-
-    protected void adjustParserForInclusion() {
-        if (myDocument instanceof Document && myIncludedDocument instanceof Document) {
-            getParser().transferReferences((Document) myDocument, (Document) myIncludedDocument, null);
-        }
-    }
-
-    public @NotNull Node getDocument() {
-        assert myDocument != null;
-        return myDocument;
-    }
-
-    /**
-     * Override to customize
-     *
-     * @return HTML string, will be cached after document is finalized to allow for timing collection iterations,
-     */
-    @NotNull
-    @Override
-    protected String renderHtml() {
-        assert myDocument != null;
-        return getRenderer().render(myDocument);
-    }
-
-    /**
-     * Override to customize
-     *
-     * @return HTML string, will be cached after document is finalized to allow for timing collection iterations,
-     */
-    @NotNull
-    @Override
-    protected String renderAst() {
-        assert myDocument != null;
-        return TestUtils.ast(myDocument);
-    }
-
-    @Override
-    public void finalizeRender() {
-        super.finalizeRender();
-    }
-
-    @NotNull
-    final public IParse getParser() {
-        return myParser;
-    }
-
-    public void setParser(@NotNull IParse parser) {
-        myParser = parser;
-    }
-
-    public void setRender(@NotNull IRender render) {
-        myRender = render;
-    }
-
-    @NotNull
-    final public IRender getRenderer() {
-        return myRender;
-    }
+  /**
+   * Override to customize
+   *
+   * @return HTML string, will be cached after document is finalized to allow for timing collection iterations,
+   */
+  @NotNull
+  @Override
+  protected String renderAst() {
+    assert myDocument != null;
+    return TestUtils.ast(myDocument);
+  }
 }

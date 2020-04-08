@@ -13,19 +13,19 @@ import org.junit.runners.Parameterized;
 import java.util.List;
 
 final public class ComboMarkdownCompatibilitySpecTest extends CoreRendererSpecTest {
-    final private static String SPEC_RESOURCE = "/core_markdown_compatibility_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .setFrom(ParserEmulationProfile.MARKDOWN)
-            .set(HtmlRenderer.INDENT_SIZE, 4)
-            .toMutable();
+  final private static String SPEC_RESOURCE = "/core_markdown_compatibility_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .setFrom(ParserEmulationProfile.MARKDOWN)
+      .set(HtmlRenderer.INDENT_SIZE, 4)
+      .toMutable();
 
-    public ComboMarkdownCompatibilitySpecTest(@NotNull SpecExample example) {
-        super(example, null, OPTIONS);
-    }
+  public ComboMarkdownCompatibilitySpecTest(@NotNull SpecExample example) {
+    super(example, null, OPTIONS);
+  }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return ComboSpecTestCase.getTestData(RESOURCE_LOCATION);
-    }
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return ComboSpecTestCase.getTestData(RESOURCE_LOCATION);
+  }
 }

@@ -9,56 +9,56 @@ import org.jetbrains.annotations.NotNull;
  * A JekyllFrontMatter block node
  */
 public class JekyllFrontMatterBlock extends Block {
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        segmentSpan(out, openingMarker, "open");
-        segmentSpan(out, getContent(), "content");
-        segmentSpan(out, closingMarker, "close");
-    }
+  public JekyllFrontMatterBlock() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return new BasedSequence[] { openingMarker, closingMarker };
-    }
+  public JekyllFrontMatterBlock(BasedSequence chars) {
+    super(chars);
+  }
 
-    public JekyllFrontMatterBlock() {
-    }
+  public JekyllFrontMatterBlock(Node node) {
+    super();
+    appendChild(node);
+    this.setCharsFromContent();
+  }
 
-    public JekyllFrontMatterBlock(BasedSequence chars) {
-        super(chars);
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    public JekyllFrontMatterBlock(Node node) {
-        super();
-        appendChild(node);
-        this.setCharsFromContent();
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  public BasedSequence getContent() {
+    return getContentChars();
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public BasedSequence getContent() {
-        return getContentChars();
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return new BasedSequence[]{openingMarker, closingMarker};
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    segmentSpan(out, openingMarker, "open");
+    segmentSpan(out, getContent(), "content");
+    segmentSpan(out, closingMarker, "close");
+  }
 
-    public void accept(JekyllFrontMatterVisitor visitor) {
-        visitor.visit(this);
-    }
+  public void accept(JekyllFrontMatterVisitor visitor) {
+    visitor.visit(this);
+  }
 }

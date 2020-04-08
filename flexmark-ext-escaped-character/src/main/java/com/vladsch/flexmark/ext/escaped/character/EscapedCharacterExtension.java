@@ -15,33 +15,33 @@ import org.jetbrains.annotations.NotNull;
  * The parsed escaped_character text is turned into {@link EscapedCharacter} nodes.
  */
 public class EscapedCharacterExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension {
-    private EscapedCharacterExtension() {
+  private EscapedCharacterExtension() {
+  }
+
+  public static EscapedCharacterExtension create() {
+    return new EscapedCharacterExtension();
+  }
+
+  @Override
+  public void rendererOptions(@NotNull MutableDataHolder options) {
+
+  }
+
+  @Override
+  public void parserOptions(MutableDataHolder options) {
+
+  }
+
+  @Override
+  public void extend(Parser.Builder parserBuilder) {
+    parserBuilder.postProcessorFactory(new EscapedCharacterNodePostProcessor.Factory());
+  }
+
+  @Override
+  public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
+    if (htmlRendererBuilder.isRendererType("HTML")) {
+      htmlRendererBuilder.nodeRendererFactory(new EscapedCharacterNodeRenderer.Factory());
+    } else if (htmlRendererBuilder.isRendererType("JIRA")) {
     }
-
-    public static EscapedCharacterExtension create() {
-        return new EscapedCharacterExtension();
-    }
-
-    @Override
-    public void rendererOptions(@NotNull MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void parserOptions(MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void extend(Parser.Builder parserBuilder) {
-        parserBuilder.postProcessorFactory(new EscapedCharacterNodePostProcessor.Factory());
-    }
-
-    @Override
-    public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
-        if (htmlRendererBuilder.isRendererType("HTML")) {
-            htmlRendererBuilder.nodeRendererFactory(new EscapedCharacterNodeRenderer.Factory());
-        } else if (htmlRendererBuilder.isRendererType("JIRA")) {
-        }
-    }
+  }
 }

@@ -14,24 +14,24 @@ import java.util.List;
 import java.util.Map;
 
 public class ComboAbbreviationTranslationFormatterSpecTest extends TranslationFormatterSpecTest {
-    final private static String SPEC_RESOURCE = "/ext_abbreviation_translation_formatter_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singleton(AbbreviationExtension.create()))
-            .set(Parser.UNDERSCORE_DELIMITER_PROCESSOR, false);
+  final private static String SPEC_RESOURCE = "/ext_abbreviation_translation_formatter_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Collections.singleton(AbbreviationExtension.create()))
+      .set(Parser.UNDERSCORE_DELIMITER_PROCESSOR, false);
 
-    final private static Map<String, DataHolder> optionsMap = placementAndSortOptions(
-            AbbreviationExtension.ABBREVIATIONS_KEEP,
-            AbbreviationExtension.ABBREVIATIONS_PLACEMENT,
-            AbbreviationExtension.ABBREVIATIONS_SORT
-    );
+  final private static Map<String, DataHolder> optionsMap = placementAndSortOptions(
+      AbbreviationExtension.ABBREVIATIONS_KEEP,
+      AbbreviationExtension.ABBREVIATIONS_PLACEMENT,
+      AbbreviationExtension.ABBREVIATIONS_SORT
+  );
 
-    public ComboAbbreviationTranslationFormatterSpecTest(@NotNull SpecExample example) {
-        super(example, optionsMap, OPTIONS);
-    }
+  public ComboAbbreviationTranslationFormatterSpecTest(@NotNull SpecExample example) {
+    super(example, optionsMap, OPTIONS);
+  }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 public interface InlineParserFactory {
-    InlineParser inlineParser(
-            @NotNull DataHolder options,
-            @NotNull BitSet specialCharacters,
-            @NotNull BitSet delimiterCharacters,
-            @NotNull Map<Character,
-                    DelimiterProcessor> delimiterProcessors,
-            @NotNull LinkRefProcessorData linkRefProcessors,
-            @NotNull List<InlineParserExtensionFactory> inlineParserExtensions
-    );
+  InlineParser inlineParser(
+      @NotNull DataHolder options,
+      @NotNull BitSet specialCharacters,
+      @NotNull BitSet delimiterCharacters,
+      @NotNull Map<Character,
+          DelimiterProcessor> delimiterProcessors,
+      @NotNull LinkRefProcessorData linkRefProcessors,
+      @NotNull List<InlineParserExtensionFactory> inlineParserExtensions
+  );
 }

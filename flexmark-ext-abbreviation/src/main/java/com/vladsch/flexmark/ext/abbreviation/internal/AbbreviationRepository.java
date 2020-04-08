@@ -16,34 +16,34 @@ import java.util.Set;
 @SuppressWarnings("WeakerAccess")
 public class AbbreviationRepository extends NodeRepository<AbbreviationBlock> {
 
-    public AbbreviationRepository(DataHolder options) {
-        super(AbbreviationExtension.ABBREVIATIONS_KEEP.get(options));
-    }
+  public AbbreviationRepository(DataHolder options) {
+    super(AbbreviationExtension.ABBREVIATIONS_KEEP.get(options));
+  }
 
-    @NotNull
-    @Override
-    public DataKey<AbbreviationRepository> getDataKey() {
-        return AbbreviationExtension.ABBREVIATIONS;
-    }
+  @NotNull
+  @Override
+  public DataKey<AbbreviationRepository> getDataKey() {
+    return AbbreviationExtension.ABBREVIATIONS;
+  }
 
-    @NotNull
-    @Override
-    public DataKey<KeepType> getKeepDataKey() {
-        return AbbreviationExtension.ABBREVIATIONS_KEEP;
-    }
+  @NotNull
+  @Override
+  public DataKey<KeepType> getKeepDataKey() {
+    return AbbreviationExtension.ABBREVIATIONS_KEEP;
+  }
 
-    @NotNull
-    @Override
-    public Set<AbbreviationBlock> getReferencedElements(Node parent) {
-        HashSet<AbbreviationBlock> references = new HashSet<>();
-        visitNodes(parent, value -> {
-            if (value instanceof Abbreviation) {
-                AbbreviationBlock reference = ((Abbreviation) value).getReferenceNode(AbbreviationRepository.this);
-                if (reference != null) {
-                    references.add(reference);
-                }
-            }
-        }, Abbreviation.class);
-        return references;
-    }
+  @NotNull
+  @Override
+  public Set<AbbreviationBlock> getReferencedElements(Node parent) {
+    HashSet<AbbreviationBlock> references = new HashSet<>();
+    visitNodes(parent, value -> {
+      if (value instanceof Abbreviation) {
+        AbbreviationBlock reference = ((Abbreviation) value).getReferenceNode(AbbreviationRepository.this);
+        if (reference != null) {
+          references.add(reference);
+        }
+      }
+    }, Abbreviation.class);
+    return references;
+  }
 }

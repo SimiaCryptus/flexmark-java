@@ -13,31 +13,31 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DefinitionTerm extends ListItem {
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-    }
+  public DefinitionTerm() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return Node.EMPTY_SEGMENTS;
-    }
+  public DefinitionTerm(BasedSequence chars) {
+    super(chars);
+  }
 
-    public DefinitionTerm() {
-    }
+  public DefinitionTerm(Node node) {
+    super();
+    appendChild(node);
+    this.setCharsFromContent();
+  }
 
-    public DefinitionTerm(BasedSequence chars) {
-        super(chars);
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return Node.EMPTY_SEGMENTS;
+  }
 
-    public DefinitionTerm(Node node) {
-        super();
-        appendChild(node);
-        this.setCharsFromContent();
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+  }
 
-    @Override
-    public boolean isParagraphWrappingDisabled(Paragraph node, ListOptions listOptions, DataHolder options) {
-        return true;
-    }
+  @Override
+  public boolean isParagraphWrappingDisabled(Paragraph node, ListOptions listOptions, DataHolder options) {
+    return true;
+  }
 }

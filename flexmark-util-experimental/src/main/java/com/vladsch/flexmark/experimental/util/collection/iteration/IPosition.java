@@ -87,159 +87,172 @@ import java.util.function.Predicate;
  * @param <T> type of element held in the list
  */
 public interface IPosition<T, P extends IPosition<T, P>> extends IPositionHolder<T, P> {
-    /**
-     * @param offset offset to current position
-     *               <p>
-     *               FIX: allow getIndex(offset) to return -1
-     * @return absolute index in list, even if this position is not valid, it will always be [-1, list.size()]
-     */
-    int getIndex(int offset);
+  /**
+   * @return get element at this position or null if no such thing
+   */
+  T getOrNull();
 
-    /**
-     * @param offset index relative to current position, &lt;0 previous elements, 0 means current, &gt;0 following elements
-     * @return Position representing the index relative to current position,
-     *         throws {@link IllegalStateException} if current position is not valid and given index == 0
-     *         throws {@link IndexOutOfBoundsException} if requested index results in absolute index &lt;0 or &gt;size() of the list
-     *         <p>
-     *         NOTE: to avoid exceptions test if position has a valid index with isValidIndex()
-     */
-    P getPosition(int offset);
+  boolean isEmpty();
 
-    /**
-     * Mark position as not valid
-     * may be useful for something. Invalidates current element with all side-effects of this state
-     */
-    void invalidate();
+  /**
+   * @return true if index of this position is between 0 and size() of the list
+   */
 
-    /**
-     * @return true if index of this position is between 0 and size() of the list
-     */
+  boolean isValidIndex();
 
-    boolean isValidIndex();
+  /**
+   * @param offset offset to current position
+   *               <p>
+   *               FIX: allow getIndex(offset) to return -1
+   * @return absolute index in list, even if this position is not valid, it will always be [-1, list.size()]
+   */
+  int getIndex(int offset);
 
-    /**
-     * @return get element at this position, throws {@link IllegalStateException} if current position is not valid or after last element of list
-     */
-    T get();
+  /**
+   * @param offset index relative to current position, &lt;0 previous elements, 0 means current, &gt;0 following elements
+   * @return Position representing the index relative to current position,
+   * throws {@link IllegalStateException} if current position is not valid and given index == 0
+   * throws {@link IndexOutOfBoundsException} if requested index results in absolute index &lt;0 or &gt;size() of the list
+   * <p>
+   * NOTE: to avoid exceptions test if position has a valid index with isValidIndex()
+   */
+  P getPosition(int offset);
 
-    /**
-     * Insert element at index
-     *
-     * @param offset relative to this position, absolute index [0, size()], if absolute index == size() then element is added at the end of the list. The latter is also considered an insert at size() index.
-     * @return element
-     */
-    T get(int offset);
+  /**
+   * Mark position as not valid
+   * may be useful for something. Invalidates current element with all side-effects of this state
+   */
+  void invalidate();
 
-    /**
-     * @return get element at this position or null if no such thing
-     */
-    T getOrNull();
+  /**
+   * @return get element at this position, throws {@link IllegalStateException} if current position is not valid or after last element of list
+   */
+  T get();
 
-    /**
-     * Insert element at index
-     *
-     * @param offset relative to this position, absolute index [0, size()], if absolute index == size() then element is added at the end of the list. The latter is also considered an insert at size() index.
-     * @return element or null if for some reason the index or position are not valid
-     */
+  /**
+   * Insert element at index
+   *
+   * @param offset relative to this position, absolute index [0, size()], if absolute index == size() then element is added at the end of the list. The latter is also considered an insert at size() index.
+   * @return element
+   */
+  T get(int offset);
 
-    @Nullable
-    T getOrNull(int offset);
+  /**
+   * Insert element at index
+   *
+   * @param offset relative to this position, absolute index [0, size()], if absolute index == size() then element is added at the end of the list. The latter is also considered an insert at size() index.
+   * @return element or null if for some reason the index or position are not valid
+   */
 
-    /**
-     * Get the requested class or null if element at position cannot be cast to this class
-     *
-     * @param elementClass class of element desired
-     * @param <S>          type of element
-     * @return element of type or null
-     */
-    @Nullable <S extends T> S getOrNull(Class<S> elementClass);
+  @Nullable
+  T getOrNull(int offset);
 
-    /**
-     * Get the requested class or null if element at position cannot be cast to this class
-     *
-     * @param offset       relative to this position, absolute index [0, size()], if absolute index == size() then element is added at the end of the list. The latter is also considered an insert at size() index.
-     * @param elementClass class of element desired
-     * @param <S>          type of element
-     * @return element of type or null
-     */
-    @Nullable <S extends T> S getOrNull(int offset, Class<S> elementClass);
+  /**
+   * Get the requested class or null if element at position cannot be cast to this class
+   *
+   * @param elementClass class of element desired
+   * @param <S>          type of element
+   * @return element of type or null
+   */
+  @Nullable <S extends T> S getOrNull(Class<S> elementClass);
 
-    /**
-     * @param element to which to set the current element in the list
-     *                throws IllegalStateException if current index is not valid
-     *                <p>
-     *                If the current index is after the last element this will add the value to the end of the list treating as an insert, with corresponding updates to any positions that this would affect.
-     */
-    void set(T element);
+  /**
+   * Get the requested class or null if element at position cannot be cast to this class
+   *
+   * @param offset       relative to this position, absolute index [0, size()], if absolute index == size() then element is added at the end of the list. The latter is also considered an insert at size() index.
+   * @param elementClass class of element desired
+   * @param <S>          type of element
+   * @return element of type or null
+   */
+  @Nullable <S extends T> S getOrNull(int offset, Class<S> elementClass);
 
-    /**
-     * Set element at given index
-     *
-     * @param offset relative to this position, absolute index [0, size()], if absolute index == size() then element is added at the end of the list. The latter is considered an insert at the index.
-     * @param element value to set at offset
-     * @return element value at that position before. If adding at end of list then null is always returned.
-     */
-    T set(int offset, T element);
+  /**
+   * @param element to which to set the current element in the list
+   *                throws IllegalStateException if current index is not valid
+   *                <p>
+   *                If the current index is after the last element this will add the value to the end of the list treating as an insert, with corresponding updates to any positions that this would affect.
+   */
+  void set(T element);
 
-    /**
-     * @param element to insert after the current position in the list, not at the end of the list as a regular List does.
-     *                throws IllegalStateException if current index is not valid
-     * @return true
-     */
-    boolean add(T element);
+  /**
+   * Set element at given index
+   *
+   * @param offset  relative to this position, absolute index [0, size()], if absolute index == size() then element is added at the end of the list. The latter is considered an insert at the index.
+   * @param element value to set at offset
+   * @return element value at that position before. If adding at end of list then null is always returned.
+   */
+  T set(int offset, T element);
 
-    /**
-     * Add element at position given by relative offset to current position.
-     * <p>
-     * NOTE: The position of insert is changed, depending on what has happened to the elements around the current position since it was instantiated:
-     * if element at position was deleted then offset 0 and 1 have the same effect, insert element before next.
-     * <p>
-     * 0 will always insert before the current position, so add(0, item1) will insert before current position, which advances the position to keep up with the current element. Next add(0, item2) will
-     * insert item2 after item1.
-     *
-     * @param offset  offset, can be negative. 0 means insert before current, 1 means after current, -1 means before previous
-     * @param element to insert
-     * @return true
-     */
-    boolean add(int offset, T element);
-    boolean addAll(@NotNull Collection<T> elements);
-    boolean addAll(int offset, @NotNull Collection<T> elements);
+  /**
+   * @param element to insert after the current position in the list, not at the end of the list as a regular List does.
+   *                throws IllegalStateException if current index is not valid
+   * @return true
+   */
+  boolean add(T element);
 
-    /**
-     * @return removed current element, throws IllegalStateException if current index is not valid or after last element of list
-     */
-    @Override
-    T remove();
-    T remove(int offset);
-    void remove(int startOffset, int endOffset);
+  /**
+   * Add element at position given by relative offset to current position.
+   * <p>
+   * NOTE: The position of insert is changed, depending on what has happened to the elements around the current position since it was instantiated:
+   * if element at position was deleted then offset 0 and 1 have the same effect, insert element before next.
+   * <p>
+   * 0 will always insert before the current position, so add(0, item1) will insert before current position, which advances the position to keep up with the current element. Next add(0, item2) will
+   * insert item2 after item1.
+   *
+   * @param offset  offset, can be negative. 0 means insert before current, 1 means after current, -1 means before previous
+   * @param element to insert
+   * @return true
+   */
+  boolean add(int offset, T element);
 
-    /**
-     * @return max offset from current position
-     */
-    int maxOffset();
-    /**
-     * @return min offset from current position to 0
-     */
-    int minOffset();
+  boolean addAll(@NotNull Collection<T> elements);
 
-    // these are delegated to the original list
-    int size();
-    boolean isEmpty();
-    boolean append(T element);
+  boolean addAll(int offset, @NotNull Collection<T> elements);
 
-    // these return index relative to current index and operate on elements at or after the current index
-    // if not found returned position will point to index after the last element. ie. getIndex() == size()
-    // test isValidPosition() to see if actual element was found
-    P indexOf(T o);
-    P indexOf(int offset, T o);
-    P indexOf(@NotNull Predicate<P> predicate);
-    P indexOf(int offset, @NotNull Predicate<P> predicate);
+  /**
+   * @return removed current element, throws IllegalStateException if current index is not valid or after last element of list
+   */
+  @Override
+  T remove();
 
-    // these return position relative to current index and operate on elements before the current index
-    // if not found returned position will point to index after the last element. ie. getIndex() == size()
-    // test isValidPosition() to see if actual element was found
-    P lastIndexOf(T o);
-    P lastIndexOf(@NotNull Predicate<P> predicate);
-    P lastIndexOf(int offset, T o);
-    P lastIndexOf(int offset, @NotNull Predicate<P> predicate);
+  T remove(int offset);
+
+  void remove(int startOffset, int endOffset);
+
+  /**
+   * @return max offset from current position
+   */
+  int maxOffset();
+
+  /**
+   * @return min offset from current position to 0
+   */
+  int minOffset();
+
+  // these are delegated to the original list
+  int size();
+
+  boolean append(T element);
+
+  // these return index relative to current index and operate on elements at or after the current index
+  // if not found returned position will point to index after the last element. ie. getIndex() == size()
+  // test isValidPosition() to see if actual element was found
+  P indexOf(T o);
+
+  P indexOf(int offset, T o);
+
+  P indexOf(@NotNull Predicate<P> predicate);
+
+  P indexOf(int offset, @NotNull Predicate<P> predicate);
+
+  // these return position relative to current index and operate on elements before the current index
+  // if not found returned position will point to index after the last element. ie. getIndex() == size()
+  // test isValidPosition() to see if actual element was found
+  P lastIndexOf(T o);
+
+  P lastIndexOf(@NotNull Predicate<P> predicate);
+
+  P lastIndexOf(int offset, T o);
+
+  P lastIndexOf(int offset, @NotNull Predicate<P> predicate);
 }

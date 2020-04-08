@@ -18,66 +18,65 @@ import com.vladsch.flexmark.util.sequence.SegmentedSequence;
 import java.util.Arrays;
 
 public class FormatterWithMods2 {
-    final private static DataHolder OPTIONS = new MutableDataSet();
+  static final MutableDataSet FORMAT_OPTIONS = new MutableDataSet();
+  static final Formatter RENDERER = Formatter.builder(FORMAT_OPTIONS).build();
+  final private static DataHolder OPTIONS = new MutableDataSet();
+  static final Parser PARSER = Parser.builder(OPTIONS).build();
 
-    static final MutableDataSet FORMAT_OPTIONS = new MutableDataSet();
-    static {
-        // copy extensions from Pegdown compatible to Formatting
-        FORMAT_OPTIONS.set(Parser.EXTENSIONS, Parser.EXTENSIONS.get(OPTIONS));
+  static {
+    // copy extensions from Pegdown compatible to Formatting
+    FORMAT_OPTIONS.set(Parser.EXTENSIONS, Parser.EXTENSIONS.get(OPTIONS));
+  }
+
+  // use the PARSER to parse and RENDERER to parse pegdown indentation rules and render CommonMark
+  public static void main(String[] args) {
+    String html = "<img src=\"//img.alicdn.com/tfscom/TB1mR4xPpXXXXXvapXXXXXXXXXX.jpg\" >";
+    String markdown = FlexmarkHtmlConverter.builder().build().convert(html);
+
+    System.out.println("html\n");
+    System.out.println(html);
+
+    System.out.println("markdown\n");
+    System.out.println(markdown);
+
+    Node document = PARSER.parse(markdown);
+    LinkNodeVisitor visitor = new LinkNodeVisitor();
+    visitor.replaceUrl(document);
+
+    String commonmark = RENDERER.render(document);
+
+    System.out.println("\n\nCommonMark\n");
+    System.out.println(commonmark);
+  }
+
+  static class LinkNodeVisitor {
+    NodeVisitor visitor = new NodeVisitor(
+        new VisitHandler<>(Link.class, this::visit),
+        new VisitHandler<>(Reference.class, this::visit),
+        new VisitHandler<>(Image.class, this::visit)
+    );
+
+    public void replaceUrl(Node node) {
+      visitor.visit(node);
     }
 
-    static final Parser PARSER = Parser.builder(OPTIONS).build();
-    static final Formatter RENDERER = Formatter.builder(FORMAT_OPTIONS).build();
-
-    static class LinkNodeVisitor {
-        NodeVisitor visitor = new NodeVisitor(
-                new VisitHandler<>(Link.class, this::visit),
-                new VisitHandler<>(Reference.class, this::visit),
-                new VisitHandler<>(Image.class, this::visit)
-        );
-
-        public void replaceUrl(Node node) {
-            visitor.visit(node);
-        }
-
-        private void visit(Link node) {
-            visit((LinkNodeBase) node);
-        }
-
-        private void visit(Reference node) {
-            visit((LinkNodeBase) node);
-        }
-
-        private void visit(Image node) {
-            visit((LinkNodeBase) node);
-        }
-
-        private void visit(LinkNodeBase node) {
-            if (node.getPageRef().startsWith("/")) {
-                node.setUrlChars(PrefixedSubSequence.prefixOf("https:", node.getPageRef()));
-                node.setChars(SegmentedSequence.create(node.getChars(), Arrays.asList(node.getSegmentsForChars())));
-            }
-        }
+    private void visit(Link node) {
+      visit((LinkNodeBase) node);
     }
 
-    // use the PARSER to parse and RENDERER to parse pegdown indentation rules and render CommonMark
-    public static void main(String[] args) {
-        String html = "<img src=\"//img.alicdn.com/tfscom/TB1mR4xPpXXXXXvapXXXXXXXXXX.jpg\" >";
-        String markdown = FlexmarkHtmlConverter.builder().build().convert(html);
-
-        System.out.println("html\n");
-        System.out.println(html);
-
-        System.out.println("markdown\n");
-        System.out.println(markdown);
-
-        Node document = PARSER.parse(markdown);
-        LinkNodeVisitor visitor = new LinkNodeVisitor();
-        visitor.replaceUrl(document);
-
-        String commonmark = RENDERER.render(document);
-
-        System.out.println("\n\nCommonMark\n");
-        System.out.println(commonmark);
+    private void visit(Reference node) {
+      visit((LinkNodeBase) node);
     }
+
+    private void visit(Image node) {
+      visit((LinkNodeBase) node);
+    }
+
+    private void visit(LinkNodeBase node) {
+      if (node.getPageRef().startsWith("/")) {
+        node.setUrlChars(PrefixedSubSequence.prefixOf("https:", node.getPageRef()));
+        node.setChars(SegmentedSequence.create(node.getChars(), Arrays.asList(node.getSegmentsForChars())));
+      }
+    }
+  }
 }

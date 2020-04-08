@@ -7,16 +7,16 @@ import com.vladsch.flexmark.util.visitor.AstAction;
 import com.vladsch.flexmark.util.visitor.AstHandler;
 
 public class LinkResolvingHandler<N extends Node> extends AstHandler<N, LinkResolvingHandler.LinkResolvingVisitor<N>> {
-    public LinkResolvingHandler(Class<N> aClass, LinkResolvingVisitor<N> adapter) {
-        super(aClass, adapter);
-    }
+  public LinkResolvingHandler(Class<N> aClass, LinkResolvingVisitor<N> adapter) {
+    super(aClass, adapter);
+  }
 
-    public ResolvedLink resolveLink(Node node, LinkResolverContext context, ResolvedLink link) {
-        //noinspection unchecked
-        return getAdapter().resolveLink((N) node, context, link);
-    }
+  public ResolvedLink resolveLink(Node node, LinkResolverContext context, ResolvedLink link) {
+    //noinspection unchecked
+    return getAdapter().resolveLink((N) node, context, link);
+  }
 
-    public static interface LinkResolvingVisitor<N extends Node> extends AstAction<N> {
-        ResolvedLink resolveLink(N node, LinkResolverContext context, ResolvedLink link);
-    }
+  public static interface LinkResolvingVisitor<N extends Node> extends AstAction<N> {
+    ResolvedLink resolveLink(N node, LinkResolverContext context, ResolvedLink link);
+  }
 }

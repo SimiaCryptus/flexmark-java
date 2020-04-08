@@ -13,28 +13,28 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SuperscriptJiraRenderer implements NodeRenderer {
-    public SuperscriptJiraRenderer(DataHolder options) {
+  public SuperscriptJiraRenderer(DataHolder options) {
 
-    }
+  }
 
+  @Override
+  public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
+    Set<NodeRenderingHandler<?>> set = new HashSet<>();
+    set.add(new NodeRenderingHandler<>(Superscript.class, this::render));
+    return set;
+  }
+
+  private void render(Superscript node, NodeRendererContext context, HtmlWriter html) {
+    html.raw("^");
+    context.renderChildren(node);
+    html.raw("^");
+  }
+
+  public static class Factory implements NodeRendererFactory {
+    @NotNull
     @Override
-    public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
-        Set<NodeRenderingHandler<?>> set = new HashSet<>();
-        set.add(new NodeRenderingHandler<>(Superscript.class, this::render));
-        return set;
+    public NodeRenderer apply(@NotNull DataHolder options) {
+      return new SuperscriptJiraRenderer(options);
     }
-
-    private void render(Superscript node, NodeRendererContext context, HtmlWriter html) {
-        html.raw("^");
-        context.renderChildren(node);
-        html.raw("^");
-    }
-
-    public static class Factory implements NodeRendererFactory {
-        @NotNull
-        @Override
-        public NodeRenderer apply(@NotNull DataHolder options) {
-            return new SuperscriptJiraRenderer(options);
-        }
-    }
+  }
 }

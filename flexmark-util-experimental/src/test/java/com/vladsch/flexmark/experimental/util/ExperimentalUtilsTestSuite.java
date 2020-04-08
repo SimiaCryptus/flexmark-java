@@ -10,11 +10,11 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        IntegerBitSetTest.class,
-        BitIntegerSetTest.class,
-        PositionListTest.class,
-        BaseSequenceEntryTest.class,
-        BaseSequenceManagerTest.class,
+    IntegerBitSetTest.class,
+    BitIntegerSetTest.class,
+    PositionListTest.class,
+    BaseSequenceEntryTest.class,
+    BaseSequenceManagerTest.class,
 })
 public class ExperimentalUtilsTestSuite {
 }

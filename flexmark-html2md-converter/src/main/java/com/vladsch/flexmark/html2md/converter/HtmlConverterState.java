@@ -7,47 +7,47 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class HtmlConverterState {
-    final Node myParent;
-    final List<Node> myElements;
-    int myIndex;
-    final Attributes myAttributes;
-    private LinkedList<Runnable> myPrePopActions;
+  final Node myParent;
+  final List<Node> myElements;
+  final Attributes myAttributes;
+  int myIndex;
+  private LinkedList<Runnable> myPrePopActions;
 
-    HtmlConverterState(Node parent) {
-        myParent = parent;
-        myElements = parent.childNodes();
-        myIndex = 0;
-        myAttributes = new Attributes();
-        myPrePopActions = null;
-    }
+  HtmlConverterState(Node parent) {
+    myParent = parent;
+    myElements = parent.childNodes();
+    myIndex = 0;
+    myAttributes = new Attributes();
+    myPrePopActions = null;
+  }
 
-    public Node getParent() {
-        return myParent;
-    }
+  public Node getParent() {
+    return myParent;
+  }
 
-    public void addPrePopAction(Runnable action) {
-        if (myPrePopActions == null) {
-            myPrePopActions = new LinkedList<>();
-        }
-        myPrePopActions.add(action);
+  public void addPrePopAction(Runnable action) {
+    if (myPrePopActions == null) {
+      myPrePopActions = new LinkedList<>();
     }
+    myPrePopActions.add(action);
+  }
 
-    public void runPrePopActions() {
-        if (myPrePopActions != null) {
-            int iMax = myPrePopActions.size();
-            for (int i = iMax; i-- > 0; ) {
-                myPrePopActions.get(i).run();
-            }
-        }
+  public void runPrePopActions() {
+    if (myPrePopActions != null) {
+      int iMax = myPrePopActions.size();
+      for (int i = iMax; i-- > 0; ) {
+        myPrePopActions.get(i).run();
+      }
     }
+  }
 
-    @Override
-    public String toString() {
-        return "State{" +
-                "myParent=" + myParent +
-                ", myElements=" + myElements +
-                ", myIndex=" + myIndex +
-                ", myAttributes=" + myAttributes +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "State{" +
+        "myParent=" + myParent +
+        ", myElements=" + myElements +
+        ", myIndex=" + myIndex +
+        ", myAttributes=" + myAttributes +
+        '}';
+  }
 }

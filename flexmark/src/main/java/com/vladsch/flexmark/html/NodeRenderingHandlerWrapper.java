@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 class NodeRenderingHandlerWrapper {
-    final public @NotNull NodeRenderingHandler<?> myRenderingHandler;
-    final public @Nullable NodeRenderingHandlerWrapper myPreviousRenderingHandler;
+  final public @NotNull NodeRenderingHandler<?> myRenderingHandler;
+  final public @Nullable NodeRenderingHandlerWrapper myPreviousRenderingHandler;
 
-    public NodeRenderingHandlerWrapper(@NotNull NodeRenderingHandler<?> renderingHandler, @Nullable NodeRenderingHandlerWrapper previousRenderingHandler) {
-        myRenderingHandler = renderingHandler;
-        myPreviousRenderingHandler = previousRenderingHandler;
-    }
+  public NodeRenderingHandlerWrapper(@NotNull NodeRenderingHandler<?> renderingHandler, @Nullable NodeRenderingHandlerWrapper previousRenderingHandler) {
+    myRenderingHandler = renderingHandler;
+    myPreviousRenderingHandler = previousRenderingHandler;
+  }
 }

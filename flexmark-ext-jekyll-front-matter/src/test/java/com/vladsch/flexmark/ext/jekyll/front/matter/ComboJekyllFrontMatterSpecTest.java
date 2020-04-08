@@ -28,18 +28,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class ComboJekyllFrontMatterSpecTest extends RendererSpecTest {
-    final private static String SPEC_RESOURCE = "/ext_jekyll_front_matter_ast_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singleton(JekyllFrontMatterExtension.create()))
-            .toImmutable();
+  final private static String SPEC_RESOURCE = "/ext_jekyll_front_matter_ast_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Collections.singleton(JekyllFrontMatterExtension.create()))
+      .toImmutable();
 
-    public ComboJekyllFrontMatterSpecTest(@NotNull SpecExample example) {
-        super(example, null, OPTIONS);
-    }
+  public ComboJekyllFrontMatterSpecTest(@NotNull SpecExample example) {
+    super(example, null, OPTIONS);
+  }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

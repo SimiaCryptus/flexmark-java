@@ -13,30 +13,30 @@ import static org.junit.Assert.assertNull;
 
 final public class AbstractVisitorTest {
 
-    @Test
-    public void replacingNodeInVisitorShouldNotDestroyVisitOrder() {
-        NodeVisitor visitor = new NodeVisitor(
-                new VisitHandler<>(Text.class, node -> {
-                    node.insertAfter(new Code(node.getChars()));
-                    node.unlink();
-                })
-        );
+  private static void assertCode(String expectedLiteral, Node node) {
+    assertEquals("Expected node to be a Code node: " + node, Code.class, node.getClass());
+    Code code = (Code) node;
+    assertEquals(expectedLiteral, code.getChars().toString());
+  }
 
-        Paragraph paragraph = new Paragraph();
-        paragraph.appendChild(new Text("foo"));
-        paragraph.appendChild(new Text("bar"));
+  @Test
+  public void replacingNodeInVisitorShouldNotDestroyVisitOrder() {
+    NodeVisitor visitor = new NodeVisitor(
+        new VisitHandler<>(Text.class, node -> {
+          node.insertAfter(new Code(node.getChars()));
+          node.unlink();
+        })
+    );
 
-        visitor.visit(paragraph);
+    Paragraph paragraph = new Paragraph();
+    paragraph.appendChild(new Text("foo"));
+    paragraph.appendChild(new Text("bar"));
 
-        assertCode("foo", paragraph.getFirstChild());
-        assertCode("bar", paragraph.getFirstChild().getNext());
-        assertNull(paragraph.getFirstChild().getNext().getNext());
-        assertCode("bar", paragraph.getLastChild());
-    }
+    visitor.visit(paragraph);
 
-    private static void assertCode(String expectedLiteral, Node node) {
-        assertEquals("Expected node to be a Code node: " + node, Code.class, node.getClass());
-        Code code = (Code) node;
-        assertEquals(expectedLiteral, code.getChars().toString());
-    }
+    assertCode("foo", paragraph.getFirstChild());
+    assertCode("bar", paragraph.getFirstChild().getNext());
+    assertNull(paragraph.getFirstChild().getNext().getNext());
+    assertCode("bar", paragraph.getLastChild());
+  }
 }

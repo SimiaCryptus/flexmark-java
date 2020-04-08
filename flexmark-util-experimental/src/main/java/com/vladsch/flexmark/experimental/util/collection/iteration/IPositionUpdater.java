@@ -7,21 +7,22 @@ import java.util.Iterator;
 import java.util.List;
 
 public interface IPositionUpdater<T, P extends IPositionHolder<T, P>> extends IPreviewPositionListener {
-    void addPositionListener(@NotNull IPositionListener listener);
-    void removePositionListener(@NotNull IPositionListener listener);
+  @NotNull
+  List<T> getList();
 
-    @NotNull
-    List<T> getList();
+  void addPositionListener(@NotNull IPositionListener listener);
 
-    default P getPosition(int index) {
-        return getPosition(index, PositionAnchor.CURRENT);
-    }
+  void removePositionListener(@NotNull IPositionListener listener);
 
-    void unframe(P position);
+  default P getPosition(int index) {
+    return getPosition(index, PositionAnchor.CURRENT);
+  }
 
-    P getPosition(int index, @NotNull PositionAnchor anchor);
+  void unframe(P position);
 
-    void clear();
+  P getPosition(int index, @NotNull PositionAnchor anchor);
 
-    Iterator<P> iterator(@NotNull P position);
+  void clear();
+
+  Iterator<P> iterator(@NotNull P position);
 }

@@ -5,17 +5,17 @@ import com.vladsch.flexmark.ext.media.tags.internal.AbstractMediaLink;
 
 public class PictureLink extends AbstractMediaLink {
 
-    final public static String PREFIX = "!P";
-    final private static String TYPE = "Picture";
+  final public static String PREFIX = "!P";
+  final private static String TYPE = "Picture";
 
-    public PictureLink() {
-        super(PREFIX, TYPE);
-    }
+  public PictureLink() {
+    super(PREFIX, TYPE);
+  }
 
-    public PictureLink(Link other) {
-        super(PREFIX, TYPE, other);
-    }
+  public PictureLink(Link other) {
+    super(PREFIX, TYPE, other);
+  }
 
-    // This class leaves room for specialization, should we need it.
-    // Additionally, it makes managing different Node types easier for users.
+  // This class leaves room for specialization, should we need it.
+  // Additionally, it makes managing different Node types easier for users.
 }

@@ -28,18 +28,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class ComboEscapedCharacterSpecTest extends RendererSpecTest {
-    final private static String SPEC_RESOURCE = "/ext_escaped_character_ast_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singleton(EscapedCharacterExtension.create()))
-            .toImmutable();
+  final private static String SPEC_RESOURCE = "/ext_escaped_character_ast_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Collections.singleton(EscapedCharacterExtension.create()))
+      .toImmutable();
 
-    public ComboEscapedCharacterSpecTest(@NotNull SpecExample example) {
-        super(example, null, OPTIONS);
-    }
+  public ComboEscapedCharacterSpecTest(@NotNull SpecExample example) {
+    super(example, null, OPTIONS);
+  }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

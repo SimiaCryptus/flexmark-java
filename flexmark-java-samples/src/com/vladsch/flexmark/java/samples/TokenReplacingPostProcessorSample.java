@@ -23,81 +23,83 @@ import java.util.Collections;
  */
 public class TokenReplacingPostProcessorSample {
 
-    static final DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singletonList(LinkReplacingExtension.create()))
-            .toImmutable();
+  static final DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Collections.singletonList(LinkReplacingExtension.create()))
+      .toImmutable();
 
-    static final Parser PARSER = Parser.builder(OPTIONS).build();
-    static final HtmlRenderer RENDERER = HtmlRenderer.builder(OPTIONS).build();
+  static final Parser PARSER = Parser.builder(OPTIONS).build();
+  static final HtmlRenderer RENDERER = HtmlRenderer.builder(OPTIONS).build();
 
-    static class LinkReplacingPostProcessor extends NodePostProcessor {
+  public static void main(String[] args) {
+    String original = "[foo](http://example.com) ![bar](http://example.com) **baz**";
 
-        static class Factory extends NodePostProcessorFactory {
+    Node document = PARSER.parse(original);
+    String html = RENDERER.render(document);
 
-            public Factory(DataHolder options) {
-                super(false);
+    // <p>foo bar <strong>baz</strong></p>
+    System.out.println(html);
+  }
 
-                addNodes(Link.class);
-                addNodes(Image.class);
-            }
+  static class LinkReplacingPostProcessor extends NodePostProcessor {
 
-            @NotNull
-            @Override
-            public NodePostProcessor apply(@NotNull Document document) {
-                return new LinkReplacingPostProcessor();
-            }
-        }
+    @Override
+    public void process(@NotNull NodeTracker state, @NotNull Node node) {
+      if (node instanceof Link) { // [foo](http://example.com)
+        Link link = (Link) node;
+        Text text = new Text(link.getText());
+        link.insertAfter(text);
+        state.nodeAdded(text);
 
-        @Override
-        public void process(@NotNull NodeTracker state, @NotNull Node node) {
-            if (node instanceof Link) { // [foo](http://example.com)
-                Link link = (Link) node;
-                Text text = new Text(link.getText());
-                link.insertAfter(text);
-                state.nodeAdded(text);
+        link.unlink();
+        state.nodeRemoved(link);
+      } else if (node instanceof Image) { // ![bar](http://example.com)
+        Image image = (Image) node;
+        Text text = new Text(image.getText());
+        image.insertAfter(text);
+        state.nodeAdded(text);
 
-                link.unlink();
-                state.nodeRemoved(link);
-            } else if (node instanceof Image) { // ![bar](http://example.com)
-                Image image = (Image) node;
-                Text text = new Text(image.getText());
-                image.insertAfter(text);
-                state.nodeAdded(text);
-
-                image.unlink();
-                state.nodeRemoved(image);
-            }
-        }
+        image.unlink();
+        state.nodeRemoved(image);
+      }
     }
 
-    /**
-     * An extension that registers a post processor which intentionally strips (replaces)
-     * specific link and image-link tokens after parsing.
-     */
-    static class LinkReplacingExtension implements Parser.ParserExtension {
+    static class Factory extends NodePostProcessorFactory {
 
-        private LinkReplacingExtension() { }
+      public Factory(DataHolder options) {
+        super(false);
 
-        @Override
-        public void parserOptions(MutableDataHolder options) { }
+        addNodes(Link.class);
+        addNodes(Image.class);
+      }
 
-        @Override
-        public void extend(Parser.Builder parserBuilder) {
-            parserBuilder.postProcessorFactory(new LinkReplacingPostProcessor.Factory(parserBuilder));
-        }
+      @NotNull
+      @Override
+      public NodePostProcessor apply(@NotNull Document document) {
+        return new LinkReplacingPostProcessor();
+      }
+    }
+  }
 
-        public static LinkReplacingExtension create() {
-            return new LinkReplacingExtension();
-        }
+  /**
+   * An extension that registers a post processor which intentionally strips (replaces)
+   * specific link and image-link tokens after parsing.
+   */
+  static class LinkReplacingExtension implements Parser.ParserExtension {
+
+    private LinkReplacingExtension() {
     }
 
-    public static void main(String[] args) {
-        String original = "[foo](http://example.com) ![bar](http://example.com) **baz**";
-
-        Node document = PARSER.parse(original);
-        String html = RENDERER.render(document);
-
-        // <p>foo bar <strong>baz</strong></p>
-        System.out.println(html);
+    public static LinkReplacingExtension create() {
+      return new LinkReplacingExtension();
     }
+
+    @Override
+    public void parserOptions(MutableDataHolder options) {
+    }
+
+    @Override
+    public void extend(Parser.Builder parserBuilder) {
+      parserBuilder.postProcessorFactory(new LinkReplacingPostProcessor.Factory(parserBuilder));
+    }
+  }
 }

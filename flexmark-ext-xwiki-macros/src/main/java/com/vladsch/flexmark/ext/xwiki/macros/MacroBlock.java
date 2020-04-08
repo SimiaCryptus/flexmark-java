@@ -13,55 +13,55 @@ import java.util.Map;
 @SuppressWarnings("WeakerAccess")
 public class MacroBlock extends Block {
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        if (isClosedTag()) out.append(" isClosed");
-        segmentSpanChars(out, getMacroContentChars(), "macroContent");
-    }
+  public MacroBlock() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return Node.EMPTY_SEGMENTS;
-    }
+  public MacroBlock(BasedSequence chars) {
+    super(chars);
+  }
 
-    public MacroBlock() {
-    }
+  public MacroBlock(Node node) {
+    super();
+    appendChild(node);
+    this.setCharsFromContent();
+  }
 
-    public MacroBlock(BasedSequence chars) {
-        super(chars);
-    }
+  public Map<String, String> getAttributes() {
+    return getMacroNode().getAttributes();
+  }
 
-    public MacroBlock(Node node) {
-        super();
-        appendChild(node);
-        this.setCharsFromContent();
-    }
+  public BasedSequence getMacroContentChars() {
+    Node firstChild = getFirstChild();
+    Node lastChild = getLastChild();
+    Node firstContentNode = firstChild.getNext();
+    Node lastContentNode = lastChild instanceof MacroClose ? lastChild.getPrevious() : lastChild;
 
-    public Map<String, String> getAttributes() {
-        return getMacroNode().getAttributes();
-    }
+    //noinspection UnnecessaryLocalVariable
+    BasedSequence contentChars = Node.spanningChars(firstContentNode == null || firstContentNode instanceof MacroClose ? BasedSequence.NULL : firstContentNode.getChars(),
+        lastContentNode == null || lastContentNode == firstChild ? BasedSequence.NULL : lastContentNode.getChars());
 
-    public Macro getMacroNode() {
-        Node firstChild = getFirstChild();
-        assert firstChild instanceof Macro;
-        return (Macro) firstChild;
-    }
+    return contentChars;
+  }
 
-    public boolean isClosedTag() {
-        return getMacroNode().isClosedTag();
-    }
+  public Macro getMacroNode() {
+    Node firstChild = getFirstChild();
+    assert firstChild instanceof Macro;
+    return (Macro) firstChild;
+  }
 
-    public BasedSequence getMacroContentChars() {
-        Node firstChild = getFirstChild();
-        Node lastChild = getLastChild();
-        Node firstContentNode = firstChild.getNext();
-        Node lastContentNode = lastChild instanceof MacroClose ? lastChild.getPrevious() : lastChild;
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return Node.EMPTY_SEGMENTS;
+  }
 
-        //noinspection UnnecessaryLocalVariable
-        BasedSequence contentChars = Node.spanningChars(firstContentNode == null || firstContentNode instanceof MacroClose ? BasedSequence.NULL : firstContentNode.getChars(),
-                lastContentNode == null || lastContentNode == firstChild ? BasedSequence.NULL : lastContentNode.getChars());
+  public boolean isClosedTag() {
+    return getMacroNode().isClosedTag();
+  }
 
-        return contentChars;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    if (isClosedTag()) out.append(" isClosed");
+    segmentSpanChars(out, getMacroContentChars(), "macroContent");
+  }
 }

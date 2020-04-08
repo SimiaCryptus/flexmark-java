@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * visitChildren() visit node's children
  */
 public interface NodeVisitHandler extends Visitor<Node> {
-    void visitNodeOnly(@NotNull Node node);
-    void visitChildren(@NotNull Node parent);
+  void visitNodeOnly(@NotNull Node node);
+
+  void visitChildren(@NotNull Node parent);
 }

@@ -5,9 +5,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        MutableAttributeTest.class,
-        AttributesTest.class,
-        AttributeTest.class,
+    MutableAttributeTest.class,
+    AttributesTest.class,
+    AttributeTest.class,
 })
 public class OptionsTestSuite {
 }

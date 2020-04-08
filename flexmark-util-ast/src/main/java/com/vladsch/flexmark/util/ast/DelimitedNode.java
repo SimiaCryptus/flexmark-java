@@ -6,27 +6,27 @@ import com.vladsch.flexmark.util.sequence.builder.ISequenceBuilder;
 import static com.vladsch.flexmark.util.misc.BitFieldSet.any;
 
 public interface DelimitedNode extends TextContainer {
-    BasedSequence getOpeningMarker();
+  BasedSequence getChars();
 
-    BasedSequence getChars();
+  BasedSequence getClosingMarker();
 
-    void setOpeningMarker(BasedSequence openingMarker);
+  void setClosingMarker(BasedSequence closingMarker);
 
-    BasedSequence getText();
+  BasedSequence getOpeningMarker();
 
-    void setText(BasedSequence text);
+  void setOpeningMarker(BasedSequence openingMarker);
 
-    BasedSequence getClosingMarker();
+  BasedSequence getText();
 
-    void setClosingMarker(BasedSequence closingMarker);
+  void setText(BasedSequence text);
 
-    @Override
-    default boolean collectText(ISequenceBuilder<? extends ISequenceBuilder<?, BasedSequence>, BasedSequence> out, int flags) {
-        if (any(flags, F_NODE_TEXT)) {
-            out.append(getText());
-            return false;
-        } else {
-            return true;
-        }
+  @Override
+  default boolean collectText(ISequenceBuilder<? extends ISequenceBuilder<?, BasedSequence>, BasedSequence> out, int flags) {
+    if (any(flags, F_NODE_TEXT)) {
+      out.append(getText());
+      return false;
+    } else {
+      return true;
     }
+  }
 }

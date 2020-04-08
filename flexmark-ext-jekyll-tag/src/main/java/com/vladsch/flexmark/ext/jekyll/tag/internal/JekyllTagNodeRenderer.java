@@ -16,43 +16,43 @@ import java.util.Map;
 import java.util.Set;
 
 public class JekyllTagNodeRenderer implements NodeRenderer {
-    final private boolean enabledRendering;
-    final private Map<String, String> includeContent;
+  final private boolean enabledRendering;
+  final private Map<String, String> includeContent;
 
-    public JekyllTagNodeRenderer(DataHolder options) {
-        enabledRendering = JekyllTagExtension.ENABLE_RENDERING.get(options);
-        includeContent = JekyllTagExtension.INCLUDED_HTML.get(options);
+  public JekyllTagNodeRenderer(DataHolder options) {
+    enabledRendering = JekyllTagExtension.ENABLE_RENDERING.get(options);
+    includeContent = JekyllTagExtension.INCLUDED_HTML.get(options);
+  }
+
+  @Override
+  public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
+    Set<NodeRenderingHandler<?>> set = new HashSet<>();
+    // @formatter:off
+    set.add(new NodeRenderingHandler<>(JekyllTag.class, this::render));
+    set.add(new NodeRenderingHandler<>(JekyllTagBlock.class, this::render));
+    // @formatter:on
+    return set;
+  }
+
+  private void render(JekyllTag node, NodeRendererContext context, HtmlWriter html) {
+    if (enabledRendering) html.text(node.getChars());
+    else if (node.getTag().equals("include") && includeContent != null && !node.getParameters().isEmpty()) {
+      String content = includeContent.get(node.getParameters().toString());
+      if (content != null && !content.isEmpty()) {
+        html.rawPre(content);
+      }
     }
+  }
 
+  private void render(JekyllTagBlock node, NodeRendererContext context, HtmlWriter html) {
+    context.renderChildren(node);
+  }
+
+  public static class Factory implements NodeRendererFactory {
+    @NotNull
     @Override
-    public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
-        Set<NodeRenderingHandler<?>> set = new HashSet<>();
-        // @formatter:off
-        set.add(new NodeRenderingHandler<>(JekyllTag.class, this::render));
-        set.add(new NodeRenderingHandler<>(JekyllTagBlock.class, this::render));
-        // @formatter:on
-        return set;
+    public NodeRenderer apply(@NotNull DataHolder options) {
+      return new JekyllTagNodeRenderer(options);
     }
-
-    private void render(JekyllTag node, NodeRendererContext context, HtmlWriter html) {
-        if (enabledRendering) html.text(node.getChars());
-        else if (node.getTag().equals("include") && includeContent != null && !node.getParameters().isEmpty()) {
-            String content = includeContent.get(node.getParameters().toString());
-            if (content != null && !content.isEmpty()) {
-                html.rawPre(content);
-            }
-        }
-    }
-
-    private void render(JekyllTagBlock node, NodeRendererContext context, HtmlWriter html) {
-        context.renderChildren(node);
-    }
-
-    public static class Factory implements NodeRendererFactory {
-        @NotNull
-        @Override
-        public NodeRenderer apply(@NotNull DataHolder options) {
-            return new JekyllTagNodeRenderer(options);
-        }
-    }
+  }
 }

@@ -10,30 +10,30 @@ import java.util.Set;
 
 @SuppressWarnings("WeakerAccess")
 public class AdmonitionCollectingVisitor {
-    private LinkedHashSet<String> qualifiers;
-    final private NodeVisitor myVisitor;
+  final private NodeVisitor myVisitor;
+  private LinkedHashSet<String> qualifiers;
 
-    public AdmonitionCollectingVisitor() {
-        myVisitor = new NodeVisitor(
-                new VisitHandler<>(AdmonitionBlock.class, this::visit)
-        );
-    }
+  public AdmonitionCollectingVisitor() {
+    myVisitor = new NodeVisitor(
+        new VisitHandler<>(AdmonitionBlock.class, this::visit)
+    );
+  }
 
-    public LinkedHashSet<String> getQualifiers() {
-        return qualifiers;
-    }
+  public LinkedHashSet<String> getQualifiers() {
+    return qualifiers;
+  }
 
-    public void collect(Node node) {
-        qualifiers = new LinkedHashSet<>();
-        myVisitor.visit(node);
-    }
+  public void collect(Node node) {
+    qualifiers = new LinkedHashSet<>();
+    myVisitor.visit(node);
+  }
 
-    public Set<String> collectAndGetQualifiers(Node node) {
-        collect(node);
-        return qualifiers;
-    }
+  public Set<String> collectAndGetQualifiers(Node node) {
+    collect(node);
+    return qualifiers;
+  }
 
-    void visit(AdmonitionBlock node) {
-        qualifiers.add(node.getInfo().toString());
-    }
+  void visit(AdmonitionBlock node) {
+    qualifiers.add(node.getInfo().toString());
+  }
 }

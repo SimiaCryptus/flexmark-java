@@ -22,193 +22,193 @@ import java.util.Map;
  * The parsed admonition text is turned into {@link AdmonitionBlock} nodes.
  */
 public class AdmonitionExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, Formatter.FormatterExtension
-        // , Parser.ReferenceHoldingExtension
+    // , Parser.ReferenceHoldingExtension
 {
-    final public static DataKey<Integer> CONTENT_INDENT = new DataKey<>("ADMONITION.CONTENT_INDENT", 4);
-    final public static DataKey<Boolean> ALLOW_LEADING_SPACE = new DataKey<>("ADMONITION.ALLOW_LEADING_SPACE", true);
-    final public static DataKey<Boolean> INTERRUPTS_PARAGRAPH = new DataKey<>("ADMONITION.INTERRUPTS_PARAGRAPH", true);
-    final public static DataKey<Boolean> INTERRUPTS_ITEM_PARAGRAPH = new DataKey<>("ADMONITION.INTERRUPTS_ITEM_PARAGRAPH", true);
-    final public static DataKey<Boolean> WITH_SPACES_INTERRUPTS_ITEM_PARAGRAPH = new DataKey<>("ADMONITION.WITH_SPACES_INTERRUPTS_ITEM_PARAGRAPH", true);
-    final public static DataKey<Boolean> ALLOW_LAZY_CONTINUATION = new DataKey<>("ADMONITION.ALLOW_LAZY_CONTINUATION", true);
-    final public static DataKey<String> UNRESOLVED_QUALIFIER = new DataKey<>("ADMONITION.UNRESOLVED_QUALIFIER", "note");
-    final public static DataKey<Map<String, String>> QUALIFIER_TYPE_MAP = new DataKey<>("ADMONITION.QUALIFIER_TYPE_MAP", AdmonitionExtension::getQualifierTypeMap);
-    final public static DataKey<Map<String, String>> QUALIFIER_TITLE_MAP = new DataKey<>("ADMONITION.QUALIFIER_TITLE_MAP", AdmonitionExtension::getQualifierTitleMap);
-    final public static DataKey<Map<String, String>> TYPE_SVG_MAP = new DataKey<>("ADMONITION.TYPE_SVG_MAP", AdmonitionExtension::getQualifierSvgValueMap);
+  final public static DataKey<Integer> CONTENT_INDENT = new DataKey<>("ADMONITION.CONTENT_INDENT", 4);
+  final public static DataKey<Boolean> ALLOW_LEADING_SPACE = new DataKey<>("ADMONITION.ALLOW_LEADING_SPACE", true);
+  final public static DataKey<Boolean> INTERRUPTS_PARAGRAPH = new DataKey<>("ADMONITION.INTERRUPTS_PARAGRAPH", true);
+  final public static DataKey<Boolean> INTERRUPTS_ITEM_PARAGRAPH = new DataKey<>("ADMONITION.INTERRUPTS_ITEM_PARAGRAPH", true);
+  final public static DataKey<Boolean> WITH_SPACES_INTERRUPTS_ITEM_PARAGRAPH = new DataKey<>("ADMONITION.WITH_SPACES_INTERRUPTS_ITEM_PARAGRAPH", true);
+  final public static DataKey<Boolean> ALLOW_LAZY_CONTINUATION = new DataKey<>("ADMONITION.ALLOW_LAZY_CONTINUATION", true);
+  final public static DataKey<String> UNRESOLVED_QUALIFIER = new DataKey<>("ADMONITION.UNRESOLVED_QUALIFIER", "note");
+  final public static DataKey<Map<String, String>> QUALIFIER_TYPE_MAP = new DataKey<>("ADMONITION.QUALIFIER_TYPE_MAP", AdmonitionExtension::getQualifierTypeMap);
+  final public static DataKey<Map<String, String>> QUALIFIER_TITLE_MAP = new DataKey<>("ADMONITION.QUALIFIER_TITLE_MAP", AdmonitionExtension::getQualifierTitleMap);
+  final public static DataKey<Map<String, String>> TYPE_SVG_MAP = new DataKey<>("ADMONITION.TYPE_SVG_MAP", AdmonitionExtension::getQualifierSvgValueMap);
 
-    public static Map<String, String> getQualifierTypeMap() {
-        HashMap<String, String> infoSvgMap = new HashMap<>();
-        // qualifier type map
-        infoSvgMap.put("abstract", "abstract");
-        infoSvgMap.put("summary", "abstract");
-        infoSvgMap.put("tldr", "abstract");
+  private AdmonitionExtension() {
+  }
 
-        infoSvgMap.put("bug", "bug");
+  public static String getDefaultCSS() {
+    return getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/admonition.css"));
+  }
 
-        infoSvgMap.put("danger", "danger");
-        infoSvgMap.put("error", "danger");
+  public static String getDefaultScript() {
+    return getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/admonition.js"));
+  }
 
-        infoSvgMap.put("example", "example");
-        infoSvgMap.put("snippet", "example");
+  public static Map<String, String> getQualifierSvgValueMap() {
+    HashMap<String, String> typeSvgMap = new HashMap<>();
+    typeSvgMap.put("abstract", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-abstract.svg")));
+    typeSvgMap.put("bug", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-bug.svg")));
+    typeSvgMap.put("danger", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-danger.svg")));
+    typeSvgMap.put("example", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-example.svg")));
+    typeSvgMap.put("fail", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-fail.svg")));
+    typeSvgMap.put("faq", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-faq.svg")));
+    typeSvgMap.put("info", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-info.svg")));
+    typeSvgMap.put("note", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-note.svg")));
+    typeSvgMap.put("quote", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-quote.svg")));
+    typeSvgMap.put("success", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-success.svg")));
+    typeSvgMap.put("tip", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-tip.svg")));
+    typeSvgMap.put("warning", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-warning.svg")));
+    return typeSvgMap;
+  }
 
-        infoSvgMap.put("fail", "fail");
-        infoSvgMap.put("failure", "fail");
-        infoSvgMap.put("missing", "fail");
+  public static Map<String, String> getQualifierTitleMap() {
+    HashMap<String, String> infoTitleMap = new HashMap<>();
+    infoTitleMap.put("abstract", "Abstract");
+    infoTitleMap.put("summary", "Summary");
+    infoTitleMap.put("tldr", "TLDR");
 
-        infoSvgMap.put("faq", "faq");
-        infoSvgMap.put("question", "faq");
-        infoSvgMap.put("help", "faq");
+    infoTitleMap.put("bug", "Bug");
 
-        infoSvgMap.put("info", "info");
-        infoSvgMap.put("todo", "info");
+    infoTitleMap.put("danger", "Danger");
+    infoTitleMap.put("error", "Error");
 
-        infoSvgMap.put("note", "note");
-        infoSvgMap.put("seealso", "note");
+    infoTitleMap.put("example", "Example");
+    infoTitleMap.put("snippet", "Snippet");
 
-        infoSvgMap.put("quote", "quote");
-        infoSvgMap.put("cite", "quote");
+    infoTitleMap.put("fail", "Fail");
+    infoTitleMap.put("failure", "Failure");
+    infoTitleMap.put("missing", "Missing");
 
-        infoSvgMap.put("success", "success");
-        infoSvgMap.put("check", "success");
-        infoSvgMap.put("done", "success");
+    infoTitleMap.put("faq", "Faq");
+    infoTitleMap.put("question", "Question");
+    infoTitleMap.put("help", "Help");
 
-        infoSvgMap.put("tip", "tip");
-        infoSvgMap.put("hint", "tip");
-        infoSvgMap.put("important", "tip");
+    infoTitleMap.put("info", "Info");
+    infoTitleMap.put("todo", "To Do");
 
-        infoSvgMap.put("warning", "warning");
-        infoSvgMap.put("caution", "warning");
-        infoSvgMap.put("attention", "warning");
+    infoTitleMap.put("note", "Note");
+    infoTitleMap.put("seealso", "See Also");
 
-        return infoSvgMap;
+    infoTitleMap.put("quote", "Quote");
+    infoTitleMap.put("cite", "Cite");
+
+    infoTitleMap.put("success", "Success");
+    infoTitleMap.put("check", "Check");
+    infoTitleMap.put("done", "Done");
+
+    infoTitleMap.put("tip", "Tip");
+    infoTitleMap.put("hint", "Hint");
+    infoTitleMap.put("important", "Important");
+
+    infoTitleMap.put("warning", "Warning");
+    infoTitleMap.put("caution", "Caution");
+    infoTitleMap.put("attention", "Attention");
+
+    return infoTitleMap;
+  }
+
+  public static Map<String, String> getQualifierTypeMap() {
+    HashMap<String, String> infoSvgMap = new HashMap<>();
+    // qualifier type map
+    infoSvgMap.put("abstract", "abstract");
+    infoSvgMap.put("summary", "abstract");
+    infoSvgMap.put("tldr", "abstract");
+
+    infoSvgMap.put("bug", "bug");
+
+    infoSvgMap.put("danger", "danger");
+    infoSvgMap.put("error", "danger");
+
+    infoSvgMap.put("example", "example");
+    infoSvgMap.put("snippet", "example");
+
+    infoSvgMap.put("fail", "fail");
+    infoSvgMap.put("failure", "fail");
+    infoSvgMap.put("missing", "fail");
+
+    infoSvgMap.put("faq", "faq");
+    infoSvgMap.put("question", "faq");
+    infoSvgMap.put("help", "faq");
+
+    infoSvgMap.put("info", "info");
+    infoSvgMap.put("todo", "info");
+
+    infoSvgMap.put("note", "note");
+    infoSvgMap.put("seealso", "note");
+
+    infoSvgMap.put("quote", "quote");
+    infoSvgMap.put("cite", "quote");
+
+    infoSvgMap.put("success", "success");
+    infoSvgMap.put("check", "success");
+    infoSvgMap.put("done", "success");
+
+    infoSvgMap.put("tip", "tip");
+    infoSvgMap.put("hint", "tip");
+    infoSvgMap.put("important", "tip");
+
+    infoSvgMap.put("warning", "warning");
+    infoSvgMap.put("caution", "warning");
+    infoSvgMap.put("attention", "warning");
+
+    return infoSvgMap;
+  }
+
+  public static String getInputStreamContent(InputStream inputStream) {
+    try {
+      InputStreamReader streamReader = new InputStreamReader(inputStream);
+      StringWriter stringWriter = new StringWriter();
+      copy(streamReader, stringWriter);
+      stringWriter.close();
+      return stringWriter.toString();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return "";
     }
+  }
 
-    public static Map<String, String> getQualifierTitleMap() {
-        HashMap<String, String> infoTitleMap = new HashMap<>();
-        infoTitleMap.put("abstract", "Abstract");
-        infoTitleMap.put("summary", "Summary");
-        infoTitleMap.put("tldr", "TLDR");
-
-        infoTitleMap.put("bug", "Bug");
-
-        infoTitleMap.put("danger", "Danger");
-        infoTitleMap.put("error", "Error");
-
-        infoTitleMap.put("example", "Example");
-        infoTitleMap.put("snippet", "Snippet");
-
-        infoTitleMap.put("fail", "Fail");
-        infoTitleMap.put("failure", "Failure");
-        infoTitleMap.put("missing", "Missing");
-
-        infoTitleMap.put("faq", "Faq");
-        infoTitleMap.put("question", "Question");
-        infoTitleMap.put("help", "Help");
-
-        infoTitleMap.put("info", "Info");
-        infoTitleMap.put("todo", "To Do");
-
-        infoTitleMap.put("note", "Note");
-        infoTitleMap.put("seealso", "See Also");
-
-        infoTitleMap.put("quote", "Quote");
-        infoTitleMap.put("cite", "Cite");
-
-        infoTitleMap.put("success", "Success");
-        infoTitleMap.put("check", "Check");
-        infoTitleMap.put("done", "Done");
-
-        infoTitleMap.put("tip", "Tip");
-        infoTitleMap.put("hint", "Hint");
-        infoTitleMap.put("important", "Important");
-
-        infoTitleMap.put("warning", "Warning");
-        infoTitleMap.put("caution", "Caution");
-        infoTitleMap.put("attention", "Attention");
-
-        return infoTitleMap;
+  public static void copy(Reader reader, Writer writer) throws IOException {
+    char[] buffer = new char[4096];
+    int n;
+    while (-1 != (n = reader.read(buffer))) {
+      writer.write(buffer, 0, n);
     }
+    writer.flush();
+    reader.close();
+  }
 
-    public static Map<String, String> getQualifierSvgValueMap() {
-        HashMap<String, String> typeSvgMap = new HashMap<>();
-        typeSvgMap.put("abstract", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-abstract.svg")));
-        typeSvgMap.put("bug", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-bug.svg")));
-        typeSvgMap.put("danger", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-danger.svg")));
-        typeSvgMap.put("example", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-example.svg")));
-        typeSvgMap.put("fail", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-fail.svg")));
-        typeSvgMap.put("faq", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-faq.svg")));
-        typeSvgMap.put("info", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-info.svg")));
-        typeSvgMap.put("note", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-note.svg")));
-        typeSvgMap.put("quote", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-quote.svg")));
-        typeSvgMap.put("success", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-success.svg")));
-        typeSvgMap.put("tip", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-tip.svg")));
-        typeSvgMap.put("warning", getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/images/adm-warning.svg")));
-        return typeSvgMap;
-    }
+  public static AdmonitionExtension create() {
+    return new AdmonitionExtension();
+  }
 
-    public static String getInputStreamContent(InputStream inputStream) {
-        try {
-            InputStreamReader streamReader = new InputStreamReader(inputStream);
-            StringWriter stringWriter = new StringWriter();
-            copy(streamReader, stringWriter);
-            stringWriter.close();
-            return stringWriter.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
+  @Override
+  public void extend(Formatter.Builder formatterBuilder) {
+    formatterBuilder.nodeFormatterFactory(new AdmonitionNodeFormatter.Factory());
+  }
 
-    public static String getDefaultCSS() {
-        return getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/admonition.css"));
-    }
+  @Override
+  public void rendererOptions(@NotNull MutableDataHolder options) {
 
-    public static String getDefaultScript() {
-        return getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/admonition.js"));
-    }
+  }
 
-    public static void copy(Reader reader, Writer writer) throws IOException {
-        char[] buffer = new char[4096];
-        int n;
-        while (-1 != (n = reader.read(buffer))) {
-            writer.write(buffer, 0, n);
-        }
-        writer.flush();
-        reader.close();
-    }
+  @Override
+  public void parserOptions(MutableDataHolder options) {
 
-    private AdmonitionExtension() {
-    }
+  }
 
-    public static AdmonitionExtension create() {
-        return new AdmonitionExtension();
-    }
+  @Override
+  public void extend(Parser.Builder parserBuilder) {
+    parserBuilder.customBlockParserFactory(new AdmonitionBlockParser.Factory());
+  }
 
-    @Override
-    public void extend(Formatter.Builder formatterBuilder) {
-        formatterBuilder.nodeFormatterFactory(new AdmonitionNodeFormatter.Factory());
-    }
-
-    @Override
-    public void rendererOptions(@NotNull MutableDataHolder options) {
+  @Override
+  public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
+    if (htmlRendererBuilder.isRendererType("HTML")) {
+      htmlRendererBuilder.nodeRendererFactory(new AdmonitionNodeRenderer.Factory());
+    } else if (htmlRendererBuilder.isRendererType("JIRA")) {
 
     }
-
-    @Override
-    public void parserOptions(MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void extend(Parser.Builder parserBuilder) {
-        parserBuilder.customBlockParserFactory(new AdmonitionBlockParser.Factory());
-    }
-
-    @Override
-    public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
-        if (htmlRendererBuilder.isRendererType("HTML")) {
-            htmlRendererBuilder.nodeRendererFactory(new AdmonitionNodeRenderer.Factory());
-        } else if (htmlRendererBuilder.isRendererType("JIRA")) {
-
-        }
-    }
+  }
 }

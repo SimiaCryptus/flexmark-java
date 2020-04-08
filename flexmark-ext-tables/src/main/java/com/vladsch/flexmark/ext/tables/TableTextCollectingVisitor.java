@@ -7,9 +7,9 @@ import com.vladsch.flexmark.ast.util.TextCollectingVisitor;
  */
 @Deprecated
 public class TableTextCollectingVisitor extends TextCollectingVisitor {
-    final public static Class<?>[] TABLE_LINE_BREAK_CLASSES = { TableBlock.class, TableRow.class, TableCaption.class };
+  final public static Class<?>[] TABLE_LINE_BREAK_CLASSES = {TableBlock.class, TableRow.class, TableCaption.class};
 
-    public TableTextCollectingVisitor(Class<?>... lineBreakNodes) {
-        super(lineBreakNodes.length == 0 ? TABLE_LINE_BREAK_CLASSES : concatArrays(TABLE_LINE_BREAK_CLASSES, lineBreakNodes));
-    }
+  public TableTextCollectingVisitor(Class<?>... lineBreakNodes) {
+    super(lineBreakNodes.length == 0 ? TABLE_LINE_BREAK_CLASSES : concatArrays(TABLE_LINE_BREAK_CLASSES, lineBreakNodes));
+  }
 }

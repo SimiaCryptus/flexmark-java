@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboDefinitionSpecTest.class,
-        DefinitionParserTest.class,
+    ComboDefinitionSpecTest.class,
+    DefinitionParserTest.class,
 })
 public class ExtDefinitionTestSuite {
 }

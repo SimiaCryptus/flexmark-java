@@ -5,7 +5,7 @@ import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 final public class PathologicalSpcUrlTest extends PathologicalRenderingTestCase {
-    public PathologicalSpcUrlTest() {
-        super(true);
-    }
+  public PathologicalSpcUrlTest() {
+    super(true);
+  }
 }

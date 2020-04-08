@@ -19,46 +19,46 @@ import org.jetbrains.annotations.NotNull;
  * The parsed emoji shortcuts text regions are turned into {@link Emoji} nodes.
  */
 public class EmojiExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, Formatter.FormatterExtension {
-    final public static DataKey<String> ATTR_ALIGN = new DataKey<>("ATTR_ALIGN", "absmiddle");
-    final public static DataKey<String> ATTR_IMAGE_SIZE = new DataKey<>("ATTR_IMAGE_SIZE", "20");
-    final public static DataKey<String> ATTR_IMAGE_CLASS = new DataKey<>("ATTR_IMAGE_CLASS", "");
-    final public static DataKey<String> ROOT_IMAGE_PATH = new DataKey<>("ROOT_IMAGE_PATH", "/img/");
-    final public static DataKey<EmojiShortcutType> USE_SHORTCUT_TYPE = new DataKey<>("USE_SHORTCUT_TYPE", EmojiShortcutType.EMOJI_CHEAT_SHEET);
-    final public static DataKey<EmojiImageType> USE_IMAGE_TYPE = new DataKey<>("USE_IMAGE_TYPE", EmojiImageType.IMAGE_ONLY);
+  final public static DataKey<String> ATTR_ALIGN = new DataKey<>("ATTR_ALIGN", "absmiddle");
+  final public static DataKey<String> ATTR_IMAGE_SIZE = new DataKey<>("ATTR_IMAGE_SIZE", "20");
+  final public static DataKey<String> ATTR_IMAGE_CLASS = new DataKey<>("ATTR_IMAGE_CLASS", "");
+  final public static DataKey<String> ROOT_IMAGE_PATH = new DataKey<>("ROOT_IMAGE_PATH", "/img/");
+  final public static DataKey<EmojiShortcutType> USE_SHORTCUT_TYPE = new DataKey<>("USE_SHORTCUT_TYPE", EmojiShortcutType.EMOJI_CHEAT_SHEET);
+  final public static DataKey<EmojiImageType> USE_IMAGE_TYPE = new DataKey<>("USE_IMAGE_TYPE", EmojiImageType.IMAGE_ONLY);
 
-    private EmojiExtension() {
+  private EmojiExtension() {
+  }
+
+  public static EmojiExtension create() {
+    return new EmojiExtension();
+  }
+
+  @Override
+  public void rendererOptions(@NotNull MutableDataHolder options) {
+
+  }
+
+  @Override
+  public void parserOptions(MutableDataHolder options) {
+
+  }
+
+  @Override
+  public void extend(Formatter.Builder formatterBuilder) {
+    formatterBuilder.nodeFormatterFactory(new EmojiNodeFormatter.Factory());
+  }
+
+  @Override
+  public void extend(Parser.Builder parserBuilder) {
+    parserBuilder.customDelimiterProcessor(new EmojiDelimiterProcessor());
+  }
+
+  @Override
+  public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
+    if (htmlRendererBuilder.isRendererType("HTML")) {
+      htmlRendererBuilder.nodeRendererFactory(new EmojiNodeRenderer.Factory());
+    } else if (htmlRendererBuilder.isRendererType("JIRA")) {
+      htmlRendererBuilder.nodeRendererFactory(new EmojiJiraRenderer.Factory());
     }
-
-    public static EmojiExtension create() {
-        return new EmojiExtension();
-    }
-
-    @Override
-    public void rendererOptions(@NotNull MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void parserOptions(MutableDataHolder options) {
-
-    }
-
-    @Override
-    public void extend(Formatter.Builder formatterBuilder) {
-        formatterBuilder.nodeFormatterFactory(new EmojiNodeFormatter.Factory());
-    }
-
-    @Override
-    public void extend(Parser.Builder parserBuilder) {
-        parserBuilder.customDelimiterProcessor(new EmojiDelimiterProcessor());
-    }
-
-    @Override
-    public void extend(@NotNull HtmlRenderer.Builder htmlRendererBuilder, @NotNull String rendererType) {
-        if (htmlRendererBuilder.isRendererType("HTML")) {
-            htmlRendererBuilder.nodeRendererFactory(new EmojiNodeRenderer.Factory());
-        } else if (htmlRendererBuilder.isRendererType("JIRA")) {
-            htmlRendererBuilder.nodeRendererFactory(new EmojiJiraRenderer.Factory());
-        }
-    }
+  }
 }

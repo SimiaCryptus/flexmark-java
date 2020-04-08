@@ -12,77 +12,77 @@ import com.vladsch.flexmark.util.sequence.BasedSequence;
 import org.jetbrains.annotations.NotNull;
 
 public class FootnoteLinkRefProcessor implements LinkRefProcessor {
-    static final boolean WANT_EXCLAMATION_PREFIX = false;
-    static final int BRACKET_NESTING_LEVEL = 0;
+  static final boolean WANT_EXCLAMATION_PREFIX = false;
+  static final int BRACKET_NESTING_LEVEL = 0;
 
-    final private FootnoteRepository footnoteRepository;
+  final private FootnoteRepository footnoteRepository;
 
-    public FootnoteLinkRefProcessor(Document document) {
-        this.footnoteRepository = FootnoteExtension.FOOTNOTES.get(document);
+  public FootnoteLinkRefProcessor(Document document) {
+    this.footnoteRepository = FootnoteExtension.FOOTNOTES.get(document);
+  }
+
+  @Override
+  public int getBracketNestingLevel() {
+    return BRACKET_NESTING_LEVEL;
+  }
+
+  @Override
+  public boolean getWantExclamationPrefix() {
+    return WANT_EXCLAMATION_PREFIX;
+  }
+
+  @Override
+  public boolean isMatch(@NotNull BasedSequence nodeChars) {
+    return nodeChars.length() >= 3 && nodeChars.charAt(0) == '[' && nodeChars.charAt(1) == '^' && nodeChars.endCharAt(1) == ']';
+  }
+
+  @NotNull
+  @Override
+  public Node createNode(@NotNull BasedSequence nodeChars) {
+    BasedSequence footnoteId = nodeChars.midSequence(2, -1).trim();
+    FootnoteBlock footnoteBlock = footnoteId.length() > 0 ? footnoteRepository.get(footnoteId.toString()) : null;
+
+    Footnote footnote = new Footnote(nodeChars.subSequence(0, 2), footnoteId, nodeChars.endSequence(1));
+    footnote.setFootnoteBlock(footnoteBlock);
+
+    if (footnoteBlock != null) {
+      footnoteRepository.addFootnoteReference(footnoteBlock, footnote);
     }
+    return footnote;
+  }
 
-    @Override
-    public boolean getWantExclamationPrefix() {
-        return WANT_EXCLAMATION_PREFIX;
-    }
+  @NotNull
+  @Override
+  public BasedSequence adjustInlineText(@NotNull Document document, @NotNull Node node) {
+    assert node instanceof Footnote;
+    return ((Footnote) node).getText();
+  }
 
-    @Override
-    public int getBracketNestingLevel() {
-        return BRACKET_NESTING_LEVEL;
-    }
+  @Override
+  public boolean allowDelimiters(@NotNull BasedSequence chars, @NotNull Document document, @NotNull Node node) {
+    return true;
+  }
 
-    @Override
-    public boolean isMatch(@NotNull BasedSequence nodeChars) {
-        return nodeChars.length() >= 3 && nodeChars.charAt(0) == '[' && nodeChars.charAt(1) == '^' && nodeChars.endCharAt(1) == ']';
-    }
+  @Override
+  public void updateNodeElements(@NotNull Document document, @NotNull Node node) {
 
+  }
+
+  public static class Factory implements LinkRefProcessorFactory {
     @NotNull
     @Override
-    public Node createNode(@NotNull BasedSequence nodeChars) {
-        BasedSequence footnoteId = nodeChars.midSequence(2, -1).trim();
-        FootnoteBlock footnoteBlock = footnoteId.length() > 0 ? footnoteRepository.get(footnoteId.toString()) : null;
-
-        Footnote footnote = new Footnote(nodeChars.subSequence(0, 2), footnoteId, nodeChars.endSequence(1));
-        footnote.setFootnoteBlock(footnoteBlock);
-
-        if (footnoteBlock != null) {
-            footnoteRepository.addFootnoteReference(footnoteBlock, footnote);
-        }
-        return footnote;
-    }
-
-    @NotNull
-    @Override
-    public BasedSequence adjustInlineText(@NotNull Document document, @NotNull Node node) {
-        assert node instanceof Footnote;
-        return ((Footnote) node).getText();
+    public LinkRefProcessor apply(@NotNull Document document) {
+      return new FootnoteLinkRefProcessor(document);
     }
 
     @Override
-    public boolean allowDelimiters(@NotNull BasedSequence chars, @NotNull Document document, @NotNull Node node) {
-        return true;
+    public boolean getWantExclamationPrefix(@NotNull DataHolder options) {
+      return WANT_EXCLAMATION_PREFIX;
     }
 
     @Override
-    public void updateNodeElements(@NotNull Document document, @NotNull Node node) {
-
+    public int getBracketNestingLevel(@NotNull DataHolder options) {
+      return BRACKET_NESTING_LEVEL;
     }
-
-    public static class Factory implements LinkRefProcessorFactory {
-        @NotNull
-        @Override
-        public LinkRefProcessor apply(@NotNull Document document) {
-            return new FootnoteLinkRefProcessor(document);
-        }
-
-        @Override
-        public boolean getWantExclamationPrefix(@NotNull DataHolder options) {
-            return WANT_EXCLAMATION_PREFIX;
-        }
-
-        @Override
-        public int getBracketNestingLevel(@NotNull DataHolder options) {
-            return BRACKET_NESTING_LEVEL;
-        }
-    }
+  }
 }

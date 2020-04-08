@@ -1,5 +1,5 @@
 package com.vladsch.flexmark.ext.wikilink;
 
 public interface WikiLinkVisitor {
-    void visit(WikiLink node);
+  void visit(WikiLink node);
 }

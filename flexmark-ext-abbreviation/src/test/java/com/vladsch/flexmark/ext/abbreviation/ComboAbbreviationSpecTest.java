@@ -20,34 +20,36 @@ import java.util.List;
 import java.util.Map;
 
 public class ComboAbbreviationSpecTest extends RendererSpecTest {
-    static final String SPEC_RESOURCE = "/ext_abbreviation_ast_spec.md";
-    final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Arrays.asList(
-                    EscapedCharacterExtension.create(),
-                    AbbreviationExtension.create(),
-                    TypographicExtension.create(),
-                    InsExtension.create(),
-                    StrikethroughSubscriptExtension.create(),
-                    SuperscriptExtension.create())
-            )
-            .toImmutable();
+  static final String SPEC_RESOURCE = "/ext_abbreviation_ast_spec.md";
+  final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Arrays.asList(
+          EscapedCharacterExtension.create(),
+          AbbreviationExtension.create(),
+          TypographicExtension.create(),
+          InsExtension.create(),
+          StrikethroughSubscriptExtension.create(),
+          SuperscriptExtension.create())
+      )
+      .toImmutable();
 
-    final private static Map<String, DataHolder> optionsMap = placementAndSortOptions(
-            AbbreviationExtension.ABBREVIATIONS_KEEP,
-            AbbreviationExtension.ABBREVIATIONS_PLACEMENT,
-            AbbreviationExtension.ABBREVIATIONS_SORT
-    );
-    static {
-        optionsMap.put("links", new MutableDataSet().set(AbbreviationExtension.USE_LINKS, true));
-        optionsMap.put("no-abbr", new MutableDataSet().set(UNLOAD_EXTENSIONS, Collections.singletonList(AbbreviationExtension.class)));
-    }
-    public ComboAbbreviationSpecTest(@NotNull SpecExample example) {
-        super(example, optionsMap, OPTIONS);
-    }
+  final private static Map<String, DataHolder> optionsMap = placementAndSortOptions(
+      AbbreviationExtension.ABBREVIATIONS_KEEP,
+      AbbreviationExtension.ABBREVIATIONS_PLACEMENT,
+      AbbreviationExtension.ABBREVIATIONS_SORT
+  );
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> data() {
-        return getTestData(RESOURCE_LOCATION);
-    }
+  static {
+    optionsMap.put("links", new MutableDataSet().set(AbbreviationExtension.USE_LINKS, true));
+    optionsMap.put("no-abbr", new MutableDataSet().set(UNLOAD_EXTENSIONS, Collections.singletonList(AbbreviationExtension.class)));
+  }
+
+  public ComboAbbreviationSpecTest(@NotNull SpecExample example) {
+    super(example, optionsMap, OPTIONS);
+  }
+
+  @Parameterized.Parameters(name = "{0}")
+  public static List<Object[]> data() {
+    return getTestData(RESOURCE_LOCATION);
+  }
 }

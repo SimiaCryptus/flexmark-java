@@ -5,10 +5,10 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboAdmonitionSpecTest.class,
-        ComboAdmonitionFormatterSpecTest.class,
-        ComboAdmonitionTranslationFormatterSpecTest.class,
-        AdmonitionParserTest.class,
+    ComboAdmonitionSpecTest.class,
+    ComboAdmonitionFormatterSpecTest.class,
+    ComboAdmonitionTranslationFormatterSpecTest.class,
+    AdmonitionParserTest.class,
 })
 public class ExtAdmonitionTestSuite {
 }

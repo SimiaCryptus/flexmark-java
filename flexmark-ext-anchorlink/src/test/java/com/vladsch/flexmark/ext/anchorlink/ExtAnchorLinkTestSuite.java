@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComboAnchorLinkSpecTest.class,
+    ComboAnchorLinkSpecTest.class,
 })
 public class ExtAnchorLinkTestSuite {
 }

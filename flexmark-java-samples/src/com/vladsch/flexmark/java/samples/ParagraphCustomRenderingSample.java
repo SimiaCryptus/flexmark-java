@@ -19,82 +19,82 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ParagraphCustomRenderingSample {
-    final private static DataHolder OPTIONS = new MutableDataSet().set(Parser.EXTENSIONS, Collections.singletonList(
-            CustomExtension.create()
-    ));
+  final private static DataHolder OPTIONS = new MutableDataSet().set(Parser.EXTENSIONS, Collections.singletonList(
+      CustomExtension.create()
+  ));
 
-    static final Parser PARSER = Parser.builder(OPTIONS).build();
-    static final HtmlRenderer RENDERER = HtmlRenderer.builder(OPTIONS).indentSize(2).build();
+  static final Parser PARSER = Parser.builder(OPTIONS).build();
+  static final HtmlRenderer RENDERER = HtmlRenderer.builder(OPTIONS).indentSize(2).build();
 
-    static class CustomNodeRenderer implements NodeRenderer {
-        final private boolean codeSoftLineBreaks;
+  // use the PARSER to parse and RENDERER to render with pegdown compatibility
+  public static void main(String[] args) {
+    // You can re-use parser and renderer instances
+    Node document = PARSER.parse("" +
+        "text\n" +
+        "");
+    String html = RENDERER.render(document);
+    System.out.println("``````markdown");
+    System.out.println(document.getChars());
+    System.out.println("``````");
+    System.out.println("");
+    System.out.println("``````html");
+    System.out.println(html);
+    System.out.println("``````");
+  }
 
-        public CustomNodeRenderer(DataHolder options) {
-            codeSoftLineBreaks = Parser.CODE_SOFT_LINE_BREAKS.get(options);
-        }
+  static class CustomNodeRenderer implements NodeRenderer {
+    final private boolean codeSoftLineBreaks;
 
-        public static class Factory implements DelegatingNodeRendererFactory {
-            @NotNull
-            @Override
-            public NodeRenderer apply(@NotNull DataHolder options) {
-                return new CustomNodeRenderer(options);
-            }
-
-            @Override
-            public Set<Class<?>> getDelegates() {
-                Set<Class<?>> set = new HashSet<>();
-                // add node renderer factory classes to which this renderer will delegate some of its rendering
-                // core node renderer is assumed to have all depend it so there is no need to add it
-                //set.add(TocNodeRenderer.Factory.class);
-                //return set;
-
-                // return null if renderer does not delegate or delegates only to core node renderer
-                return null;
-            }
-        }
-
-        @Override
-        public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
-            HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
-            set.add(new NodeRenderingHandler<>(Paragraph.class, (node, context, html) -> {
-                html.withAttr().tag("div");
-                context.delegateRender();
-                html.tag("/div");
-            }));
-
-            return set;
-        }
+    public CustomNodeRenderer(DataHolder options) {
+      codeSoftLineBreaks = Parser.CODE_SOFT_LINE_BREAKS.get(options);
     }
 
-    static class CustomExtension implements HtmlRendererExtension {
-        @Override
-        public void rendererOptions(@NotNull MutableDataHolder options) {
+    @Override
+    public Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
+      HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
+      set.add(new NodeRenderingHandler<>(Paragraph.class, (node, context, html) -> {
+        html.withAttr().tag("div");
+        context.delegateRender();
+        html.tag("/div");
+      }));
 
-        }
-
-        @Override
-        public void extend(@NotNull Builder htmlRendererBuilder, @NotNull String rendererType) {
-            htmlRendererBuilder.nodeRendererFactory(new CustomNodeRenderer.Factory());
-        }
-
-        static CustomExtension create() {
-            return new CustomExtension();
-        }
+      return set;
     }
 
-    // use the PARSER to parse and RENDERER to render with pegdown compatibility
-    public static void main(String[] args) {
-        // You can re-use parser and renderer instances
-        Node document = PARSER.parse("" +
-                "text\n" +
-                "");
-        String html = RENDERER.render(document);
-        System.out.println("``````markdown");
-        System.out.println(document.getChars());
-        System.out.println("``````");
-        System.out.println("");
-        System.out.println("``````html");
-        System.out.println(html);
-        System.out.println("``````");
+    public static class Factory implements DelegatingNodeRendererFactory {
+      @Override
+      public Set<Class<?>> getDelegates() {
+        Set<Class<?>> set = new HashSet<>();
+        // add node renderer factory classes to which this renderer will delegate some of its rendering
+        // core node renderer is assumed to have all depend it so there is no need to add it
+        //set.add(TocNodeRenderer.Factory.class);
+        //return set;
+
+        // return null if renderer does not delegate or delegates only to core node renderer
+        return null;
+      }
+
+      @NotNull
+      @Override
+      public NodeRenderer apply(@NotNull DataHolder options) {
+        return new CustomNodeRenderer(options);
+      }
     }
+  }
+
+  static class CustomExtension implements HtmlRendererExtension {
+    static CustomExtension create() {
+      return new CustomExtension();
+    }
+
+    @Override
+    public void rendererOptions(@NotNull MutableDataHolder options) {
+
+    }
+
+    @Override
+    public void extend(@NotNull Builder htmlRendererBuilder, @NotNull String rendererType) {
+      htmlRendererBuilder.nodeRendererFactory(new CustomNodeRenderer.Factory());
+    }
+  }
 }

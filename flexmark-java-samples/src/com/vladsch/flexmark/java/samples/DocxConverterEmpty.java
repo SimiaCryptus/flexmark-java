@@ -31,65 +31,65 @@ import java.util.Arrays;
  * Creates a docx document from DocxRenderer provided empty.md and empty.xml
  */
 public class DocxConverterEmpty {
-    // don't need to use pegdown options adapter. You can setup the options as you like. I find this is a quick way to add all the fixings
-    final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(Parser.EXTENSIONS, Arrays.asList(
-                    AsideExtension.create(),
-                    DefinitionExtension.create(),
-                    EmojiExtension.create(),
-                    FootnoteExtension.create(),
-                    StrikethroughSubscriptExtension.create(),
-                    InsExtension.create(),
-                    SuperscriptExtension.create(),
-                    TablesExtension.create(),
-                    TocExtension.create(),
-                    SimTocExtension.create(),
-                    WikiLinkExtension.create()
-            ))
-            .set(DocxRenderer.SUPPRESS_HTML, true)
-            // the following two are needed to allow doc relative and site relative address resolution
-            //.set(DocxRenderer.DOC_RELATIVE_URL, "file:///Users/vlad/src/pdf") // this will be used for URLs like 'images/...' or './' or '../'
-            //.set(DocxRenderer.DOC_ROOT_URL, "file:///Users/vlad/src/pdf") // this will be used for URLs like: '/...'
-            ;
+  // don't need to use pegdown options adapter. You can setup the options as you like. I find this is a quick way to add all the fixings
+  final private static DataHolder OPTIONS = new MutableDataSet()
+      .set(Parser.EXTENSIONS, Arrays.asList(
+          AsideExtension.create(),
+          DefinitionExtension.create(),
+          EmojiExtension.create(),
+          FootnoteExtension.create(),
+          StrikethroughSubscriptExtension.create(),
+          InsExtension.create(),
+          SuperscriptExtension.create(),
+          TablesExtension.create(),
+          TocExtension.create(),
+          SimTocExtension.create(),
+          WikiLinkExtension.create()
+      ))
+      .set(DocxRenderer.SUPPRESS_HTML, true)
+      // the following two are needed to allow doc relative and site relative address resolution
+      //.set(DocxRenderer.DOC_RELATIVE_URL, "file:///Users/vlad/src/pdf") // this will be used for URLs like 'images/...' or './' or '../'
+      //.set(DocxRenderer.DOC_ROOT_URL, "file:///Users/vlad/src/pdf") // this will be used for URLs like: '/...'
+      ;
 
-    static String getResourceFileContent(String resourcePath) {
-        StringWriter writer = new StringWriter();
-        getResourceFileContent(writer, resourcePath);
-        return writer.toString();
+  public static void main(String[] args) {
+    String markdown = DocxRenderer.getResourceString("/empty.md");
+    System.out.println("markdown\n");
+    System.out.println(markdown);
+
+    Parser PARSER = Parser.builder(OPTIONS).build();
+    DocxRenderer RENDERER = DocxRenderer.builder(OPTIONS).build();
+
+    Node document = PARSER.parse(markdown);
+
+    // to get XML
+    String xml = RENDERER.render(document);
+
+    // or to control the package
+    WordprocessingMLPackage template = DocxRenderer.getDefaultTemplate();
+    RENDERER.render(document, template);
+
+    File file = new File("flexmark-empty-template.docx");
+    try {
+      template.save(file, Docx4J.FLAG_SAVE_ZIP_FILE);
+    } catch (Docx4JException e) {
+      e.printStackTrace();
     }
+  }
 
-    private static void getResourceFileContent(StringWriter writer, String resourcePath) {
-        InputStream inputStream = DocxConverterEmpty.class.getResourceAsStream(resourcePath);
-        try {
-            IOUtils.copy(inputStream, writer, "UTF-8");
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+  static String getResourceFileContent(String resourcePath) {
+    StringWriter writer = new StringWriter();
+    getResourceFileContent(writer, resourcePath);
+    return writer.toString();
+  }
+
+  private static void getResourceFileContent(StringWriter writer, String resourcePath) {
+    InputStream inputStream = DocxConverterEmpty.class.getResourceAsStream(resourcePath);
+    try {
+      IOUtils.copy(inputStream, writer, "UTF-8");
+      inputStream.close();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-
-    public static void main(String[] args) {
-        String markdown = DocxRenderer.getResourceString("/empty.md");
-        System.out.println("markdown\n");
-        System.out.println(markdown);
-
-        Parser PARSER = Parser.builder(OPTIONS).build();
-        DocxRenderer RENDERER = DocxRenderer.builder(OPTIONS).build();
-
-        Node document = PARSER.parse(markdown);
-
-        // to get XML
-        String xml = RENDERER.render(document);
-
-        // or to control the package
-        WordprocessingMLPackage template = DocxRenderer.getDefaultTemplate();
-        RENDERER.render(document, template);
-
-        File file = new File("flexmark-empty-template.docx");
-        try {
-            template.save(file, Docx4J.FLAG_SAVE_ZIP_FILE);
-        } catch (Docx4JException e) {
-            e.printStackTrace();
-        }
-    }
+  }
 }

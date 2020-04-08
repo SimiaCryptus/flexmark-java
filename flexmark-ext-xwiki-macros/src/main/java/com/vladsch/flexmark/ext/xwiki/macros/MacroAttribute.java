@@ -9,79 +9,79 @@ import org.jetbrains.annotations.NotNull;
  * A macros node
  */
 public class MacroAttribute extends Node implements DoNotDecorate {
-    protected BasedSequence attribute = BasedSequence.NULL;
-    protected BasedSequence separator = BasedSequence.NULL;
-    protected BasedSequence openingMarker = BasedSequence.NULL;
-    protected BasedSequence value = BasedSequence.NULL;
-    protected BasedSequence closingMarker = BasedSequence.NULL;
+  protected BasedSequence attribute = BasedSequence.NULL;
+  protected BasedSequence separator = BasedSequence.NULL;
+  protected BasedSequence openingMarker = BasedSequence.NULL;
+  protected BasedSequence value = BasedSequence.NULL;
+  protected BasedSequence closingMarker = BasedSequence.NULL;
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        //return EMPTY_SEGMENTS;
-        return new BasedSequence[] { attribute, separator, openingMarker, value, closingMarker };
-    }
+  public MacroAttribute() {
+  }
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        segmentSpanChars(out, attribute, "attribute");
-        segmentSpanChars(out, separator, "separator");
-        delimitedSegmentSpanChars(out, openingMarker, value, closingMarker, "value");
-    }
+  public MacroAttribute(BasedSequence chars) {
+    super(chars);
+  }
 
-    public MacroAttribute() {
-    }
+  public MacroAttribute(BasedSequence attribute, BasedSequence separator, BasedSequence openingMarker, BasedSequence value, BasedSequence closingMarker) {
+    super(spanningChars(attribute, separator, openingMarker, value, closingMarker));
+    this.attribute = attribute;
+    this.separator = separator;
+    this.openingMarker = openingMarker;
+    this.value = value;
+    this.closingMarker = closingMarker;
+  }
 
-    public MacroAttribute(BasedSequence chars) {
-        super(chars);
-    }
+  public BasedSequence getAttribute() {
+    return attribute;
+  }
 
-    public MacroAttribute(BasedSequence attribute, BasedSequence separator, BasedSequence openingMarker, BasedSequence value, BasedSequence closingMarker) {
-        super(spanningChars(attribute, separator, openingMarker, value, closingMarker));
-        this.attribute = attribute;
-        this.separator = separator;
-        this.openingMarker = openingMarker;
-        this.value = value;
-        this.closingMarker = closingMarker;
-    }
+  public void setAttribute(BasedSequence attribute) {
+    this.attribute = attribute;
+  }
 
-    public BasedSequence getAttribute() {
-        return attribute;
-    }
+  public BasedSequence getClosingMarker() {
+    return closingMarker;
+  }
 
-    public void setAttribute(BasedSequence attribute) {
-        this.attribute = attribute;
-    }
+  public void setClosingMarker(BasedSequence closingMarker) {
+    this.closingMarker = closingMarker;
+  }
 
-    public BasedSequence getSeparator() {
-        return separator;
-    }
+  public BasedSequence getOpeningMarker() {
+    return openingMarker;
+  }
 
-    public void setSeparator(BasedSequence separator) {
-        this.separator = separator;
-    }
+  public void setOpeningMarker(BasedSequence openingMarker) {
+    this.openingMarker = openingMarker;
+  }
 
-    public BasedSequence getOpeningMarker() {
-        return openingMarker;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    //return EMPTY_SEGMENTS;
+    return new BasedSequence[]{attribute, separator, openingMarker, value, closingMarker};
+  }
 
-    public void setOpeningMarker(BasedSequence openingMarker) {
-        this.openingMarker = openingMarker;
-    }
+  public BasedSequence getSeparator() {
+    return separator;
+  }
 
-    public BasedSequence getValue() {
-        return value;
-    }
+  public void setSeparator(BasedSequence separator) {
+    this.separator = separator;
+  }
 
-    public void setValue(BasedSequence value) {
-        this.value = value;
-    }
+  public BasedSequence getValue() {
+    return value;
+  }
 
-    public BasedSequence getClosingMarker() {
-        return closingMarker;
-    }
+  public void setValue(BasedSequence value) {
+    this.value = value;
+  }
 
-    public void setClosingMarker(BasedSequence closingMarker) {
-        this.closingMarker = closingMarker;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    segmentSpanChars(out, attribute, "attribute");
+    segmentSpanChars(out, separator, "separator");
+    delimitedSegmentSpanChars(out, openingMarker, value, closingMarker, "value");
+  }
 }

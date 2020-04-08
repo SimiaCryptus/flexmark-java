@@ -9,35 +9,35 @@ import org.jetbrains.annotations.NotNull;
  * Table row of a {@link TableHead} or {@link TableBody} containing {@link TableCell TableCells}.
  */
 public class TableRow extends Node implements LineBreakNode {
-    /**
-     * rowNumber within the table section: header, body, separator
-     */
-    private int rowNumber;
+  /**
+   * rowNumber within the table section: header, body, separator
+   */
+  private int rowNumber;
 
-    @Override
-    public void getAstExtra(@NotNull StringBuilder out) {
-        super.getAstExtra(out);
-        if (rowNumber != 0) out.append(" rowNumber=").append(rowNumber);
-    }
+  public TableRow() {
+  }
 
-    @NotNull
-    @Override
-    public BasedSequence[] getSegments() {
-        return EMPTY_SEGMENTS;
-    }
+  public TableRow(BasedSequence chars) {
+    super(chars);
+  }
 
-    public TableRow() {
-    }
+  public int getRowNumber() {
+    return rowNumber;
+  }
 
-    public TableRow(BasedSequence chars) {
-        super(chars);
-    }
+  public void setRowNumber(int rowNumber) {
+    this.rowNumber = rowNumber;
+  }
 
-    public int getRowNumber() {
-        return rowNumber;
-    }
+  @NotNull
+  @Override
+  public BasedSequence[] getSegments() {
+    return EMPTY_SEGMENTS;
+  }
 
-    public void setRowNumber(int rowNumber) {
-        this.rowNumber = rowNumber;
-    }
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    super.getAstExtra(out);
+    if (rowNumber != 0) out.append(" rowNumber=").append(rowNumber);
+  }
 }
